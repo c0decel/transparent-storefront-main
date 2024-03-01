@@ -1,0 +1,165 @@
+<div class="new-product-page">
+    <div class="title-container">
+        <h1>
+            Add New
+        </h1>
+        <div class="options-container">
+            <h2 
+                *ngIf="isLoggedIn()"
+                (click)="logOut()"
+                >
+            Log out
+            </h2>
+        </div>
+    </div>
+    <div class="content-container">
+        <div class="forms-container">
+            <form class="admin-form">
+                <h2>Name</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newProductData.Name"
+                        placeholder="Product Name"
+                        type="text"
+                        name="Name"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Price</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newProductData.Price"
+                        placeholder="Product Price"
+                        type="text"
+                        name="Price"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Description</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newProductData.Description"
+                        placeholder="Product Description"
+                        type="text"
+                        name="Description"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Stock</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newProductData.Stock"
+                        placeholder="Product Stock"
+                        type="number"
+                        name="Stock"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Link to image</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newProductData.Image"
+                        placeholder="Link to image"
+                        type="text"
+                        name="Image"
+                        required
+                    >
+                </mat-form-field><br>
+                <div *ngFor="let tag of allTags">
+                    <label>
+                        <input 
+                            type="checkbox"
+                            [checked]="selectedTags[tag._id]"
+                            (change)="toggleTagSelection(tag._id)">
+                        {{ tag.Tag }}
+                    </label>
+                </div>
+                <button
+                    (click)="submitNewProduct()"
+                >
+                    Submit new product
+                </button>
+            </form>
+    
+            <form class="admin-form">
+                <h2>Name</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newSupplyData.Name"
+                        placeholder="Supply Name"
+                        type="text"
+                        name="Name"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Description</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newSupplyData.Description"
+                        placeholder="Supply Description"
+                        type="text"
+                        name="Description"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Quantity</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newSupplyData.Quantity"
+                        placeholder="Supply Quantity"
+                        type="text"
+                        name="Quantity"
+                        required
+                    >
+                </mat-form-field>
+    
+                    <select
+                        [(ngModel)]="newSupplyData.Measurement"
+                        name="Quantity"
+                        required
+                    >
+                        <option value="grams">Grams</option>
+                        <option value="oz">Ounce</option>
+                        <option value="ml">Milliliter</option>
+                        <option value="piece">Pieces</option>
+                    </select>
+                <br>
+                <h2>Cost</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newSupplyData.Cost"
+                        placeholder="Supply Cost"
+                        type="text"
+                        name="Cost"
+                        required
+                    >
+                </mat-form-field><br>
+                <h2>Supplier</h2>
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newSupplyData.Supplier"
+                        placeholder="Supply Supplier"
+                        type="text"
+                        name="Supplier"
+                        required
+                    >
+                </mat-form-field><br>
+                <button
+                    (click)="submitNewSupply()"
+                >
+                    Submit new supply
+                </button>
+            </form>
+        </div>
+    </div>
+    </div>

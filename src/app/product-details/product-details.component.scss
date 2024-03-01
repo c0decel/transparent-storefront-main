@@ -1,0 +1,67 @@
+
+@media only screen and (min-width: 1024px) {
+    .product-image {
+      width: 400px;
+    }
+  }
+
+select {
+    padding: 10px;
+    border-radius: 10px;
+    border-style: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.reviews-section {
+    padding: 40px;
+    margin-top: 10px;
+    margin-right: 30px;
+    border-radius: 10px;
+    min-width: fit-content;
+    width: auto;
+
+    h1 {
+        text-align: center;
+    }
+
+    li {
+        list-style-type: none;
+        width: auto;
+        margin-top: 10px;
+        margin-right: 5%;
+        padding: 20px;
+        min-width: fit-content;
+        border-radius: 10px;
+    }
+}
+
+.write-review {
+    padding: 40px;
+    border-radius: 10px;
+    margin: auto;
+    width: fit-content;
+
+    form {
+        text-align: center;
+    }
+
+    input {
+        width: fit-content;
+        padding: 30px;
+        border-radius: 10px;
+        border-style: none;
+    }
+}
+
+.no-login {
+    width: fit-content;
+    text-align: center;
+    border-radius: 10px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}

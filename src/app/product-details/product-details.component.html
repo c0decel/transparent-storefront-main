@@ -1,0 +1,121 @@
+<div class="title-container">
+    <h1>
+        Details
+    </h1>
+    <div class="options-container">
+        <h2 
+            *ngIf="isLoggedIn()"
+            (click)="logOut()"
+            >
+        Log out
+        </h2>
+    </div>
+</div>
+<div class="info-page">
+
+    <div class="product-info">
+        <h1>{{productData.Name}}</h1>
+        <h2>${{productData.Price}}</h2>
+        <img
+            style="width: 200px;"
+            src={{productData.Image}}
+        >
+        <h2>Sales: {{productData.Sales}}</h2>
+        <h2>Stock: {{productData.Stock}}</h2>
+        <h2>Description:</h2>
+        <p>{{productData.Description}}</p>
+            <h2>Tags:</h2>
+            <ul class="tags-list">
+                <li *ngFor="let tag of tags">
+                    {{ tag }}
+                </li>
+            </ul>
+        <div class="options">
+            <button
+                    class="button"
+                    (click)="addItemToCart(productData._id)"
+                >
+                    Add to cart
+                </button>
+                <button
+                    class="button"
+                    (click)="addItemToWishlist(productData._id)"
+                >
+                    Wishlist
+                </button>
+        </div>
+
+    </div>
+    <div class="reviews-section" *ngIf="isJanitor">
+        <h1>Edit</h1>
+        <div class="content-container">
+            <form class="form">
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newStock.newStock"
+                        placeholder="New stock quantity"
+                        type="text"
+                        name="Stock"
+                        required
+                    >
+                </mat-form-field><br>
+                <button
+                    (click)="updateStockQuantity(newStock, productData._id)"
+                >
+                Update Stock
+            </button>
+            </form>
+        </div>
+    </div>
+    <div class="reviews-section">
+        <h1>Reviews</h1>
+        <ul>
+            <li *ngFor="let review of reviews">
+                <h2>{{ review.Username }}</h2>
+                <p style="font-weight: bolder;">Rating: {{ review.Rating }}</p>
+                <p>{{ review.Content }}</p>
+            </li>
+        </ul>
+        <h1>Write a review</h1>
+        <div *ngIf="isLoggedIn()" class="write-review">
+            <form>
+                    <select
+                        [(ngModel)]="reviewData.Rating"
+                        name="Rating"
+                        placeholder="Rating"
+                    >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+            </select>
+
+                    <input
+                        matInput
+                        [(ngModel)]="reviewData.Content"
+                        placeholder="Write a review..."
+                        name="Content"
+                        type="text"
+                    >
+            </form>
+            <button
+                (click)="submitReview()"
+            >
+                Submit
+            </button>
+        </div>
+        <div *ngIf="!isLoggedIn" class="no-login">
+            <h2>Log in to submit a review</h2>
+        </div>
+    </div>
+    <div>
+        <button
+            class="button"
+            (click)="closeDetails()"
+        >
+            Go back
+        </button>
+    </div>
+</div>

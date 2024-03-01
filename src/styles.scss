@@ -1,0 +1,376 @@
+@import 'variables';
+
+html, body { height: 100%; }
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: $background-color-body;
+  }
+
+/*
+Global
+*/
+.title-container {
+    background-color: $background-color-header;
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    height: fit-content;
+    margin-bottom: 10px;
+    border-color: $border-color;
+    border-width: $border-width;
+    border-style: solid;
+}
+
+.options-container {
+  background-color: $options-container-color;
+  display: flex;
+  width: fit-content;
+  padding-left: 4px;
+  border-color: $border-color;
+  border-width: $border-width;
+  border-radius: 10px;
+  border-style: solid;
+}
+
+.content-container {
+  background-color: $background-color-container;
+  padding: 10px;
+  border-color: $border-color;
+  border-width: $border-width;
+  border-style: solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+button {
+  font-size: 20px;
+  margin: 10px;
+  padding: 5px;
+  background-color: $button-color;
+  border-radius: 5px;
+  border-width: 3px;
+  border-color: black;
+  border-style: solid;
+  font-family: $font;
+}
+
+h2 {
+  padding-right: 9px;
+}
+
+.icon {
+  width: 30px;
+  padding-left: 2px;
+  padding-right: 9px;
+}
+
+table {
+  background-color: white;
+  border-color: $border-color;
+  border-width: $border-width;
+  border-style: solid;
+  padding: 10px;
+  margin: 20px;
+  align-items: center;
+}
+
+/*
+Store
+*/
+.product-container {
+  background-color: $background-color-container;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  padding: 10px;
+  border-color: $border-color;
+  border-width: $border-width;
+  border-style: solid;
+
+  .product-card {
+    background-color: $background-color-product;
+    border-color: $border-color;
+    border-radius: 20px;
+    border-style: solid;
+    margin: 10px;
+  }
+}
+
+
+mat-form-field {
+  background-color: white;
+  margin: 2px;
+  border-radius: 10px;
+  border-width: 4px;
+  border-color: black;
+  border-style: solid;
+  font-size: 20px;
+}
+
+.products-list {
+  background-color: $background-color-product;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  padding: 10px;
+  border-color: $border-color;
+  border-width: $border-width;
+  border-style: solid;
+
+  mat-card {
+    text-align: left;
+    background-color: white;
+  }
+
+  mat-card-title {
+    font-size: 30px;
+    margin: 10px;
+  }
+
+  mat-card-subtitle {
+      font-size: 25px;
+      margin: 20px;
+  }
+
+  .product-image {
+      width: 70%;
+      justify-content: left;
+      align-items: left;
+      padding-left: 10px;
+  }
+
+}
+
+.cart-items {
+  background-color: $background-color-product;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+  padding: 10px;
+  border-color: $border-color;
+  border-radius: 20px;
+  border-style: solid;
+  margin: 10px;
+  text-align: center;
+
+  mat-card {
+    background-color: $background-color-body;
+  }
+
+  mat-card-title {
+    font-size: 30px;
+    margin: 10px;
+}
+
+mat-card-subtitle {
+    font-size: 25px;
+    margin: 20px;
+}
+
+.product-image {
+    width: 70%;
+    justify-content: left;
+    align-items: left;
+    padding-left: 10px;
+}
+}
+
+/*
+Login
+*/
+.login-form {
+
+background-color: $background-color-container;
+
+mat-card-header {
+    font-size: 30px;
+    margin: 20px;
+}
+
+mat-card-content {
+    align-items: center;
+}
+
+mat-form-field {
+    margin: 8px;
+    border-radius: 10px;
+    border-width: 4px;
+    border-color: black;
+    font-size: 20px;
+}
+}
+
+.info-page {
+  background-color: $background-color-container;
+  padding: 30px;
+  align-items: center;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: $border-color;
+  border-style: solid;
+
+  .product-info {
+    background-color: $options-container-color;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    p {
+      font-size: 20px;
+    }
+}
+
+.product-image {
+    width: 60%;
+}
+
+}
+
+/*
+Sign up
+*/
+.signup-form {
+
+  mat-card {
+    align-items: center;
+    padding: 8px;
+    border-radius: 10px;
+    border-width: 4px;
+    border-color: black;
+    font-size: 20px;
+}
+
+mat-card-header {
+    font-size: 30px;
+    margin: 20px;
+}
+
+mat-card-content {
+    align-items: center;
+}
+
+mat-form-field {
+    margin: 8px;
+    border-radius: 10px;
+    border-width: 4px;
+    border-color: black;
+    font-size: 20px;
+}
+}
+
+/*
+Transparency panel
+*/
+
+.tags-list {
+  display: flex;
+  width: auto;
+
+  li {
+    list-style-type: none;
+    background-color: $tag-color;
+    width: fit-content;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 10px;
+    border-width: 2px;
+  border-color: $border-color;
+  border-style: solid;
+  }
+}
+
+/*
+Admin panel
+*/
+
+.data-list {
+  display: grid;
+  grid-gap: 40px;
+  padding: 20px;
+}
+
+.user-list {
+  table {
+    width: min-content;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .data-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .data-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.add-data {
+  background-color: $background-color-product;
+  border-radius: 10px;
+  border-width: 4px;
+  border-color: $border-color;
+  border-style: solid;
+  padding: 20px;
+}
+
+/*
+New products page
+*/
+.forms-container {
+  display: grid;
+  grid-gap: 40px;
+  padding: 20px;
+}
+
+.admin-form {
+  background-color: $background-color-product;
+  width: fit-content;
+  padding: 20px;
+  text-align: center;
+  border-style: solid;
+  border-width: 4px;
+  border-radius: 5px;
+  border-color: black;
+}
+
+@media screen and (min-width: 768px) {
+  .forms-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .forms-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*
+Details page
+*/
+
+
+.reviews-section {
+  background-color: $options-container-color;
+
+  li {
+      background-color: $tag-color;
+  }
+}
+
+.write-review {
+  background-color: $background-color-header;
+}
+
+.no-login {
+  background-color: $background-color-header;
+}
+

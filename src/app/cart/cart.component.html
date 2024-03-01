@@ -1,0 +1,80 @@
+<div class="cart-page">
+    <div class="title-container">
+        <h1>
+            Cart
+        </h1>
+        <div class="options-container">
+            <h2 
+                *ngIf="isLoggedIn()"
+                (click)="logOut()"
+                >
+            Log out
+            </h2>
+        </div>
+    </div>
+    <div class="content-container">
+        <h2>Cart</h2>
+
+        <div class="cart-items">
+            <mat-card *ngFor="let cartItem of cartItems">
+                <mat-card-header>
+                    <mat-card-title>
+                        {{ cartItem.Name }}
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        ${{ cartItem.Price }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <img src="{{ cartItem.Image }}" class="product-image">
+                    <button
+                        class="button"
+                        (click)="removeItemFromCart(cartItem)"
+                    >
+                        X
+                    </button>
+                </mat-card-content>
+            </mat-card>
+
+            <h2 *ngIf="cartItems.length === 0">
+                Cart is empty.
+            </h2>
+        </div>
+
+        <h2>Checkout</h2>
+
+        <div class="checkout">
+            <p>Checkout API goes here</p>
+        </div>
+
+        <h2>Wishlist</h2>
+
+        <div class="cart-items">
+            <mat-card *ngFor="let wishlistItem of wishlistItems">
+                <mat-card-header>
+                    <mat-card-title>
+                        {{ wishlistItem.Name }}
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        {{ wishlistItem.Price }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <img src="{{ wishlistItem.Image }}" class="product-image">
+                    <button
+                        class="button"
+                        (click)="removeItemFromWishlist(wishlistItem)"
+                    >
+                        X
+                    </button>
+                </mat-card-content>
+            </mat-card>
+
+            <h2 *ngIf="wishlistItems.length === 0">
+                Wishlist is empty.
+            </h2>
+        </div>
+    </div>
+</div>
