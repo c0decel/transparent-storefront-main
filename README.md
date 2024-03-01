@@ -15,11 +15,11 @@ Transparent Storefront is an ecommerce template.
 
 - Log in or create account
 - Add products to cart or wishlist
-- View expenses and sales
+- View expenses, sales, and supplies used
 
 ### Admin
 
-- Submit new products
+- Submit new products and supply info
 - Create tags for products
 - Log expense and sales data
 
