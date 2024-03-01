@@ -23,6 +23,12 @@ Transparent Storefront is an ecommerce template.
 - Create tags for products
 - Log expense and sales data
 
+### Price calculator
+
+- Python command line calculator to input resources used in product and come up with a retail price based on a profit margin chosen by the user
+- Includes an option to add instructions to make the product
+- Exports in a .docx for easy reference
+
 ## Packages Used
 
 - Angular
