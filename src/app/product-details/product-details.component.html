@@ -14,37 +14,61 @@
 <div class="info-page">
 
     <div class="product-info">
-        <h1>{{productData.Name}}</h1>
-        <h2>${{productData.Price}}</h2>
-        <img
-            style="width: 200px;"
-            src={{productData.Image}}
-        >
-        <h2>Sales: {{productData.Sales}}</h2>
-        <h2>Stock: {{productData.Stock}}</h2>
-        <h2>Description:</h2>
-        <p>{{productData.Description}}</p>
-            <h2>Tags:</h2>
+        <div class="product-info_item" id="text-info">
+            <h1>{{productData.Name}}</h1>
+            <h2>${{productData.Price}}</h2>
+            <h2>Sales: {{productData.Sales}}</h2>
+            <h2>Stock: {{productData.Stock}}</h2>
+            <h2>Description:</h2>
+            <p>{{productData.Description}}</p>
+            <h2>Upcharge:</h2>
+            <p>{{productData.Upcharge}}%</p>
+
+        </div>
+        <div class="product-info_item" id="image-info">
+            <img
+                src={{productData.Image}}
+            >
+            <h2 *ngIf="tags.length > 0">Tags:</h2>
             <ul class="tags-list">
                 <li *ngFor="let tag of tags">
                     {{ tag }}
                 </li>
             </ul>
-        <div class="options">
-            <button
-                    class="button"
-                    (click)="addItemToCart(productData._id)"
-                >
-                    Add to cart
-                </button>
+            <div class="options" id="button-options">
                 <button
-                    class="button"
-                    (click)="addItemToWishlist(productData._id)"
-                >
-                    Wishlist
-                </button>
+                        class="button"
+                        (click)="addItemToCart(productData._id)"
+                    >
+                        Add to cart
+                    </button>
+                    <button
+                        class="button"
+                        (click)="addItemToWishlist(productData._id)"
+                    >
+                        Wishlist
+                    </button>
+            </div>
         </div>
-
+        <div class="product-info_item" id="supply-info">
+            <h2>Supplies:</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Quantity</th>
+                    <th>Supplier</th>
+                </tr>
+                <tr *ngFor="let supply of supplies">
+                    <td>{{ supply.Name }}</td>
+                    <td>{{ supply.Description }}</td>
+                    <td>{{ supply.Cost }}</td>
+                    <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
+                    <td>{{ supply.Supplier }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div class="reviews-section" *ngIf="isJanitor">
         <h1>Edit</h1>

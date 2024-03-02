@@ -16,6 +16,7 @@ export class ProductDetailsComponent implements OnInit {
   user: any;
   reviews: any[] = [];
   tags: any[] = [];
+  supplies: any[]=[];
   newStock: any = {newStock: 0}
 
   constructor(
@@ -32,6 +33,7 @@ export class ProductDetailsComponent implements OnInit {
         this.productData = window.history.state.data;
         this.getReviews(this.productData._id);
         this.getTags(this.productData._id);
+        this.getSupplies(this.productData._id);
       }
     });
 
@@ -55,6 +57,18 @@ export class ProductDetailsComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching tags:', error);
+      }
+    );
+  }
+
+  getSupplies(productId: string): void {
+    this.fetchApiData.getProductSupplies(productId).subscribe(
+      (response: any) => {
+        this.supplies = response;
+        console.log(this.supplies);
+      },
+      (error) => {
+        console.error('Error fetching supplies:', error);
       }
     );
   }

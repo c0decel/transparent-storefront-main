@@ -66,7 +66,7 @@ export class StoreComponent implements OnInit {
    * @param Stock stock
    * @param Reviews reviews array
    */
-  openDetails(_id: string, Name: string, Price: string, Description: string, Image: string, Sales: string, Stock: number, Reviews: {Rating: string, Username: string, Content: string}): void {
+  openDetails(_id: string, Name: string, Price: string, Description: string, Image: string, Sales: string, Stock: number, Upcharge: number, Supplies: {Name: string, Description: string, Cost: number, Quantity: string, Measurement: string, Supplier: string}, Reviews: {Rating: string, Username: string, Content: string}): void {
     this.router.navigate(['/product-details', _id], {
       state: {
         data: {
@@ -77,6 +77,8 @@ export class StoreComponent implements OnInit {
           Image: Image,
           Sales: Sales,
           Stock: Stock,
+          Supplies: Supplies,
+          Upcharge: Upcharge,
           Reviews: Reviews
         }
       }

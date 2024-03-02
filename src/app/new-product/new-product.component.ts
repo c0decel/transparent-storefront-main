@@ -9,10 +9,12 @@ import { FetchApiDataService } from '../fetch-api-data.service';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
-  newProductData: any = { Name: '', Price: '', Description: '', Stock: '', Image: '', Tags: [] };
+  newProductData: any = { Name: '', Price: '', Description: '', Stock: '', Upcharge: '', Image: '', Tags: [], Supplies: [] };
   newSupplyData: any = { Name: '', Description: '', Cost: '', Quantity: '', Measurement: '', Supplier: ''};
   allTags: any[] = [];
+  allSupplies: any[] = [];
   selectedTags: { [tagId: string]: boolean } = {};
+  selectedSupplies: { [supplyId: string]: boolean} = {};
 
   constructor(
     private authService: AuthService,
@@ -35,6 +37,10 @@ export class NewProductComponent implements OnInit {
     this.fetchApiData.getAllTags().subscribe(allTags => {
       this.allTags = allTags;
     });
+
+    this.fetchApiData.getAllSupplies().subscribe(allSupplies => {
+      this.allSupplies = allSupplies;
+    });
   }
 
   toggleTagSelection(tagId: string): void {
@@ -48,12 +54,26 @@ export class NewProductComponent implements OnInit {
     }
   }
 
+  toggleSupplySelection(supplyId: string): void {
+    this.selectedSupplies[supplyId] = !this.selectedSupplies[supplyId];
+
+    if (!this.selectedSupplies[supplyId]) {
+      const index = this.newProductData.Supplies.indexOf(supplyId);
+      if (index !== -1) {
+        this.newProductData.Supplies.splice(index, 1);
+      }
+    }
+  }
+
   submitNewProduct(): void {
     if (!this.newProductData.Image) {
       this.newProductData.Image = 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg';
     }
     const selectedTags = this.allTags.filter(tag => this.selectedTags[tag._id]).map(tag => tag._id);
     this.newProductData.Tags = selectedTags;
+
+    const selectedSupplies = this.allSupplies.filter(supply => this.selectedSupplies[supply._id]).map(supply => supply._id);
+    this.newProductData.Supplies = selectedSupplies;
     
     this.fetchApiData.addNewProduct(this.newProductData).subscribe(
       response => {

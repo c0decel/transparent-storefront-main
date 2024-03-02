@@ -22,6 +22,7 @@ Global
     border-color: $border-color;
     border-width: $border-width;
     border-style: solid;
+    width: auto;
 }
 
 .options-container {
@@ -214,22 +215,12 @@ mat-form-field {
   border-color: $border-color;
   border-style: solid;
 
-  .product-info {
-    background-color: $options-container-color;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    p {
-      font-size: 20px;
-    }
 }
 
 .product-image {
     width: 60%;
 }
 
-}
 
 /*
 Sign up
@@ -341,36 +332,146 @@ New products page
   border-color: black;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 769px) {
   .forms-container {
     grid-template-columns: 1fr 1fr;
   }
+
+  #image-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+      width: 400px;
+    }
+  }
+  
+  #text-info {
+    text-align: right;
+    width: fit-content;
+  }
+
+  #supply-info {
+    width: fit-content;
+    text-align: left;
+  }
+
+  .product-info {
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 100px;
+    grid-gap: 40px;
+  }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   .forms-container {
     grid-template-columns: 1fr;
   }
+
+  #image-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+      width: 200px;
+    }
+  }
+  
+  #text-info {
+    text-align: center;
+    width: fit-content;
+  }
+
+  #supply-info {
+    width: fit-content;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .product-info {
+    grid-template-columns: 1fr;
+  }
+
+  .options {
+    #button-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 }
+
+.product-info_item {
+  padding: 10px;
+}
+
 
 /*
 Details page
 */
 
+.product-info {
+  background-color: $options-container-color;
+  border-radius: 10px;
+  display: grid;
+  align-items: center;
+  width: fit-content;
+}
 
 .reviews-section {
   background-color: $options-container-color;
+  padding: 40px;
+  margin-top: 10px;
+  margin-right: 30px;
+  border-radius: 10px;
+  min-width: fit-content;
+  width: auto;
+
+  h1 {
+      text-align: center;
+  }
 
   li {
+      list-style-type: none;
+      width: auto;
+      margin-top: 10px;
+      margin-right: 5%;
+      padding: 20px;
+      min-width: fit-content;
+      border-radius: 10px;
       background-color: $tag-color;
   }
 }
 
+
 .write-review {
+  padding: 40px;
+  border-radius: 10px;
+  margin: auto;
+  width: fit-content;
   background-color: $background-color-header;
+
+  form {
+      text-align: center;
+  }
+
+  input {
+      width: fit-content;
+      padding: 30px;
+      border-radius: 10px;
+      border-style: none;
+  }
 }
 
 .no-login {
+  width: fit-content;
   background-color: $background-color-header;
+  text-align: center;
+  border-radius: 10px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
 }
-

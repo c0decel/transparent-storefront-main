@@ -118,6 +118,11 @@ export class FetchApiDataService {
     return this.http.get(`${apiUrl}products/${productID}/tags`);
   }
 
+  //Get product supplies
+  getProductSupplies(productID: string): Observable<any> {
+    return this.http.get(`${apiUrl}products/${productID}/supplies`);
+  }
+
   //Get all reviews
   getAllReviews(productId: string): Observable<any> {
     return this.http.get(`${apiUrl}reviews?ProductID=${productId}`);
@@ -413,6 +418,21 @@ export class FetchApiDataService {
   addTagToProduct(productID: string, tagID: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.put<any>(`/api/products/${productID}/tags/${tagID}`, {}, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      })
+    }).pipe(
+      map(this.extractResponseData),
+      catchError(this.handleError)
+    );
+
+  }
+
+  //Add supplies to product
+  addSupplyToProduct(productID: string, supplyID: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.put<any>(`/api/products/${productID}/supplies/${supplyID}`, {}, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
