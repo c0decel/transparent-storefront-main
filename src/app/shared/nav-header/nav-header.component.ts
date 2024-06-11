@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FetchApiDataService } from '../../fetch-api-data.service';
+import { FetchProductDataService } from '../../fetch-product-data.service';
+import { FetchUserDataService } from '../../fetch-user-data.service';
+import { AuthService } from '../../auth.service';
+import { User } from '../../models/user.model';
+
+@Component({
+  selector: 'nav-header-component',
+  templateUrl: './nav-header.component.html',
+  styleUrls: ['./nav-header.component.scss']
+})
+export class NavHeaderComponent implements OnInit {
+  user: User[] = [];
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    public fetchApiData: FetchApiDataService,
+    public fetchProductData: FetchProductDataService,
+    public fetchUserData: FetchUserDataService,
+    public router: Router,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar) { }
+
+  ngOnInit(): void {
+    const user = this.authService.getUser();
+  }
+
+  public isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  public isSponsor(): boolean {
+    return this.authService.isSponsor();
+  }
+
+  public isJanitor(): boolean {
+    return this.authService.isJanitor();
+  }
+
+  public currentUser(): string {
+    return this.authService.getUser()._id;
+  }
+
+  goToProfile(): void {
+    const user = this.authService.getUser();
+    console.log(user);
+    if (user) {
+      this.router.navigate(['/profile', user._id]);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  goToNotifs(): void {
+    this.router.navigate(['notifications']);
+  }
+
+  goToHome(): void {
+    this.router.navigate(['store']);
+  }
+
+  openCart(): void {
+    this.router.navigate(['cart']);
+  }
+
+  goToAdminPanel(): void {
+    this.router.navigate(['admin-panel']);
+  }
+
+  goToAnalyticsPanel(): void {
+    this.router.navigate(['analytics-panel']);
+  }
+
+  goToProductSubmit(): void {
+    this.router.navigate(['new-product']);
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['login']);
+  }
+
+  goToSignup(): void {
+    this.router.navigate(['sign-up']);
+  }
+
+  goToForum(): void {
+    this.router.navigate(['discuss']);
+  }
+
+  logOut(): void {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.authService.logout();
+    this.router.navigate(['store']);
+  }
+}

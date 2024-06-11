@@ -1,0 +1,50 @@
+<div class="tag-main">
+    <div class="tag-details">
+        <h1>{{tagData.Tag}}</h1>
+        <p>{{tagData.Description}}</p>
+    </div>
+
+    <div class="content-container">
+        <h2>Products containing tag:</h2>
+        <div class="cart-items">
+            <mat-card *ngFor="let product of products">
+                <mat-card-header>
+                    <mat-card-title>
+                        {{ product.Name }}
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        ${{ product.Price }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <img src="{{ product.Image }}" class="product-image">
+                </mat-card-content>
+
+            </mat-card>
+
+            <p *ngIf="products.length === 0">
+                No products with this tag.
+            </p>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <h2>Threads containing tag:</h2>
+        <p *ngIf="threads.length === 0">
+            No threads with this tag.
+        </p>
+        <table *ngIf="threads.length > 0">
+            <tr>
+                <th>Name</th>
+                <th>Replies</th>
+            </tr>
+            <tr *ngFor="let thread of threads">
+                <td
+                    (click)="openThread(thread._id)"
+                >{{ thread.Title }}</td>
+                <td>{{ thread.ReplyCount }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

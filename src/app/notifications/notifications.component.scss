@@ -1,0 +1,26 @@
+.notifs-container {
+    margin: 20px;
+}
+
+.notification {
+    background-color: #F3DBFF;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    border-color: black;
+    border-width: 3px;
+    border-style: solid;
+}
+
+.Unread {
+    background-color: #DE9DFF;
+}
+
+.notif-header {
+    font-size: 25px;
+    font-weight: 200;
+}
+
+.thread-reply {
+    font-weight: 900;
+}

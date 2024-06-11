@@ -1,0 +1,87 @@
+<nav-header-component>
+        
+</nav-header-component>
+<div class="forum-main">
+    <div class="forum-grid">
+        <div class="forum-titles-box">
+            <h1>Threads:</h1>
+            <div class="forum-threads">
+                <p *ngIf="threads.length === 0">
+                    No threads yet.
+                </p>
+                <table *ngIf="threads.length > 0">
+                    <tr>
+                        <th>Name</th>
+                        <th>Replies</th>
+                    </tr>
+                    <tr *ngFor="let thread of threads">
+                        <td
+                            (click)="openThread(thread._id)"
+                        >{{ thread.Title }}</td>
+                        <td>{{ thread.ReplyCount }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    
+        <div *ngIf="isLoggedIn()" class="post-thread">
+            <h1>Post a thread:</h1>
+
+                <form>
+                    <div class="new-post-container">
+                        <div class="new-post-grid-item">
+                            <h2>Title</h2>
+                            <mat-form-field>
+                                <input
+                                    matInput
+                                    [(ngModel)]="postData.Title"
+                                    placeholder="Thread title"
+                                    name="Title"
+                                    type="text"
+                                >
+                            </mat-form-field>
+    
+                        </div>
+    
+                        <div class="new-post-grid-item">
+                            <h2>Content</h2>
+                        <mat-form-field>
+                            <input
+                                matInput
+                                [(ngModel)]="postData.Content"
+                                placeholder="Thread content"
+                                name="Content"
+                                type="text"
+                            >
+                        </mat-form-field>
+                            
+                        </div>
+    
+                        <div class="new-post-grid-item" *ngIf="allTags.length > 0">
+                            <h2>Add tags</h2>
+                        <div *ngFor="let tag of allTags">
+                            <label>
+                                <input 
+                                    type="checkbox"
+                                    [checked]="selectedTags[tag._id]"
+                                    (change)="toggleTagSelection(tag._id)">
+                                {{ tag.Tag }}
+                            </label>
+                        </div>
+                            
+                        </div>
+                    </div>
+                    
+
+                    <button
+                        (click)="postThread()"
+                    >
+                        Post
+                    </button>
+                    
+                </form>
+
+        </div>
+    </div>
+
+</div>

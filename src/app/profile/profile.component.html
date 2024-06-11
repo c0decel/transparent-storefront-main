@@ -1,0 +1,120 @@
+<nav-header-component>
+        
+</nav-header-component>
+<div class="profile-container">
+    <div class="profile-grid">
+        <div class="profile-grid-item" id="profile-pic">
+            <img>
+        </div>
+        <div class="profile-grid-item" id="account-info">
+            <div style="display: flex;">
+                <h1 [ngClass]="{'has-broom': user?.hasBroom}">{{user?.Username}}</h1>
+                <img *ngIf="user?.hasBroom" src="src/app/icons/crown.svg" class="icon">
+            </div>
+            
+            <p>{{user?.Status}}</p>
+            <h3>Joined on {{user?.JoinDate}}</h3>
+            <p>{{user?.Bio}}</p>
+        </div>
+        
+    </div>
+
+    <div *ngIf="currentUser?.hasBroom">
+        <div style="display: flex; flex-direction: row; align-items: center;">
+            <!--<button
+                (click)="togglePosting(user._id)"
+            >
+                {{ user.canPost ? 'Ban from posting' : 'Allow to post' }}
+            </button>
+        -->
+            <button>
+                Give broom
+            </button>
+            <button>
+                Sponsor
+            </button>
+        </div>
+    </div>
+
+    <div class="user-post-container">
+        <div class="user-post-info">
+            <h2>Posts: {{user?.Posts?.length}}</h2>
+            <h2>Reaction Score: {{reactionScore}}</h2>
+        </div>
+    </div>
+    
+    <div>
+        <h2>Wishlist</h2>
+        <div class="cart-items">
+            <mat-card *ngFor="let wishlistItem of wishlistItems">
+                <mat-card-header>
+                    <mat-card-title>
+                        {{ wishlistItem.Name }}
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        {{ wishlistItem.Price }}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <img src="{{ wishlistItem.Image }}" class="product-image">
+                    <button
+                        class="button"
+                        (click)="removeItemFromWishlist(wishlistItem)"
+                    >
+                        X
+                    </button>
+                </mat-card-content>
+            </mat-card>
+
+            <h2 *ngIf="wishlistItems.length === 0">
+                Wishlist is empty.
+            </h2>
+        </div>
+    </div>
+
+    <div *ngIf="currentUser?._id === user?._id">
+        <h1>
+            Settings
+        </h1>
+        <div>
+            <h2>
+                Update bio:
+            </h2>
+            <form>
+                <input
+                    [(ngModel)]="updatedBio.newBio"
+                    placeholder="New bio"
+                    type="text"
+                    name="newBio"
+                    required
+                >
+            </form>
+            <button
+                (click)="updateBio()"
+            >
+                Update bio
+            </button>
+        </div>
+
+        <div>
+            <h2>
+                Update status:
+            </h2>
+            <form>
+                <input
+                    [(ngModel)]="updatedStatus.newStatus"
+                    placeholder="New status"
+                    type="text"
+                    name="newStatus"
+                    required
+                >
+            </form>
+            <button
+                (click)="updateStatus()"
+            >
+                Update status
+            </button>
+        </div>
+    </div>
+</div>

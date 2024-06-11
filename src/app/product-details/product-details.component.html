@@ -1,0 +1,162 @@
+<nav-header-component>
+        
+</nav-header-component>
+<div class="info-page">
+
+    <div class="product-info">
+        <div class="product-info_item" id="text-info">
+            <h1>{{productData.Name}}</h1>
+            <h2>${{productData.Price}}</h2>
+            <h2>Sales: {{productData.Sales}}</h2>
+            <h2>Stock: {{productData.Stock}}</h2>
+            <h2>Description:</h2>
+            <p>{{productData.Description}}</p>
+            <h2>Upcharge:</h2>
+            <p>{{productData.Upcharge}}%</p>
+
+        </div>
+        <div class="product-info_item" id="image-info">
+            <img
+                src={{productData.Image}}
+            >
+            <h2 *ngIf="tags.length > 0">Tags:</h2>
+            <ul class="tags-list">
+                <li *ngFor="let tag of tags">
+                    {{ tag }}
+                </li>
+            </ul>
+            <div class="options" id="button-options">
+                <button
+                        class="button"
+                        (click)="addItemToCart(productData._id)"
+                    >
+                        Add to cart
+                    </button>
+                    <button
+                        class="button"
+                        (click)="addItemToWishlist(productData._id)"
+                    >
+                        Wishlist
+                    </button>
+            </div>
+        </div>
+        <div *ngIf="supplies.length > 0" class="product-info_item" id="supply-info">
+            <h2>Supplies:</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Quantity</th>
+                </tr>
+                <tr *ngFor="let supply of supplies">
+                    <td>{{ supply.Name }}</td>
+                    <td>{{ supply.Description }}</td>
+                    <td>{{ supply.Cost }}</td>
+                    <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="reviews-section" *ngIf="relatedThreads.length > 0">
+        <div style="display: flex; flex-direction: row;">
+            <h2>Threads on this product:</h2>
+            <div class="related-threads">
+                <mat-card *ngFor="let thread of relatedThreads">
+                    <mat-card-header>
+                        <mat-card-title>
+                            {{thread.Title}}
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            {{thread.Username}}
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p>
+                            {{thread.Content}}
+                        </p>
+                        <button
+                            (click)="openThread(thread._id)"
+                        >
+                            Open thread
+                        </button>
+
+                    </mat-card-content>
+                </mat-card>
+
+            </div>
+        </div>
+    </div>
+    <div class="reviews-section" *ngIf="isJanitor">
+        <h1>Edit</h1>
+        <div class="content-container">
+            <form class="form">
+                <mat-form-field>
+                    <input
+                        matInput
+                        [(ngModel)]="newStock.newStock"
+                        placeholder="New stock quantity"
+                        type="text"
+                        name="Stock"
+                        required
+                    >
+                </mat-form-field><br>
+                <button
+                    (click)="updateStockQuantity(newStock, productData._id)"
+                >
+                Update Stock
+            </button>
+            </form>
+        </div>
+    </div>
+    <div class="reviews-section">
+        <h1>Reviews</h1>
+        <ul>
+            <li *ngFor="let review of reviews">
+                <h2>{{ review.Username }}</h2>
+                <p style="font-weight: bolder;">Rating: {{ review.Rating }}</p>
+                <p>{{ review.Content }}</p>
+            </li>
+        </ul>
+        <h1>Write a review</h1>
+        <div *ngIf="isLoggedIn()" class="write-review">
+            <form>
+                    <select
+                        [(ngModel)]="reviewData.Rating"
+                        name="Rating"
+                        placeholder="Rating"
+                    >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+            </select>
+
+                    <input
+                        matInput
+                        [(ngModel)]="reviewData.Content"
+                        placeholder="Write a review..."
+                        name="Content"
+                        type="text"
+                    >
+            </form>
+            <button
+                (click)="submitReview()"
+            >
+                Submit
+            </button>
+        </div>
+        <div *ngIf="!isLoggedIn" class="no-login">
+            <h2>Log in to submit a review</h2>
+        </div>
+    </div>
+    <div>
+        <button
+            class="button"
+            (click)="closeDetails()"
+        >
+            Go back
+        </button>
+    </div>
+</div>

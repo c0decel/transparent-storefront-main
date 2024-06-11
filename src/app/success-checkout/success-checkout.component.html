@@ -1,0 +1,35 @@
+<div class="success-page">
+    <div class="success-header">
+        <h1>Success</h1>
+        <h2>Thank you!</h2>
+    </div>
+
+
+    <div class="success-container">
+        <div class="success-grid">
+            <div class="success-grid-item" id="success-image-container">
+                <img class="success-image" src="{{successfulPurchase?.Image}}">
+            </div>
+            <div class="success-grid-item">
+                <div id="success-detail">
+                    <h3>
+                        {{successfulPurchase?.Name}} - ${{successfulPurchase?.Price}}
+                    </h3>
+                    <h4>
+                        Purchased on {{successfulPurchase?.PurchaseDate}}
+                    </h4>
+                    
+                    <p>
+                        Thank you
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <h3>Status: </h3><h2 class="status-bar" id="status-{{successfulPurchase?.Status}}">{{successfulPurchase?.Status}}</h2>
+        </div>
+    </div>
+
+
+   
+</div>

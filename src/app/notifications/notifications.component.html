@@ -1,0 +1,71 @@
+<div>
+    <nav-header-component>
+
+    </nav-header-component>
+    <div class="notifs-container">
+        <div *ngIf="notifs.length === 0" class="notification" style="text-align: center;">
+            <h2>
+                You have no notifications! You must be really boring :(
+            </h2>
+        </div>
+        <div *ngFor="let notif of notifs">
+            <div class="notification" class="{{notif?.Status}}">
+
+                    <p *ngIf="notif.Type == 'ThreadReply'" class="notif-header">
+                        New reply in thread 
+                        <span 
+                            class="thread-reply"
+                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                        >
+                            {{notif?.ThreadLink?.ThreadName}}
+                        </span>
+                    </p>
+
+                    <p *ngIf="notif.Type == 'Mention'" class="notif-header">
+                        You were mentioned in thread 
+                        <span 
+                            class="thread-reply"
+                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                        >
+                            {{notif?.ThreadLink?.ThreadName}}
+                        </span>
+                    </p>
+
+                    <p *ngIf="notif.Type == 'Threadban'" class="notif-header">
+                        {{notif?.Header}} 
+                        <span
+                            class="thread-reply"
+                            (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                        >
+                            {{notif?.UserLink?.Username}}
+                        </span>
+                    </p>
+
+                    <h3>
+                        {{notif?.NotifTime}}
+                    </h3>
+                    <p>
+                        <span *ngIf="notif.Type == 'Mention'">
+                            <span 
+                                class="thread-reply"
+                                (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                            >
+                                {{notif?.UserLink?.Username}} 
+                            </span>
+                        </span>
+                        
+                        {{notif?.Content}}
+                    <span *ngIf="notif.Type == 'Threadban'">
+                        in thread 
+                        <span 
+                            class="thread-reply"
+                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                        >
+                            {{notif?.ThreadLink?.ThreadName}}
+                        </span>
+                    </span>
+                    </p>
+            </div>
+        </div>
+    </div>
+</div>

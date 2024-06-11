@@ -1,0 +1,44 @@
+
+@media only screen and (min-width: 1024px) {
+    .product-image {
+      width: 400px;
+    }
+  }
+
+select {
+    padding: 10px;
+    border-radius: 10px;
+    border-style: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.related-threads {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+
+  mat-card {
+    background-color: white;
+    padding: 20px;
+  }
+
+  mat-card-title {
+    padding: 10px;
+    font-size: 30px;
+  }
+
+  mat-card-subtitle {
+    padding: 10px;
+  }
+
+  mat-card-content {
+    p {
+      margin:10px;
+      background-color: antiquewhite;
+      max-height: fit-content;
+      padding: 10px;
+    }
+  } 
+}
+

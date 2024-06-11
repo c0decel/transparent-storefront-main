@@ -1,0 +1,39 @@
+<div class="store-page">
+    <nav-header-component>
+        
+    </nav-header-component>
+    <div class="product-container">
+        <mat-card *ngFor="let product of products" class="product-card">
+            <mat-card-header>
+                <mat-card-title
+                    (click)="openDetails(product._id, product.Name, product.Price, product.Description, product.Image, product.Sales, product.Stock, product.Upcharge, product.Supplies, product.Reviews)"
+                >
+                    {{ product.Name }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                    ${{ product.Price }}
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <img src="{{ product.Image }}" class="product-image">
+            </mat-card-content>
+            <p>Sales: {{ product.Sales }}</p>
+            <p>{{ product.Stock }} in stock</p>
+            <mat-card-actions>
+                <button
+                    class="button"
+                    (click)="addItemToCart(product._id)"
+                >
+                    Add to cart
+                </button>
+                <button
+                    class="button"
+                    (click)="addItemToWishlist(product._id)"
+                >
+                    Wishlist
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+    </div>
+</div>
