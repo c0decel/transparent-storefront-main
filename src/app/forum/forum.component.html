@@ -13,12 +13,14 @@
                     <tr>
                         <th>Name</th>
                         <th>Replies</th>
+                        <th>OP</th>
                     </tr>
                     <tr *ngFor="let thread of threads">
                         <td
                             (click)="openThread(thread._id)"
                         >{{ thread.Title }}</td>
                         <td>{{ thread.ReplyCount }}</td>
+                        <td>{{ thread.Username }}</td>
                     </tr>
                 </table>
             </div>
