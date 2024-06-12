@@ -4,12 +4,12 @@ export interface Post {
     User: string;
     Username: string;
     Content: string;
-    LikedBy: [];
-    DislikedBy: [];
     ReplyNumber: number;
     PostedAtDate: string;
     PostedAtTime: string;
     Highlighted: boolean;
+    LikedBy: [];
+    DislikedBy: [];
     ReactionScore: number;
     PostBan: boolean;
     ReplyingTo: {

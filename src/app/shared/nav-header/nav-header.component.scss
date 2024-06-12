@@ -1,0 +1,140 @@
+.title-container {
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    height: fit-content;
+    width: auto;
+    margin-bottom: 10px;
+    border-style: solid;
+}
+
+.icon {
+    width: 30px;
+    padding-right: 4px;
+    margin: 0;
+  }
+
+.menu-container {
+    padding-bottom: 20px;
+}
+
+.user-bar {
+    border-style: solid;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: grid;
+    height: 40px;
+    align-items: right;
+}
+
+.user-bar-item {
+    display: flex;
+    flex-direction: row;
+}
+
+.less-wide {
+    left: auto;
+    margin-right: 0;
+}
+
+.menu-container {
+    &.active {
+        display: block;
+        background-color: white;
+    }
+}
+
+.nav-menu {
+    display: none;
+
+    &.active {
+        display: flex;
+        position: fixed; 
+        top: 25%;
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        z-index: 104;
+        width: 90%;
+        flex-direction: column;
+        background-color: white;
+        padding-bottom: 10px;
+    }
+
+    .nav-item {
+        text-align: center;
+    }
+
+    .nav-item-icon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        img {
+            height: fit-content;
+        }
+        height: 28px;
+        text-align: center;
+        
+    }
+    
+}
+
+@media (max-width: 767px) {
+    .menu-icon {
+        display: block;
+        height: 50px;
+        text-align: right;
+    }
+
+    .options-container {
+        display: none;
+    }
+
+    .user-bar {
+        grid-template-columns: 25% auto;
+        left: 50%;
+    }
+
+    .desktop-menu {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .user-bar  {
+        .logged-in-true {
+            grid-template-columns: auto 25%;
+        }
+
+        .logged-in-false {
+            grid-template-columns: auto 10%;
+        }
+    }
+
+    .menu-icon {
+        display: none;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    .menu-container {
+        display: none;
+    }
+
+    .options-container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .desktop-menu {
+        display: flex;
+        flex-direction: row;
+
+        h3 {
+            margin-right: 10px;
+        }
+    }
+}

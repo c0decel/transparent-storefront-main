@@ -1,69 +1,139 @@
+<div class="user-bar" [style.gridTemplateColumns]="getGridTemplateColumns()">
+    <div class="user-bar-item">
+        <img 
+        src="src/app/icons/search.svg" 
+        class="icon"
+    >
+    <img
+        src="src/app/icons/profile.svg"
+        class="icon"
+        *ngIf="isLoggedIn()"
+        (click)="goToProfile()"
+    >
+    <img
+            src="src/app/icons/notification.svg"
+            class="icon"
+            *ngIf="isLoggedIn()"
+            (click)="goToNotifs()"
+    >
+    <img 
+            src="src/app/icons/cart.svg"
+            class="icon"
+            (click)="openCart()"
+    >
+    <img
+        src="src/app/icons/settings.svg"
+        class="icon"
+        *ngIf="isJanitor()"
+        (click)="goToAdminPanel()"
+    >
+    </div>
+
+    <div class="user-bar-item">
+        <div class="less-wide">
+            <div class="menu-icon" (click)="toggleMenu()">
+                <button>
+                    +
+                </button>
+            </div>
+            <div [class.active]="menuActive" class="nav-menu">
+                <div *ngIf="!isLoggedIn()">
+                    <div class="nav-item">
+                        <h2
+                            (click)="goToLogin()"
+                        >
+                            Log In
+                        </h2>
+                    </div>
+                    <div class="nav-item">
+                        <h2
+                            (click)="goToSignup()"
+                        >
+                            Sign Up
+                        </h2>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <h2 
+                        *ngIf="isLoggedIn()"
+                        (click)="goToForum()"
+                    >
+                        Forum
+                    </h2>
+                </div>
+                <div class="nav-item">
+                    <h2 
+                            *ngIf="isLoggedIn()"
+                            (click)="goToAnalyticsPanel()"
+                        >
+                        Analytics
+                    </h2>
+                </div>
+                <div class="nav-item">
+                    <h2
+                        *ngIf="isJanitor()"
+                        (click)="goToProductSubmit()"
+                    >
+                        New
+                    </h2>
+                </div>
+                <div class="nav-item">
+                    <h2 
+                        *ngIf="isLoggedIn()"
+                        (click)="logOut()"
+                    >
+                        Log out
+                    </h2>
+                </div>
+            </div>
+        </div>
+    
+        <div class="desktop-menu">
+                <h3
+                    *ngIf="isJanitor()"
+                    (click)="goToProductSubmit()"
+                >
+                    New
+                </h3>
+                <h3 
+                    *ngIf="isLoggedIn()"
+                    (click)="goToForum()"
+                    >
+                Forum
+                </h3>
+                <h3 
+                    *ngIf="isLoggedIn()"
+                    (click)="goToAnalyticsPanel()"
+                    >
+                Analytics
+                </h3>
+                <h3 
+                    *ngIf="isLoggedIn()"
+                    (click)="logOut()"
+                    >
+                Log out
+                </h3>
+                <h3
+                    *ngIf="!isLoggedIn()"
+                    (click)="goToLogin()"
+                    >
+                Log In
+                </h3>
+                <h3
+                    *ngIf="!isLoggedIn()"
+                    (click)="goToSignup()"
+                    >
+                Sign Up
+                </h3>
+        </div>
+    </div>
+
+</div>
 <div class="title-container">
     <h1
         (click)="goToHome()"
     >
          Transparent Storefront
     </h1>
-    <div class="options-container">
-        <img 
-            src="src/app/icons/cart.svg"
-            class="icon"
-            (click)="openCart()"
-            >
-        <img src="src/app/icons/search.svg" class="icon">
-        <h2
-            *ngIf="!isLoggedIn()"
-            (click)="goToLogin()"
-            >
-        Log In
-        </h2>
-        <img
-            src="src/app/icons/notification.svg"
-            class="icon"
-            *ngIf="isLoggedIn()"
-            (click)="goToNotifs()"
-        >
-        <h2
-            *ngIf="!isLoggedIn()"
-            (click)="goToSignup()"
-            >
-        Sign Up
-        </h2>
-        <h2 
-            *ngIf="isLoggedIn()"
-            (click)="goToForum()"
-            >
-        Forum
-        </h2>
-        <h2 
-            *ngIf="isLoggedIn()"
-            (click)="goToAnalyticsPanel()"
-            >
-        Analytics
-        </h2>
-        <h2 
-            *ngIf="isLoggedIn()"
-            (click)="goToProfile()"
-            >
-        Profile
-        </h2>
-        <h2 
-            *ngIf="isLoggedIn()"
-            (click)="logOut()"
-            >
-        Log out
-        </h2>
-    </div>
-    <div class="options-container" *ngIf="isJanitor()">
-        <h2
-            (click)="goToProductSubmit()"
-        >
-            New
-        </h2>
-        <img
-            src="src/app/icons/settings.svg"
-            class="icon"
-            (click)="goToAdminPanel()"
-        >
-    </div>
+
 </div>

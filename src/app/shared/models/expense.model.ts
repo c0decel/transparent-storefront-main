@@ -4,6 +4,5 @@ export interface Expense {
     Amount: number;
     Description: string;
     ExpenseDate: string;
-    __v: number;
   }
   

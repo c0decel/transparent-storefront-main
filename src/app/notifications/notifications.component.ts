@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+
+//Import services
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { AuthService } from '../auth.service';
-import { User } from '../models/user.model';
-import { Router } from '@angular/router';
-import { Notification } from '../models/notification.model';
-import { Subscription } from 'rxjs';
+
+//Import models
+import { User } from '../shared/models/user.model';
+import { Notification } from '../shared/models/notification.model';
+
 
 @Component({
   selector: 'app-notifications',
@@ -12,7 +16,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent {
-  user: any;
+  user!: User;
   notifs: Notification[]=[];
 
   constructor(
@@ -35,6 +39,9 @@ export class NotificationsComponent {
     this.markAllAsRead();
   }
 
+  /**
+   * Get all current user notifications
+   */
   getNotifs(): void {
     this.fetchUserData.getNotifs().subscribe(
       (items: Notification[]) => {
@@ -49,8 +56,14 @@ export class NotificationsComponent {
       }
     );
   }
-  
 
+  public isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+  
+  /**
+   * Mark all notifications as read
+   */
   markAllAsRead(): void {
     this.fetchUserData.markAsRead().subscribe(
       (result) => {
@@ -62,6 +75,10 @@ export class NotificationsComponent {
     )
   }
 
+  /**
+   * Open user's profile
+   * @param userId user ID
+   */
   openProfile(userId: string): void {
     console.log(userId)
     this.router.navigate(['/profile', userId], {
@@ -73,6 +90,10 @@ export class NotificationsComponent {
     })
   }
 
+  /**
+   * Open thread
+   * @param _id thread ID
+   */
   openThread(_id: string): void {
     this.router.navigate(['/threads', _id])
   }

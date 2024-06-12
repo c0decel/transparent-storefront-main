@@ -3,12 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { FetchProductDataService } from '../fetch-product-data.service';
 import { FetchPaymentDataService } from '../fetch-payment-data.service';
+import { UtilsService } from '../shared/functions/utils.service';
 import { AuthService } from '../auth.service';
-import { Location } from '@angular/common';
+
+//Import models
+import { Purchase } from '../shared/models/purchase.model';
+import { User } from '../shared/models/user.model';
+import { Product } from '../shared/models/product.model';
 
 
 @Component({
@@ -17,11 +24,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./admin-panel.component.scss']
 })
 export class AdminPanelComponent implements OnInit {
+  user: User[]=[];
+  products: Product[] = [];
+  purchases: Purchase[] = [];
+  users: User[]=[];
+
   isJanitor: boolean = false;
-  products: any[] = [];
-  purchases: any[] = [];
-  user: any;
-  users: any[] = [];
+
   newExpenseData: any = {Expense: '', Amount: '', Description: '', ExpenseDate: ''}
   newSaleData: any = {Sale: '', Amount: '', Description: '', SaleDate: ''}
   newTagData: any = {Tag: '', Description: ''}
@@ -29,57 +38,74 @@ export class AdminPanelComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
+    public utilsService: UtilsService,
     public router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public fetchUserData: FetchUserDataService,
-    public fetchPaymentDada: FetchPaymentDataService,
+    public fetchPaymentData: FetchPaymentDataService,
     public fetchProductData: FetchProductDataService,
     public fetchApiData: FetchApiDataService,
   ) {}
 
   ngOnInit(): void { 
+    this.user = this.authService.getUser();
 
     if (this.authService.isJanitor()) {
       this.isJanitor = true;
-    }
+    } 
     
     if (this.isJanitor == false) {
       this.router.navigate(['store']);
     }
 
-    this.user = this.authService.getUser();
-
-    this.fetchUserData.getAllUsers().subscribe(users => {
-      this.users = users;
-    });
-
+    this.getUsers();
     this.getProducts();
     this.getPurchases();
   }
 
+  /**
+   * Get users
+   */
+  getUsers(): void {
+    this.fetchUserData.getAllUsers().subscribe(
+      (users) => {
+      this.users = users;
+      },
+      (error) => {
+        console.log(`Error fetching users: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Get products
+   */
   getProducts(): void {
-    this.fetchProductData.getAllProducts().subscribe((resp: any) => {
-      this.products = resp;
+    this.fetchProductData.getAllProducts().subscribe(
+      (products) => {
+      this.products = products;
       return this.products;
-    });
+      },
+      (error) => {
+        console.log(`Error fetching products: ${error}`);
+      }
+    );
   }
 
+  /**
+   * Get all purchases
+   */
   getPurchases(): void {
-    this.fetchPaymentDada.getAllPurchases().subscribe((resp: any) => {
-      this.purchases = resp;
-      console.log(this.purchases)
-      return this.purchases;
-    });
-  }
-
-  isLoggedIn(): boolean {
-    return this.authService.isAuthenticated();
-  }
-
-  logOut(): void {
-    localStorage.clear();
-    this.router.navigate(['store']);
+    this.fetchPaymentData.getAllPurchases().subscribe(
+      (purchases) => {
+        this.purchases = purchases;
+        return this.purchases;
+      },
+      (error) => {
+        console.log(`Error fetching purchases: ${error}`);
+      }
+    );
   }
 
   /**
@@ -92,7 +118,7 @@ export class AdminPanelComponent implements OnInit {
 
     if (isConfirmed) {
       this.fetchUserData.deleteUser(toDelete).subscribe(
-        (result) => {
+      (result) => {
         alert(`${toDelete} deleted.`);
         console.log(result);
       }, 
@@ -210,5 +236,4 @@ export class AdminPanelComponent implements OnInit {
       }
     );
   }
-
 }

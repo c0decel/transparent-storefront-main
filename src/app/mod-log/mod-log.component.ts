@@ -1,14 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../auth.service';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchProductDataService } from '../fetch-product-data.service';
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { FetchForumDataService } from '../fetch-forum-data.service';
-import { Product } from '../models/product.model';
-import { Ban } from '../models/bans.model';
-import { User } from '../models/user.model';
+import { AuthService } from '../auth.service';
+
+//Import models
+import { Product } from '../shared/models/product.model';
+import { Ban } from '../shared/models/bans.model';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-mod-log',
@@ -16,6 +20,7 @@ import { User } from '../models/user.model';
   styleUrls: ['./mod-log.component.scss']
 })
 export class ModLogComponent {
+  user!: User;
   bans: Ban[] = [];
   users: User[] = [];
 
@@ -31,11 +36,19 @@ export class ModLogComponent {
   ) { }
 
   ngOnInit(): void {
-    this.fetchApiData.getBans().subscribe(
-      (resp: any) => {
-        this.bans = resp;
-        return this.bans;
+    this.user = this.authService.getUser();
 
+    this.getBans();
+  }
+
+  /**
+   * Get all bans
+   */
+  getBans(): void {
+    this.fetchApiData.getBans().subscribe(
+      (bans) => {
+        this.bans = bans;
+        return this.bans;
       },
       (error) => {
         console.error(`Could not fetch bans: ${error}`);

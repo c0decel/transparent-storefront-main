@@ -4,6 +4,5 @@ export interface Sale {
     Amount: number;
     Description: string;
     SaleDate: string;
-    __v: number;
   }
   

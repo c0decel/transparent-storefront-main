@@ -1,24 +1,18 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../auth.service';
+import { MatDialog } from '@angular/material/dialog';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchForumDataService } from '../fetch-forum-data.service';
 import { FetchUserDataService } from '../fetch-user-data.service';
-import { Ban } from '../models/bans.model';
-import { Post } from '../models/post.model';
+import { AuthService } from '../auth.service';
 
-interface Thread {
-  Content: string;
-  Highlighted: boolean;
-  Replies: any[]; 
-  ReplyCount: number;
-  Tags: any[]; 
-  Title: string;
-  Username: string;
-  __v: number;
-  _id: string;
-}
+//Import models
+import { Ban } from '../shared/models/bans.model';
+import { Post } from '../shared/models/post.model';
+import { Thread } from '../shared/models/thread.model';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-thread',
@@ -27,19 +21,24 @@ interface Thread {
 })
 
 export class ThreadComponent {
-  replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false}
-  thread: Thread | null = null;
-  isJanitor: boolean = false;
-  user: any;
-  users: any[] = [];
+  user!: User;
+  users: User[] = [];
   replies: Post[] = [];
-  currentIndex: number = 0;
+  thread!: Thread;
+
+  isJanitor: boolean = false;
+
   modalOpen = false;
+
   BannedUser: string = '';
   BannedFrom: string = '';
   BannedForPost: string = '';
   BannedBy: string = '';
-  banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''}
+
+  threadData: any;
+
+  replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
+  banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
 
   constructor(
     public router: Router,
@@ -52,45 +51,75 @@ export class ThreadComponent {
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const threadId = params.get('id');
-      if (threadId) {
-        this.fetchForumData.getOneThread(threadId).subscribe(data => {
-          this.thread = data.thread;
-          console.log(this.thread)
-        });
-
-        this.fetchForumData.getAllReplies(threadId).subscribe(
-          (result: any) => {
-            this.replies = result;
-            console.log(this.replies);
-          },
-          (error) => {
-            console.error(`Error fetching replies: ${error}`);
-          }
-        );
-      }
-    });
+    this.user = this.authService.getUser();
 
     if (this.authService.isJanitor()) {
       this.isJanitor = true;
     }
 
-    this.user = this.authService.getUser();
-    console.log(this.user);
+    this.route.paramMap.subscribe(params => {
+      const threadId = params.get('id');
+      if (threadId) {
+        this.getThread(threadId);
+        this.getThreadReplies(threadId);
+        }
+      }
+    );
 
-    this.fetchUserData.getAllUsers().subscribe(users => {
-      this.users = users;
-    });
-
-    console.log(this.modalOpen);
-
+    this.getAllUsers();
   }
 
   public isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }
 
+  /**
+   * Get all users
+   */
+  getAllUsers(): void {
+    this.fetchUserData.getAllUsers().subscribe(
+      (users) => {
+        this.users = users;
+      },
+      (error) => {
+        console.log(`Couldn't fetch users: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Get current thread
+   */
+  getThread(threadId: string): void {
+    this.fetchForumData.getOneThread(threadId).subscribe(
+      (data) => {
+        this.thread = data.thread;
+        console.log(this.thread)
+      },
+      (error) => {
+        console.log(`Couldn't fetch thread: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Get thread replies
+   */
+  getThreadReplies(threadId: string): void {
+    this.fetchForumData.getAllReplies(threadId).subscribe(
+      (replies) => {
+        this.replies = replies;
+      },
+      (error) => {
+        console.error(`Error fetching replies: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Open user profile
+   * @param userId user ID
+   */
   openProfile(userId: string): void {
     console.log(userId)
     this.router.navigate(['/profile', userId], {
@@ -102,13 +131,19 @@ export class ThreadComponent {
     })
   }
 
+  /**
+   * Open ban modal
+   * @param userId user ID to ban
+   * @param threadId thread ID to ban user from
+   * @param replyId reply ID of post to ban
+   */
   openBanModal(userId: string, threadId: string, replyId: string): void {
     this.modalOpen = true;
 
     this.BannedUser = userId;
     this.BannedFrom = threadId;
     this.BannedForPost = replyId;
-    this.BannedBy = this.user;
+    this.BannedBy = this.user._id;
     console.log(this.BannedBy)
     console.log(this.BannedUser)
     console.log(this.BannedFrom)
@@ -122,8 +157,12 @@ export class ThreadComponent {
     console.log(this.modalOpen)
   }
 
+  /**
+   * Ban user from thread
+   * @param banData data of user to ban
+   */
   banUser(banData: Ban): void {
-    banData.BannedBy = this.user;
+    banData.BannedBy = this.user._id;
     banData.BannedFrom = this.BannedFrom;
     banData.BannedForPost = this.BannedForPost;
     banData.Reason = this.banData.Reason; 
@@ -136,8 +175,7 @@ export class ThreadComponent {
     this.fetchForumData.banUser(banData).subscribe(
       (result) => {
         console.log(`User has been banned: ${result}`);
-        console.log(`User banned for: ${banData.BannedForPost}`)
-        
+        console.log(`User banned for: ${banData.BannedForPost}`);
       },
       (error) => {
         console.error(`Error banning user: ${error}`);
@@ -146,10 +184,6 @@ export class ThreadComponent {
   
     this.closeModal();
   }
-  
-  
-  
-
 
   /**
    * Highlight or unhighlight a reply
@@ -159,17 +193,19 @@ export class ThreadComponent {
     const isConfirmed = confirm(`Update highlight status for this post?`);
 
     if (isConfirmed) {
-      this.fetchForumData.toggleHighlight(postId).subscribe(() => {
-        console.log(`${postId} updated.`);
-        window.location.reload();
-      }, error => {
-        console.error(`Error updating: ${error}`);
-      });
+      this.fetchForumData.toggleHighlight(postId).subscribe(
+        (result) => {
+          console.log(`${postId} updated.`);
+          window.location.reload();
+        }, 
+        (error) => {
+          console.error(`Error updating: ${error}`);
+        }
+      );
     } else {
       console.log(`Update canceled by user.`);
     }
   }
-
 
   /**
    * Reply to a thread
@@ -187,11 +223,9 @@ export class ThreadComponent {
         ReactionScore: 0
       };
   
-      console.log(replyData);
-  
       this.fetchForumData.postNewReply(replyData).subscribe(
-        (result: any) => {
-          console.log(`Response created successfully: ${result.message}`);
+        (result) => {
+          console.log(`Response created successfully.`);
           window.location.reload();
         },
         (error) => {
@@ -203,22 +237,21 @@ export class ThreadComponent {
     }
   }
   
-  
-
+  /**
+   * Like a post
+   * @param postId ID of post to like
+   */
   likePost(postId: string): void {
     this.fetchForumData.getOnePost(postId).subscribe(
       (post) => {
-        const user = this.authService.getUser();
-
-          this.fetchForumData.likePost(postId).subscribe(
-            (result) => {
-              console.log(`Post liked successfully: ${result}`);
-            },
-            (error) => {
-              console.error(`Error liking post: ${error}`);
-            }
-          );
-        
+        this.fetchForumData.likePost(postId).subscribe(
+          (result) => {
+            console.log(`Post liked successfully: ${result}`);
+          },
+          (error) => {
+            console.error(`Error liking post: ${error}`);
+          }
+        );
       },
       (error) => {
         console.error(`Error fetching post: ${error}`);
@@ -226,26 +259,27 @@ export class ThreadComponent {
     );
   }
 
+  /**
+   * Dislike a post
+   * @param postId ID of post to dislike
+   */
   dislikePost(postId: string): void {
     this.fetchForumData.getOnePost(postId).subscribe(
         (post) => {
-                this.fetchForumData.dislikePost(postId).subscribe(
-                    (result) => {
-                      console.log(`Post disliked successfully: ${result}`);
-                    },
-                    (error) => {
-                      console.error(`Error disliking post: ${error}`);
-                    }
-                );
-            
+          this.fetchForumData.dislikePost(postId).subscribe(
+            (result) => {
+              console.log(`Post disliked successfully: ${result}`);
+            },
+            (error) => {
+              console.error(`Error disliking post: ${error}`);
+            }
+          ); 
         },
         (error) => {
           console.error(`Error fetching post: ${error}`);
         }
     );
   }
-
-
 }
 
 

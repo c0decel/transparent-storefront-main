@@ -4,13 +4,13 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FetchApiDataService } from './fetch-api-data.service';
-import { Product } from './models/product.model';
+import { Product } from './shared/models/product.model';
 
 
 /**
  * Replace with your API URL
  */
-const apiUrl = 'https://your-api.com/';
+const apiUrl = 'https://transparent-storefront-api-7a631c0a8a92.herokuapp.com';
 
 @Injectable({
   providedIn: 'root'

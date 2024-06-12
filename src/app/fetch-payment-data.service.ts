@@ -9,7 +9,7 @@ import { FetchProductDataService } from './fetch-product-data.service';
 /**
  * Replace with your API URL
  */
-const apiUrl = 'https://your-api.com/';
+const apiUrl = 'https://transparent-storefront-api-7a631c0a8a92.herokuapp.com';
 
 @Injectable({
   providedIn: 'root'

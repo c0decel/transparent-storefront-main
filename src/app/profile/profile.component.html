@@ -8,13 +8,13 @@
         </div>
         <div class="profile-grid-item" id="account-info">
             <div style="display: flex;">
-                <h1 [ngClass]="{'has-broom': user?.hasBroom}">{{user?.Username}}</h1>
+                <h1 [ngClass]="{'has-broom': user.hasBroom}">{{user.Username}}</h1>
                 <img *ngIf="user?.hasBroom" src="src/app/icons/crown.svg" class="icon">
             </div>
             
-            <p>{{user?.Status}}</p>
-            <h3>Joined on {{user?.JoinDate}}</h3>
-            <p>{{user?.Bio}}</p>
+            <p>{{user.Status}}</p>
+            <h3>Joined on {{user.JoinDate}}</h3>
+            <p>{{user.Bio}}</p>
         </div>
         
     </div>
@@ -38,7 +38,7 @@
 
     <div class="user-post-container">
         <div class="user-post-info">
-            <h2>Posts: {{user?.Posts?.length}}</h2>
+            <h2>Posts: {{user.Posts.length}}</h2>
             <h2>Reaction Score: {{reactionScore}}</h2>
         </div>
     </div>

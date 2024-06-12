@@ -3,11 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+//Import services
 import { FetchApiDataService } from '../../fetch-api-data.service';
 import { FetchProductDataService } from '../../fetch-product-data.service';
 import { FetchUserDataService } from '../../fetch-user-data.service';
+
+//Import models
 import { AuthService } from '../../auth.service';
-import { User } from '../../models/user.model';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'nav-header-component',
@@ -15,7 +19,9 @@ import { User } from '../../models/user.model';
   styleUrls: ['./nav-header.component.scss']
 })
 export class NavHeaderComponent implements OnInit {
-  user: User[] = [];
+  user!: User;
+
+  menuActive: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -28,7 +34,7 @@ export class NavHeaderComponent implements OnInit {
     public snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    const user = this.authService.getUser();
+    this.user = this.authService.getUser();
   }
 
   public isLoggedIn(): boolean {
@@ -45,6 +51,14 @@ export class NavHeaderComponent implements OnInit {
 
   public currentUser(): string {
     return this.authService.getUser()._id;
+  }
+
+  getGridTemplateColumns(): string {
+    return this.isLoggedIn() ? 'auto 25%' : 'auto 13%';
+  }
+
+  toggleMenu(): void {
+    this.menuActive = !this.menuActive
   }
 
   goToProfile(): void {

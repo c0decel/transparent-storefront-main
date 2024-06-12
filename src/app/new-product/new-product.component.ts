@@ -1,9 +1,15 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchProductDataService } from '../fetch-product-data.service';
-import { User } from '../models/user.model';
+
+//Import models
+import { User } from '../shared/models/user.model';
+import { Supply } from '../shared/models/supply.model';
+import { Tag } from '../shared/models/tag.model';
 
 interface SupplyDetail {
   selected: boolean;
@@ -18,16 +24,18 @@ interface SupplyDetail {
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
-  newProductData: any = { Name: '', Price: '', Description: '', Stock: '', Upcharge: '', Image: '', Tags: [], Supplies: [{SupplyID: '', Amount: '', Measurement: '', Name: '', Description: '', Supplier: ''}] };
-  newSupplyData: any = { Name: '', Description: '', Cost: '', Quantity: '', Measurement: '', Supplier: ''};
-  newDiscountData: any = { Name: '', Description: '', Type: '', Amount: 0, ExpiresOn: ''};
+  user!: User;
+  allTags: Tag[] = [];
+  allSupplies: Supply[] = [];
+
   supplyDetailData: { [supplyId: string]: SupplyDetail } = {};
-  allTags: any[] = [];
-  allSupplies: any[] = [];
   selectedTags: { [tagId: string]: boolean } = {};
   selectedSupplies: { [supplyId: string]: boolean } = {};
   measurementUnits = ['grams', 'oz', 'piece'];
-  user: User[] =[];
+
+  newProductData: any = { Name: '', Price: '', Description: '', Stock: '', Upcharge: '', Image: '', Tags: [], Supplies: [{SupplyID: '', Amount: '', Measurement: '', Name: '', Description: '', Supplier: ''}] };
+  newSupplyData: any = { Name: '', Description: '', Cost: '', Quantity: '', Measurement: '', Supplier: ''};
+  newDiscountData: any = { Name: '', Description: '', Type: '', Amount: 0, ExpiresOn: ''};
 
   discountFormVisible: boolean = false;
   productFormVisible: boolean = false;
@@ -41,16 +49,10 @@ export class NewProductComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const user = this.authService.getUser();
-    this.user = user;
+    this.user = this.authService.getUser();
 
     if (!this.authService.isJanitor()) {
       this.router.navigate(['store']);
-    }
-
-    if (!user._id) {
-      this.router.navigate(['store']);
-      return;
     }
 
     this.fetchApiData.getAllTags().subscribe(allTags => {
@@ -62,16 +64,31 @@ export class NewProductComponent implements OnInit {
     });
   }
 
+  /**
+   * Toggle discount form
+   */
   toggleDiscount(): void {
     this.discountFormVisible = !this.discountFormVisible
   }
+
+  /**
+   * Toggle new product form
+   */
   toggleProduct(): void {
     this.productFormVisible = !this.productFormVisible
   }
+
+  /**
+   * Toggle new tag form
+   */
   toggleTag(): void {
     this.tagFormVisible = !this.tagFormVisible
   }
 
+  /**
+   * Select or unselect tag
+   * @param tagId selected tag
+   */
   toggleTagSelection(tagId: string): void {
     this.selectedTags[tagId] = !this.selectedTags[tagId];
 
@@ -83,15 +100,22 @@ export class NewProductComponent implements OnInit {
     }
   }
 
+  /**
+   * Select or unselect supply
+   * @param supplyId selected supply
+   */
   toggleSupplySelection(supplyId: string): void {
     this.selectedSupplies[supplyId] = !this.selectedSupplies[supplyId];
     if (this.selectedSupplies[supplyId]) {
-      this.supplyDetailData[supplyId] = { selected: true, Amount: 0, Measurement: undefined };
+      this.supplyDetailData[supplyId] = { selected: true, Amount: 0, Measurement: '' };
     } else {
       delete this.supplyDetailData[supplyId];
     }
   }
 
+  /**
+   * Submit new discount
+   */
   submitNewDiscount(): void {
     this.fetchProductData.addNewDiscount(this.newDiscountData).subscribe(
       (result) => {
@@ -105,27 +129,30 @@ export class NewProductComponent implements OnInit {
     );
   }
 
+  /**
+   * Submit new product
+   */
   submitNewProduct(): void {
     if (!this.newProductData.Image) {
       this.newProductData.Image = 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg';
     }
-    const selectedTags = this.allTags.filter(tag => this.selectedTags[tag._id]).map(tag => tag._id);
+    const selectedTags = this.allTags.filter(tag => this.selectedTags[tag.TagID]).map(tag => tag.TagID);
     this.newProductData.Tags = selectedTags;
   
-    const selectedSupplies = this.allSupplies.filter(supply => this.selectedSupplies[supply._id]);
-    const validSupplies = selectedSupplies.filter(supply => this.supplyDetailData[supply._id]);
+    const selectedSupplies = this.allSupplies.filter(supply => this.selectedSupplies[supply.SupplyID]);
+    const validSupplies = selectedSupplies.filter(supply => this.supplyDetailData[supply.SupplyID]);
   
     this.newProductData.Supplies = [];
 
     validSupplies.forEach(supply => {
       const costOz = supply.CostOz;
-      const supplyId = supply._id;
+      const supplyId = supply.SupplyID;
       const supplyName = supply.Name;
       const supplyDescription = supply.Description;
       console.log(supply.Description)
       const supplySupplier = supply.Supplier;
-      const supplyAmount = this.supplyDetailData[supply._id].Amount;
-      const supplyMeasurement = this.supplyDetailData[supply._id].Measurement;
+      const supplyAmount = this.supplyDetailData[supply.SupplyID].Amount;
+      const supplyMeasurement = this.supplyDetailData[supply.SupplyID].Measurement;
   
       if (supplyId && supplyAmount && supplyMeasurement) {
         this.newProductData.Supplies.push({
@@ -152,6 +179,13 @@ export class NewProductComponent implements OnInit {
     );
   }
   
+  /**
+   * Calculate cost of used supplies
+   * @param costOz cost per ounce
+   * @param supplyAmount amount of supply
+   * @param supplyMeasurement unit of measurement
+   * @returns calculated cost of supply usage
+   */
   calculateCost(costOz: number, supplyAmount: number, supplyMeasurement: string): number {
     let convertedUnit = 0;
     
@@ -172,7 +206,9 @@ export class NewProductComponent implements OnInit {
     }
   }
   
-
+  /**
+   * Submit new supply
+   */
   submitNewSupply(): void {
     if (!this.newSupplyData.Supplier) {
       this.newSupplyData.Supplier = `None specified.`
@@ -188,14 +224,4 @@ export class NewProductComponent implements OnInit {
       }
     );
   }
-  
-  isLoggedIn(): boolean {
-    return this.authService.isAuthenticated();
-  }
-
-  logOut(): void {
-    localStorage.clear();
-    this.router.navigate(['store']);
-  }
-  
 }

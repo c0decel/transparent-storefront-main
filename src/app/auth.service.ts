@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FetchApiDataService } from './fetch-api-data.service';
-import { User } from './models/user.model';
+import { User } from './shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'

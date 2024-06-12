@@ -1,10 +1,7 @@
 export interface Notification {
     Status: string;
     Type: string;
-    Content: string;
     Header: string;
-    NotifDate: any;
-    NotifTime: any;
     UserLink: {
         UserID: string;
         Username: string;
@@ -14,4 +11,7 @@ export interface Notification {
         ThreadID: string;
         ThreadName: string;
     };
+    Content: string;
+    NotifDate: string;
+    NotifTime: string;
 }

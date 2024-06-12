@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { loadStripe } from '@stripe/stripe-js';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { FetchPaymentDataService } from '../fetch-payment-data.service';
 import { AuthService } from '../auth.service';
-import { environment } from '../../environments/environment';
-import { loadStripe } from '@stripe/stripe-js';
-import { Wishlist } from '../models/wishlist.model';
-import { Cart } from '../models/cart.model';
+
+//Import models
+import { Wishlist } from '../shared/models/wishlist.model';
+import { Cart } from '../shared/models/cart.model';
 import { ModalService } from '../modal.service';
-
-
-type User = { _id?: string, Username?: string, Cart?: [], Purchases?: []};
-
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-cart',
@@ -21,11 +22,13 @@ type User = { _id?: string, Username?: string, Cart?: [], Purchases?: []};
 })
 
 export class CartComponent {
-  checkoutDetails: any = { ProductID: '', successUrl: '', cancelUrl: '', UserID: ''}
-  user: User = {};
+  user!: User;
   cartItems: Cart[] = [];
   wishlistItems: Wishlist[] = [];
+
   stripePromise!: Promise<any>;
+
+  checkoutDetails: any = { ProductID: '', successUrl: '', cancelUrl: '', UserID: ''};
 
   constructor(
     private modalService: ModalService,
@@ -38,36 +41,43 @@ export class CartComponent {
     ngOnInit(): void {
       this.stripePromise = loadStripe(environment.stripePublicKeyTEST);
 
-      const user = this.authService.getUser();
+      this.user = this.authService.getUser();
 
-      if (!user._id) {
+      if (!this.user) {
         this.router.navigate(['store']);
-        return;
-      } else {
-        this.user = user;
       }
 
-      this.fetchUserData.getCartItems().subscribe(
-      (items: Cart[]) => {
-          this.cartItems = items;
-          console.log(`Cart Items: ${this.cartItems[0].ProductID}`);
-      }, 
-      (error) => {
-        console.error(`Could not fetch cart items: ${error}`);
-      });
-
-      this.fetchUserData.getListItems().subscribe(
-      (items: Wishlist[]) => {
-        this.wishlistItems = items;
-        console.log(`Wishlist Items: ${this.wishlistItems}`);
-      }, 
-      (error) => {
-        console.error(`Could not fetch wishlist items: ${error}`);
-      });
+      this.getCartItems();
+      this.getListItems();
     }
 
-    public isLoggedIn(): boolean {
-      return this.authService.isAuthenticated();
+    /**
+     * Get current user's cart items
+     */
+    getCartItems(): void {
+      this.fetchUserData.getCartItems().subscribe(
+        (items: Cart[]) => {
+            this.cartItems = items;
+        }, 
+        (error) => {
+          console.error(`Couldn't fetch cart items: ${error}`);
+        }
+      );
+    }
+
+    /**
+     * Get current user's wishlist items
+     */
+    getListItems(): void {
+      this.fetchUserData.getListItems().subscribe(
+        (items: Wishlist[]) => {
+          this.wishlistItems = items;
+          console.log(`Wishlist Items: ${this.wishlistItems}`);
+        }, 
+        (error) => {
+          console.error(`Could not fetch wishlist items: ${error}`);
+        }
+      );
     }
 
     /**
@@ -77,11 +87,11 @@ export class CartComponent {
     removeItemFromCart(item: Cart): void {
       const itemID: string = item.ProductID as string;
       this.fetchUserData.removeFromCart(itemID).subscribe(
-      () => {
+      (result) => {
         console.log(`${itemID} removed from cart.`)
         this.modalService.openModal({
-          title: 'Removed from cart',
-          content: 'Test'
+          title: `Removed from cart`,
+          content: `Test`
         })
       },
       (error) => {
@@ -93,22 +103,27 @@ export class CartComponent {
      * Remove item from wishlist
      * @param item 
      */
-
     removeItemFromWishlist(item: Wishlist): void {
       const itemID: string = item.ProductID as string;
       this.fetchUserData.removeFromList(itemID).subscribe(
-      () => {
-        console.log(`${itemID} removed from wishlist.`)
-        this.modalService.openModal({
-          title: 'Removed from wishlist',
-          content: 'Test'
-        })
-      },
-      (error) => {
-        console.error(`Cannot remove from wishlist: ${error}`)
-      })
+        (result) => {
+          console.log(`${itemID} removed from wishlist.`)
+          this.modalService.openModal({
+            title: `Removed from wishlist`,
+            content: `Test`
+          })
+        },
+        (error) => {
+          console.error(`Cannot remove from wishlist: ${error}`)
+        }
+      )
     }
 
+    /**
+     * Purchase an item
+     * @param item cart item to purchase
+     * @returns Stripe checkout session
+     */
     checkoutCart(item: Cart): void {
       if (!this.stripePromise) {
         console.error(`No stripe promise.`);
@@ -139,12 +154,4 @@ export class CartComponent {
         }
       )
     }
-
-  logOut(): void {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    this.authService.logout();
-    this.router.navigate(['store']);
-  }
-
 }

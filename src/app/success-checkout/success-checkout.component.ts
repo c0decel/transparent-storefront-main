@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { FetchUserDataService } from '../fetch-user-data.service';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
-import { Purchase } from '../models/purchase.model';
+
+//Import services
+import { FetchUserDataService } from '../fetch-user-data.service';
+import { AuthService } from '../auth.service';
+
+//Import models
+import { User } from '../shared/models/user.model';
+import { Purchase } from '../shared/models/purchase.model';
 
 @Component({
   selector: 'app-success-checkout',
@@ -12,8 +16,8 @@ import { Purchase } from '../models/purchase.model';
   styleUrls: ['./success-checkout.component.scss']
 })
 export class SuccessCheckoutComponent {
-  user: User | null=null;
-  successfulPurchase: Purchase | null=null;
+  user!: User;
+  successfulPurchase!: Purchase;
 
   constructor(
     private http: HttpClient,
@@ -23,15 +27,26 @@ export class SuccessCheckoutComponent {
   ) {}
 
   ngOnInit(): void {
-    const _id = this.authService.getUser();
+    this.user = this.authService.getUser();
 
+    if (!this.user) {
+      this.router.navigate(['store']);
+    }
+
+    this.getMostRecentPurchase();
+  }
+
+  /**
+   * Get user's most recent purchase
+   */
+  getMostRecentPurchase(): void {
     this.fetchUserData.getMostRecentPurchase().subscribe(
-      (purchase: Purchase) => {
+      (purchase) => {
         this.successfulPurchase = purchase;
-        console.log(this.successfulPurchase)
       },
       (error) => {
         console.error(`Could not fetch.`)
-      });
+      }
+    );
   }
 }

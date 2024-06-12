@@ -1,13 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { Data, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchProductDataService } from '../fetch-product-data.service';
+import { UtilsService } from '../shared/functions/utils.service';
 import { AuthService } from '../auth.service';
-import { Sale } from '../models/sale.model';
-import { Expense } from '../models/expense.model';
+
+//Import models
+import { Sale } from '../shared/models/sale.model';
+import { Expense } from '../shared/models/expense.model';
+import { User } from '../shared/models/user.model';
+import { Product } from '../shared/models/product.model';
+import { Supply } from '../shared/models/supply.model';
+import { Tag } from '../shared/models/tag.model';
 
 interface DataPoint {
   label: string;
@@ -21,22 +30,26 @@ interface DataPoint {
   styleUrls: ['./analytics-panel.component.scss']
 })
 export class AnalyticsPanelComponent implements OnInit {
-  user: any;
-  products: any[] = [];
+  user: User[]=[];
+  products: Product[]=[];
+  expenses: Expense[]=[];
+  sales: Sale[]=[];
+  supplies: Supply[]=[];
+  tags: Tag[]=[];
+
+  dataPoints: DataPoint[]=[];
+  salesDataPoints: any[]=[];
+
   isJanitor: boolean = false;
-  sales: Sale[] = [];
   groupedExpenses: { [formattedExpense: string]: (Expense)[] } = {};
   groupedSales: { [formattedSale: string]: (Sale)[] } = {};
-  salesDataPoints: any[]=[];
-  dataPoints: DataPoint[]=[];
-  expenses: Expense[] = [];
-  supplies: any[]=[];
-  tags: any[] = [];
+
   chartOptions: any = {};
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
+    public utilsService: UtilsService,
     public router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
@@ -45,25 +58,71 @@ export class AnalyticsPanelComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.user = this.authService.getUser();
+
     if (this.authService.isJanitor()) {
       this.isJanitor = true;
     }
 
-    this.user = this.authService.getUser();
-
-    this.fetchApiData.getAllTags().subscribe(tags => {
-      this.tags = tags;
-    });
-
-    this.fetchApiData.getAllSupplies().subscribe(supplies => {
-      this.supplies = supplies;
-    });
-    
+    this.getTags();
+    this.getSupplies();
     this.getFinances();
   }
 
+  public isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  /**
+   * Get all products
+   */
+  getProducts(): void {
+    this.fetchProductData.getAllProducts().subscribe(
+    (products) => {
+      this.products = products;
+    }, 
+    (error) => {
+      console.error(`Error fetching products: ${error}`);
+    });
+  }
+
+  /**
+   * Get all tags
+   */
+  getTags(): void {
+    this.fetchApiData.getAllTags().subscribe(
+      (tags) => {
+        this.tags = tags;
+        console.log(this.tags[0])
+      },
+      (error) => {
+        console.log(`Error fetching tags: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Get all supplies
+   */
+  getSupplies(): void {
+    this.fetchApiData.getAllSupplies().subscribe(
+      (supplies) => {
+        this.supplies = supplies;
+      },
+      (error) => {
+        console.log(`Error fetching supplies: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Get all sales and expense data
+   */
   getFinances(): void {
     const allDataPoints: DataPoint[] = [];
+    /**
+     * Get all sales 
+     */
     this.fetchApiData.getAllSales().subscribe(
       (sales: Sale[]) => {
         this.sales = sales;
@@ -73,40 +132,41 @@ export class AnalyticsPanelComponent implements OnInit {
           const salesForDate = this.groupedSales[formattedSale];
           const totalSalesForDate = salesForDate.reduce((total, sale) => total + sale.Amount, 0);
           allDataPoints.push({ label: formattedSale, y: totalSalesForDate, type: 'sale' });
-        }
-        
-    },
+        } 
+      },
+      (error) => {
+        console.log(`Error fetching sales: ${error}`);
+      }
+    );
 
-    
-    (error) => {
-      console.log('Error fetching sales:', error);
-    });
-
+    /**
+     * Get all expenses
+     */
     this.fetchApiData.getAllExpenses().subscribe(
       (expenses: Expense[]) => {
         this.expenses = expenses;
         this.groupedExpenses = this.groupExpensesByDate(expenses);
         
-
         for (const formattedExpense in this.groupedExpenses) {
           const expensesForDate = this.groupedExpenses[formattedExpense];
           const totalExpensesForDate = expensesForDate.reduce((total, expense) => total + expense.Amount, 0);
           allDataPoints.push({ label: formattedExpense, y: totalExpensesForDate, type: 'expense' });
         }
-
         this.dataPoints = allDataPoints;
         console.log(this.dataPoints)
         this.populateChartOptions(this.dataPoints)
+        },
+        (error) => {
+        console.log(`Error fetching expenses: ${error}`);
+        }
+      );
+    }
 
-        
-    },
-    (error) => {
-      console.log('Error fetching expenses:', error);
-    });
-
-  }
-
-
+  /**
+   * Format sales and expense dates
+   * @param dateString 
+   * @returns formatted date
+   */ 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -116,6 +176,11 @@ export class AnalyticsPanelComponent implements OnInit {
     });
   }
 
+  /**
+   * Group sales by date
+   * @param sales 
+   * @returns sales grouped by date
+   */
   groupSalesByDate(sales: Sale[]): { [formattedSale: string]: Sale[] } {
     const groupedSales: { [formattedSale: string]: Sale[] } = {};
   
@@ -131,6 +196,11 @@ export class AnalyticsPanelComponent implements OnInit {
     return groupedSales;
   }
 
+  /**
+   * Group expenses by date
+   * @param expenses 
+   * @returns expenses grouped by date
+   */
   groupExpensesByDate(expenses: Expense[]): { [formattedExpense: string]: Expense[] } {
     const groupedExpenses: { [formattedExpense: string]: Expense[] } = {};
   
@@ -145,17 +215,14 @@ export class AnalyticsPanelComponent implements OnInit {
     return groupedExpenses;
   }
 
-  getProducts(): void {
-    this.fetchProductData.getAllProducts().subscribe(
-    (resp: any) => {
-      this.products = resp;
-    }, 
-    (error) => {
-      console.error('Error fetching products:', error);
-    });
-  }
-
+  /**
+   * Redirects to details of selected tag
+   * @param _id ID of tag
+   * @param Tag name of tag
+   * @param Description description of tag
+   */
   openTagDetails(_id: string, Tag: string, Description: string): void {
+    console.log(_id)
     this.router.navigate(['/tag-details', _id], {
       state: {
         data: {
@@ -167,19 +234,10 @@ export class AnalyticsPanelComponent implements OnInit {
     })
   }
 
-  isLoggedIn(): boolean {
-    return this.authService.isAuthenticated();
-  }
-
-  goToAdminPanel(): void {
-    this.router.navigate(['admin-panel']);
-  }
-
-  logOut(): void {
-    localStorage.clear();
-    this.router.navigate(['store']);
-  }
-
+  /**
+   * Populate analytics chart
+   * @param dataPoints sales and expense data
+   */
   populateChartOptions(dataPoints: DataPoint[]): void {
 
     const groupedData: { [date: string]: { sales: number, expenses: number } } = {};
@@ -251,8 +309,8 @@ export class AnalyticsPanelComponent implements OnInit {
       ]
     };
   }
-  
-  
-  
-  
+
+  goToAdminPanel(): void {
+    this.utilsService.goToAdminPanel();
+  }
 }

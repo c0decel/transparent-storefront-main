@@ -3,9 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchForumDataService } from '../fetch-forum-data.service';
+import { UtilsService } from '../shared/functions/utils.service';
 import { AuthService } from '../auth.service';
+
+//Import models
+import { User } from '../shared/models/user.model';
+import { Thread } from '../shared/models/thread.model';
+import { Tag } from '../shared/models/tag.model';
 
 @Component({
   selector: 'app-forum',
@@ -13,39 +21,66 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./forum.component.scss']
 })
 export class ForumComponent {
-  postData: any = { Title: '', UserID: '', Username: '', Content: '', Tags: []  }
-  user: any;
-  threads: any[] = [];
-  allTags: any[] = [];
+  user!: User;
+  threads: Thread[] = [];
+  allTags: Tag[] = [];
+
   selectedTags: { [tagId: string]: boolean } = {};
+  postData: any = { Title: '', UserID: '', Username: '', Content: '', Tags: []};
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     public fetchApiData: FetchApiDataService,
     public fetchForumData: FetchForumDataService,
+    public utilsService: UtilsService,
     public router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar) { }
 
     ngOnInit(): void {
       this.user = this.authService.getUser();
-      console.log(this.user.Username);
 
-      this.fetchApiData.getAllTags().subscribe(allTags => {
-        this.allTags = allTags;
-      });
-
-      this.fetchForumData.getAllThreads().subscribe(threads => {
-        this.threads = threads;
-      });
-
+      this.getTags();
+      this.getThreads();
     }
 
     public isLoggedIn(): boolean {
       return this.authService.isAuthenticated();
     }
+    
+    /**
+     * Get all tags
+     */
+    getTags(): void {
+      this.fetchApiData.getAllTags().subscribe(
+        (tags) => {
+          this.allTags = tags;
+        },
+        (error) => {
+          console.log(`Couldn't fetch tags: ${error}`);
+        }
+      );
+    }
 
+    /**
+     * Get all threads
+     */
+    getThreads(): void {
+      this.fetchForumData.getAllThreads().subscribe(
+        (threads) => {
+          this.threads = threads;
+        },
+        (error) => {
+          console.log( `Couldn't fetch threads: ${error}`);
+        }
+      );
+    }
+
+    /**
+     * Select or unselect a tag
+     * @param tagId selected tag
+     */
     toggleTagSelection(tagId: string): void {
       this.selectedTags[tagId] = !this.selectedTags[tagId];
   
@@ -64,23 +99,28 @@ export class ForumComponent {
       this.postData.UserID = this.user;
       this.postData.Username = this.user.Username;
 
-      const selectedTags = this.allTags.filter(tag => this.selectedTags[tag._id]).map(tag => tag._id);
+      const selectedTags = this.allTags.filter(
+        tag => this.selectedTags[tag.TagID]).map(tag => tag.TagID
+        );
       this.postData.Tags = selectedTags;
   
       this.fetchForumData.postNewThread(this.postData).subscribe(
         (result) => {
           console.log(`New thread posted: ${result}`);
-          window.location.reload();
+          this.openThread(result._id);
+         // window.location.reload();
         },
         (error) => {
           console.error(`Error posting thread: ${error}`);
         }
       )
     }
-    
+
+    /**
+     * Open a thread
+     * @param _id thread ID
+     */
     openThread(_id: string): void {
       this.router.navigate(['/threads', _id])
     }
-
-
 }

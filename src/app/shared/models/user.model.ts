@@ -1,10 +1,11 @@
 export interface User {
     _id: string;
     Username: string;
+    ProfileImage: string;
     Email: string;
-    hasBroom: boolean;
-    isSponsor: boolean;
+    Birthday: string;
     JoinDate: string;
+    JoinTime: string;
     Cart: [];
     Wishlist: [];
     Purchases: [
@@ -17,10 +18,17 @@ export interface User {
         Price: number
       }
     ];
+    Reviews: [];
     Posts: [];
+    PostCount: number;
     Threads: [];
+    ThreadCount: number;
+    hasBroom: boolean;
+    isSponsor: boolean;
     canPost: boolean;
     Threadbans: [];
-    Bio: string;
     Status: string;
+    Bio: string;
+    Notifications: [];
+    SavedPosts: [];
   }

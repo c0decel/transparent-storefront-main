@@ -3,14 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { FetchForumDataService } from '../fetch-forum-data.service';
 import { AuthService } from '../auth.service';
-import { User } from '../models/user.model';
-import { Wishlist } from '../models/wishlist.model';
-import { Observable } from 'rxjs';
 
+//Import models
+import { User } from '../shared/models/user.model';
+import { Wishlist } from '../shared/models/wishlist.model';
+import { Post } from '../shared/models/post.model';
 
 @Component({
   selector: 'app-profile',
@@ -18,15 +21,18 @@ import { Observable } from 'rxjs';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
+  currentUser!: User;
+  user!: User;
+  wishlistItems: Wishlist[]=[];
+  posts: Post[]=[];
+
   isJanitor: boolean = false;
-  user: User | null=null;
-  currentUser: User | null = null;
-  reactionScore: number = 0;
-  wishlistItems: Wishlist[] = [];
-  posts: any[] = [];
+
+  reactionScore!: number;
+  userId: string | null=null;
+
   @Input() updatedBio = { newBio: '' };
   @Input() updatedStatus = { newStatus: ''};
-  userId: string | null = null;
 
   constructor(
     private http: HttpClient,
@@ -42,21 +48,16 @@ export class ProfileComponent {
     ngOnInit(): void {
       this.userId = this.route.snapshot.paramMap.get('id');
       this.currentUser = this.authService.getUser();
+      
       if (this.userId) {
-        this.fetchUserData.getUserByID(this.userId).subscribe(
-          (data) => {
-            this.user = data;
-            console.log(this.user)
-
-          },
-          (error) => {
-            console.error('Error fetching user data:', error);
-          }
-        );
+        this.loadUserProfile(this.userId);
       }
-    
     }
-
+    
+    /**
+     * Load profile of selected user
+     * @param userId user ID
+     */
     loadUserProfile(userId: string): void {
       this.fetchUserData.getUserByID(userId).subscribe(user => {
         this.user = user;
@@ -73,23 +74,14 @@ export class ProfileComponent {
           } 
 
           this.reactionScore = totalLikes - totalDislikes;
-
         }
 
       })
     }
 
-    public isLoggedIn(): boolean {
-      return this.authService.isAuthenticated();
-    }
-
-    logOut(): void {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      this.authService.logout();
-      this.router.navigate(['store']);
-    }
-
+    /**
+     * Update user bio
+     */
     updateBio(): void {
       this.fetchUserData.editBio(this.updatedBio).subscribe(
         (result) => {
@@ -102,6 +94,9 @@ export class ProfileComponent {
         });
     }
 
+    /**
+     * Update user status
+     */
     updateStatus(): void {
       this.fetchUserData.editStatus(this.updatedStatus).subscribe(
         (result) => {
@@ -149,20 +144,24 @@ export class ProfileComponent {
 
       if (isConfirmed) {
         this.fetchUserData.toggleSponsorStatus(userId).subscribe(
-        (result) => {
-          alert(`${userId} updated.`);
-          console.log(`${userId} updated: ${result}`);
-        }, 
-        (error) => {
-          alert(`Could not update ${userId}`);
-          console.error(`Error updating ${userId}: ${error}`);
-        });
+          (result) => {
+            alert(`${userId} updated.`);
+            console.log(`${userId} updated: ${result}`);
+          }, 
+          (error) => {
+            alert(`Could not update ${userId}`);
+            console.error(`Error updating ${userId}: ${error}`);
+          }
+        );
       } else {
         console.log(`Update canceled by user.`);
       }
-
     }
 
+    /**
+     * Toggle user's posting ability
+     * @param userId user ID
+     */
     togglePosting(userId: string): void {
       console.log(userId)
 
@@ -170,18 +169,17 @@ export class ProfileComponent {
 
       if (isConfirmed) {
         this.fetchUserData.togglePostPerms(userId).subscribe(
-        (result) => {
-          alert(`${userId} updated.`);
-          console.log(`${userId} updated: ${result}`);
-        }, 
-        (error) => {
-          alert(`Could not update ${userId}`);
-          console.error(`Error updating ${userId}: ${error}`);
-        });
+          (result) => {
+            alert(`${userId} updated.`);
+          }, 
+          (error) => {
+            alert(`Could not update ${userId}`);
+            console.error(`Error updating ${userId}: ${error}`);
+          }
+        );
       } else {
         console.log(`Update canceled by user.`);
       }
-
     }
 
     /**
@@ -190,9 +188,14 @@ export class ProfileComponent {
      */
     removeItemFromWishlist(item: Wishlist): void {
       const itemID: string = item.ProductID as string;
-      this.fetchUserData.removeFromList(itemID).subscribe(() => {
-        console.log('Removed from list.')
-      })
+      this.fetchUserData.removeFromList(itemID).subscribe(
+        (result) => {
+          console.log(`Removed from list.`)
+        },
+        (error) => {
+          console.log(`Couldn't remove item from wishlist: ${error}`)
+        }
+      );
     }
 
 }

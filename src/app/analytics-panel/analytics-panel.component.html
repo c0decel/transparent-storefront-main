@@ -99,7 +99,7 @@
             <h1>Tags</h1>
             <ul class="tags-list" *ngIf="tags.length > 0">
                 <li *ngFor="let tag of tags"
-                    (click)="openTagDetails(tag._id, tag.Tag, tag.Description)"
+                    (click)="openTagDetails(tag.TagID, tag.Tag, tag.Description)"
                 >
                     {{tag.Tag}}
                 </li>

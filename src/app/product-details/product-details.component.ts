@@ -1,13 +1,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Location } from '@angular/common';
+
+//Import services
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { FetchProductDataService } from '../fetch-product-data.service';
-import { Location } from '@angular/common';
 import { FetchUserDataService } from '../fetch-user-data.service';
 import { FetchForumDataService } from '../fetch-forum-data.service';
-import { Thread } from '../models/thread.model';
+import { AuthService } from '../auth.service';
+
+//Import models
+import { Thread } from '../shared/models/thread.model';
+import { User } from '../shared/models/user.model';
+import { Review } from '../shared/models/review.model';
+import { Tag } from '../shared/models/tag.model';
+import { Supply } from '../shared/models/supply.model';
 
 @Component({
   selector: 'app-product-details',
@@ -15,14 +23,17 @@ import { Thread } from '../models/thread.model';
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  productData: any;
+  user!: User;
+  reviews: Review[]=[];
+  tags: Tag[]=[];
+  supplies: Supply[]=[];
+
   isJanitor: boolean = false;
-  reviewData: any = {Rating: 0, UserID: '', Username: '', ProductID: '', Content: ''};
-  user: any;
-  reviews: any[] = [];
-  tags: any[] = [];
+  
+  productData: any;
   relatedThreads: any[] =[];
-  supplies: any[]=[];
+
+  reviewData: any = {Rating: 0, UserID: '', Username: '', ProductID: '', Content: ''};
   newStock: any = {newStock: 0};
 
 
@@ -39,6 +50,12 @@ export class ProductDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.user = this.authService.getUser();
+
+    if (this.authService.isJanitor()) {
+      this.isJanitor = true;
+    }
+
     this.route.paramMap.subscribe(params => {
       if (window.history.state && window.history.state.data) {
 
@@ -50,19 +67,16 @@ export class ProductDetailsComponent implements OnInit {
         this.getRelatedThreads(productName);
       }
     });
-
-    if (this.authService.isJanitor()) {
-      this.isJanitor = true;
-    }
-
-    this.user = this.authService.getUser();
-    console.log(this.user);
   }
 
   public isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }
 
+  /**
+   * Get threads that mention product
+   * @param productName name of product
+   */
   getRelatedThreads(productName: string): void {
     this.fetchForumData.getAllThreads().subscribe(
       (result: Thread[]) => {
@@ -70,9 +84,7 @@ export class ProductDetailsComponent implements OnInit {
         const relatedThreads = result.filter((thread) => {
           return thread.Title.includes(productName);
         });
-
         this.relatedThreads = relatedThreads;
-        console.log(this.relatedThreads)
       },
       (error) => {
         console.error(`Error`);
@@ -80,11 +92,14 @@ export class ProductDetailsComponent implements OnInit {
     )
   }
 
+  /**
+   * Get tags from product
+   * @param productId product ID
+   */
   getTags(productId: string): void {
     this.fetchProductData.getProductTags(productId).subscribe(
-      (result: any) => {
-        this.tags = result;
-        console.log(this.tags);
+      (tags) => {
+        this.tags = tags;
       },
       (error) => {
         console.error(`Error fetching tags: ${error}`);
@@ -92,11 +107,14 @@ export class ProductDetailsComponent implements OnInit {
     );
   }
 
+  /**
+   * Get supplies from product
+   * @param productId product ID
+   */
   getSupplies(productId: string): void {
     this.fetchProductData.getProductSupplies(productId).subscribe(
-      (result: any) => {
-        this.supplies = result;
-        console.log(this.supplies);
+      (supplies) => {
+        this.supplies = supplies;
       },
       (error) => {
         console.error(`Error fetching supplies: ${error}`);
@@ -104,6 +122,10 @@ export class ProductDetailsComponent implements OnInit {
     );
   }
 
+  /**
+   * Get reviews from product
+   * @param productId product ID
+   */
   getReviews(productId: string): void {
     this.fetchApiData.getAllReviews(productId).subscribe(
       (result: any) => {
@@ -115,6 +137,10 @@ export class ProductDetailsComponent implements OnInit {
     );
   }
 
+  /**
+   * Open a thread
+   * @param _id thread ID
+   */
   openThread(_id: string): void {
     this.router.navigate(['/threads', _id])
   }
@@ -124,16 +150,20 @@ export class ProductDetailsComponent implements OnInit {
  * @param _id of item
  */
   addItemToCart(_id: string): void {
-    this.fetchUserData.addToCart(_id).subscribe(
-      (result) => {
-        console.log(`Item added to cart: ${result}`);
-        this.router.navigate(['cart']);
-      },
-      (error) => {
-        alert(`There was an error.`)
-        console.error(`Error adding item to cart: ${error}`);
-      }
-  );
+    if (!this.user) {
+      this.router.navigate(['login']);
+    } else {
+      this.fetchUserData.addToCart(_id).subscribe(
+        (result) => {
+          console.log(`Item added to cart: ${result}`);
+          this.router.navigate(['cart']);
+        },
+        (error) => {
+          alert(`There was an error.`)
+          console.error(`Error adding item to cart: ${error}`);
+        }
+      );
+    }
   }
 
   /**
@@ -141,22 +171,31 @@ export class ProductDetailsComponent implements OnInit {
    * @param _id of item
    */
   addItemToWishlist(_id: string): void {
-    this.fetchUserData.addToList(_id).subscribe(
-      (result) => {
-        console.log(`Item added to wishlist: ${result}`);
-        this.router.navigate(['cart']);
-      },
-      (error) => {
-        alert(`There was an error.`)
-        console.error(`Error adding item to wishlist: ${error}`);
-      }
-    );
+    if (!this.user) {
+      this.router.navigate(['login']);
+    } else {
+      this.fetchUserData.addToList(_id).subscribe(
+        (result) => {
+          console.log(`Item added to wishlist: ${result}`);
+          this.router.navigate(['cart']);
+        },
+        (error) => {
+          alert(`There was an error.`)
+          console.error(`Error adding item to wishlist: ${error}`);
+        }
+      );
+    }
   }
 
+  /**
+   * Update product stock
+   * @param newStock new stock number
+   * @param productId product ID
+   */
   updateStockQuantity(newStock: number, productId: string): void {
     console.log('New stock: ', newStock);
     this.fetchProductData.updateStock(newStock, productId).subscribe(
-      (result: any) => {
+      (result) => {
         console.log(`New stock is: ${result}`);
         window.location.reload();
       },
@@ -167,6 +206,9 @@ export class ProductDetailsComponent implements OnInit {
     )
   }
 
+  /**
+   * Submit a review
+   */
   submitReview(): void {
     this.reviewData.ProductID = this.productData._id;
     this.reviewData.UserID = this.user;
@@ -182,12 +224,10 @@ export class ProductDetailsComponent implements OnInit {
       }
     )
   }
-
-  logOut(): void {
-    localStorage.clear();
-    this.router.navigate(['store']);
-  }
   
+  /**
+   * Go back to store
+   */
   closeDetails(): void {
     this.router.navigate(['store']);
   }

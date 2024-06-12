@@ -152,8 +152,8 @@
                     <label>
                         <input 
                             type="checkbox"
-                            [checked]="selectedTags[tag._id]"
-                            (change)="toggleTagSelection(tag._id)">
+                            [checked]="selectedTags[tag.TagID]"
+                            (change)="toggleTagSelection(tag.TagID)">
                         {{ tag.Tag }}
                     </label>
                 </div><br>
@@ -162,24 +162,24 @@
                     <label>
                         <input 
                             type="checkbox"
-                            [checked]="selectedSupplies[supply._id]"
-                            (change)="toggleSupplySelection(supply._id)">
+                            [checked]="selectedSupplies[supply.SupplyID]"
+                            (change)="toggleSupplySelection(supply.SupplyID)">
                         {{ supply.Name }}
                     </label>
-                    <div *ngIf="selectedSupplies[supply._id]">
+                    <div *ngIf="selectedSupplies[supply.SupplyID]">
                         <label>
                             Amount:
                             <input 
                                 type="number"
-                                name="supplyDetailData[supply._id].Amount"
-                                [(ngModel)]="supplyDetailData[supply._id].Amount"
+                                name="supplyDetailData[supply.SupplyID].Amount"
+                                [(ngModel)]="supplyDetailData[supply.SupplyID].Amount"
 [ngModelOptions]="{standalone: true}"
                             >
                         </label>
                         <label>
                             UOM:
                             <select
-                                [(ngModel)]="supplyDetailData[supply._id].Measurement"
+                                [(ngModel)]="supplyDetailData[supply.SupplyID].Measurement"
                                 [ngModelOptions]="{standalone: true}"
                             >
                                 <option 
