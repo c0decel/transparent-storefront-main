@@ -1,22 +1,31 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavHeaderComponent } from './shared/nav-header/nav-header.component';
+import { LoginCardComponent } from './shared/login-card/login-card.component';
 import { ProductCardComponent } from './shared/product-card/product-card.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     NavHeaderComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    LoginCardComponent
   ],
   imports: [
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule
   ],
   exports: [
     NavHeaderComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    LoginCardComponent
   ]
 })
 export class SharedModule { }

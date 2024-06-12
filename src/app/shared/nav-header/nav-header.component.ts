@@ -22,6 +22,8 @@ export class NavHeaderComponent implements OnInit {
   user!: User;
 
   menuActive: boolean = false;
+  showLogin: boolean = false;
+  newUser: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -58,7 +60,7 @@ export class NavHeaderComponent implements OnInit {
   }
 
   toggleMenu(): void {
-    this.menuActive = !this.menuActive
+    this.menuActive = !this.menuActive;
   }
 
   goToProfile(): void {
@@ -96,11 +98,17 @@ export class NavHeaderComponent implements OnInit {
   }
 
   goToLogin(): void {
-    this.router.navigate(['login']);
+    this.showLogin = !this.showLogin;
+  }
+
+  toggleNewUser(): void {
+    this.newUser = !this.newUser;
   }
 
   goToSignup(): void {
-    this.router.navigate(['sign-up']);
+    this.showLogin = !this.showLogin;
+    this.toggleNewUser();
+    console.log(this.newUser)
   }
 
   goToForum(): void {

@@ -1,0 +1,90 @@
+<div class="login-visible" *ngIf="isVisible">
+    <div class="login-backdrop"></div>
+<div class="login-container">
+    <div class="login-items" *ngIf="!newUser">
+        <h1>
+            Log In
+        </h1>
+        <form>
+            <input
+                [(ngModel)]="loginData.Username"
+                placeholder="Username"
+                type="text"
+                name="Username"
+                required
+            >
+            <input
+                [(ngModel)]="loginData.Password"
+                placeholder="Password"
+                type="password"
+                name="password"
+                required
+            >
+        </form>
+        <div class="login-options">
+            <button
+                class="button"
+                (click)="loginUser()"
+            >
+                Log in
+            </button>
+            <button
+                class="button"
+                (click)="toggleNewUser()"
+            >
+                Sign Up
+            </button>
+        </div>
+    </div>
+
+    <div class="login-items" *ngIf="newUser">
+        <h1>
+            Sign Up
+        </h1>
+        <form id="signup-form">
+            <input
+                [(ngModel)]="userData.Username"
+                placeholder="Username"
+                type="text"
+                name="Username"
+                required
+            >
+            <input   
+                [(ngModel)]="userData.Password"
+                type = "password"
+                placeholder="Password"
+                name="Password"
+                required
+            >
+            <input
+                [(ngModel)]="userData.Email"
+                type = "email"
+                placeholder="Email"
+                name="Email"
+                required
+            >
+            <input
+                [(ngModel)]="userData.Birthday"
+                type = "date"
+                placeholder="Birthday"
+                name="Birthday" 
+            >
+        </form>
+        <div class="login-options">
+            <button
+                class="button"
+                (click)="registerUser()"
+            >
+                Sign Up
+            </button>
+            <button
+                class="button"
+                (click)="toggleNewUser()"
+            >
+                Log In
+            </button>
+        </div>
+    </div>
+</div>
+
+</div>

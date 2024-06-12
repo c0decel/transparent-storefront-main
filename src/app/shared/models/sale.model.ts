@@ -5,4 +5,3 @@ export interface Sale {
     Description: string;
     SaleDate: string;
   }
-  

@@ -1,3 +1,4 @@
+
 export interface Ban {
     BanID: string;
     BannedBy: string;
@@ -9,4 +10,4 @@ export interface Ban {
     IsActive: boolean;
     BannedUser: string;
     PostBan: boolean;
-  }
+}

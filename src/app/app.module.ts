@@ -21,8 +21,6 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { CartComponent } from './cart/cart.component';
 import { NewProductComponent } from './new-product/new-product.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { LoginComponent } from './login/login.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
 import { AnalyticsPanelComponent } from './analytics-panel/analytics-panel.component';
 import { ForumComponent } from './forum/forum.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -38,8 +36,6 @@ const appRoutes: Routes = [
     { path: 'store', component: StoreComponent },
     { path: 'product-details/:id', component: ProductDetailsComponent },
     { path: 'cart', component: CartComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'sign-up', component: SignUpComponent },
     { path: 'new-product', component: NewProductComponent },
     { path: 'admin-panel', component: AdminPanelComponent },
     { path: 'analytics-panel', component: AnalyticsPanelComponent },
@@ -61,8 +57,6 @@ const appRoutes: Routes = [
         CartComponent,
         NewProductComponent,
         AdminPanelComponent,
-        LoginComponent,
-        SignUpComponent,
         AnalyticsPanelComponent,
         ForumComponent,
         ProfileComponent,

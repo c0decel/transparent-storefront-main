@@ -5,4 +5,3 @@ export interface Expense {
     Description: string;
     ExpenseDate: string;
   }
-  
