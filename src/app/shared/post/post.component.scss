@@ -1,0 +1,48 @@
+.write-reply {
+    padding: 20px;
+}
+
+/* Your existing CSS styles */
+
+/* Adjusted CSS */
+
+.reaction-buttons {
+    position: relative;
+}
+
+.hover-reactions {
+    position: absolute;
+    top: -40px; /* Adjust the top position as needed */
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    display: none;
+}
+
+.recent-reactions-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Align items vertically */
+    height: 20px;
+    line-height: 20px;
+    flex-wrap: wrap;
+}
+
+.reply-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px; /* Adjust spacing between icon and username */
+}
+
+.reaction-username {
+    margin: 0;
+    margin-right: 4px;
+    font-size: 14px; /* Adjust font size if needed */
+}
+
+.reaction-buttons:hover .hover-reactions {
+    display: flex;
+}
+

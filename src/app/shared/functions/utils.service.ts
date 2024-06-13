@@ -26,4 +26,18 @@ export class UtilsService {
     this.router.navigate(['admin-panel']);
   }
 
+  /**
+   * Open user profile
+   * @param userId user ID
+   */
+  openProfile(userId: string): void {
+    this.router.navigate(['/profile', userId], {
+      state: {
+        data: {
+          _id: userId
+        }
+      }
+    })
+  }
+
 }

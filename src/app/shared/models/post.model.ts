@@ -8,12 +8,19 @@ export interface Post {
     PostedAtDate: string;
     PostedAtTime: string;
     Highlighted: boolean;
-    LikedBy: [];
-    DislikedBy: [];
+    Reactions: {
+      Username: string;
+      Type: string;
+    }[];
     ReactionScore: number;
     PostBan: boolean;
     ReplyingTo: {
       UserID: string;
       Username: string;
     }
+    MostRecentReactions: {
+      Username: string;
+      Type: string;
+      Icon: string;
+    }[];
   }

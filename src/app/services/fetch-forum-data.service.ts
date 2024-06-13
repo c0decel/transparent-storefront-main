@@ -109,12 +109,13 @@ export class FetchForumDataService {
         );
     }
 
-    //Like a post
-    likePost(postId: string): Observable<any> {
+    //React to a post
+    reactToPost(postId: string, reactionData: string): Observable<any> {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        return this.http.put(`${apiUrl}/posts/${postId}/like/${user.Username}`, {}, { 
+        return this.http.put(`${apiUrl}/posts/${postId}/react/${user.Username}`, 
+            {Type: reactionData}, { 
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -124,24 +125,6 @@ export class FetchForumDataService {
             catchError(this.handleError)
         );
       }
-
-    // Dislike a post
-    dislikePost(postId: string): Observable<any> {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        return this.http.put(`${apiUrl}/posts/${postId}/dislike/${user.Username}`, 
-            {}, 
-            { 
-                headers: new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                })
-            }
-        ).pipe(
-            map(this.extractResponseData),
-            catchError(this.handleError)
-        );
-    } 
 
     //Ban user
     banUser(banData: any): Observable<any> {

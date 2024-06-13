@@ -1,1 +1,101 @@
-<p>post works!</p>
+<div class="thread-replies">
+    <div *ngFor="let reply of replies" class="thread-content">
+        <div style="display: flex; flex-direction: row;" id="{{ reply.ReplyNumber }}">
+            <h2 (click)="openProfile(reply.User)">{{ reply.Username }}</h2>
+            <p>#{{ reply.ReplyNumber }}</p>
+        </div>
+        <p class="timestamp">{{ reply.PostedAtDate }} at {{ reply.PostedAtTime }}</p>
+        <div class="reply-content" [ngClass]="{ 'highlighted-post': reply.Highlighted }">
+            <div style="display: flex; flex-direction: column;">
+                <p *ngIf="reply.PostBan" class="ban-message">
+                    USER WAS BANNED FOR THIS POST
+                </p>
+                <p>
+                    {{ reply.Content }}
+                </p>
+                <div class="recent-reactions-container">
+                    <div *ngFor="let reaction of reply.MostRecentReactions">
+                        <mat-icon [svgIcon]="reaction.Icon" class="reply-icon"></mat-icon>
+                    </div>
+                    <p *ngFor="let reaction of reply.MostRecentReactions" class="reaction-username">
+                        {{ reaction.Username }},
+                    </p>
+                </div>
+            </div>
+            <div class="highlight-options">
+                <p *ngIf="reply.Highlighted" class="highlight-arrow"> << </p>
+                <p *ngIf="isJanitor" class="highlight-button" (click)="toggleHighlight(reply._id)">Highlight</p>
+                <p *ngIf="reply.Highlighted" class="highlight-arrow"> >> </p>
+            </div>
+        </div>
+        <div class="thread-options">
+            <p *ngIf="isLoggedIn()">Reply</p>
+            <div class="reaction-buttons" *ngIf="isLoggedIn()">
+                <mat-icon svgIcon="like_icon" class="icon like-icon"
+                    (click)="reactPost(reply._id, 'Like')"
+                >
+                    Like
+                </mat-icon>
+                <div class="hover-reactions">
+                    <mat-icon svgIcon="like_icon" class="icon like-icon"
+                        (click)="reactPost(reply._id, 'Like')"
+                    >
+                        Like
+                    </mat-icon>
+                    <mat-icon svgIcon="dislike_icon" class="icon"
+                        (click)="reactPost(reply._id, 'Dislike')"
+                    >
+                        Dislike
+                    </mat-icon>
+                    <mat-icon svgIcon="useful_icon" class="icon"
+                        (click)="reactPost(reply._id, 'Useful')"
+                    >
+                        Useful
+                    </mat-icon>
+                    <mat-icon svgIcon="funny_icon" class="icon"
+                        (click)="reactPost(reply._id, 'Funny')"
+                    >
+                        Funny
+                    </mat-icon>
+                    <mat-icon svgIcon="dumb_icon" class="icon"
+                        (click)="reactPost(reply._id, 'Dumb')"
+                    >
+                        Dumb
+                    </mat-icon>
+                </div>
+            </div>
+            <p *ngIf="thread && thread?._id" (click)="openBanModal(reply.Username, thread._id, reply._id)">Ban user</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal" *ngIf="modalOpen">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">x</span>
+        <h2>Ban user</h2>
+        <div class="ban-form">
+            <form>
+                <h4>Reason:</h4>
+                <input [(ngModel)]="banData.Reason" name="Reason" type="text" required>
+                <h4>Expires on</h4>
+                <input [(ngModel)]="banData.ExpiresOn" name="ExpiresOn" type="date" required>
+                <button (click)="banUser(banData)">Ban user</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="write-reply">
+    <div *ngIf="isLoggedIn()">
+        <div class="new-reply-container">
+            <h2>Reply: </h2>
+            <form>
+                <input [(ngModel)]="replyData.Content" name="Content" type="text" class="large-reply-box"><br>
+                <button (click)="postReply()">Post</button>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="!isLoggedIn()">
+        <p>Log in to post a reply.</p>
+    </div>
+</div>

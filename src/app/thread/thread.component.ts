@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 //Import services
 import { FetchApiDataService } from '../services/fetch-api-data.service';
@@ -37,18 +39,24 @@ export class ThreadComponent {
 
   threadData: any;
 
+  reactionData: 'Like' | 'Dislike' | 'Userful' | 'Funny' | 'Dumb' | ''='';
+
   replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
   banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
 
   constructor(
     public router: Router,
     private authService: AuthService,
+    private iconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
     public fetchApiData: FetchApiDataService,
     public fetchForumData: FetchForumDataService,
     public fetchUserData: FetchUserDataService,
     public route: ActivatedRoute,
     public dialog: MatDialog
-  ) { }
+  ) { 
+    this.registerIcons();
+  }
 
   ngOnInit(): void {
     this.user = this.authService.getUser();
@@ -57,20 +65,73 @@ export class ThreadComponent {
       this.isJanitor = true;
     }
 
-    this.route.paramMap.subscribe(params => {
-      const threadId = params.get('id');
-      if (threadId) {
-        this.getThread(threadId);
-        this.getThreadReplies(threadId);
-        }
-      }
-    );
-
     this.getAllUsers();
+    this.getThreadRoute();
   }
 
   public isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  getIconByType(type: string): string {
+    let icon: string;
+
+    switch (type) {
+        case 'Like':
+            icon = 'like_icon';
+            break;
+        case 'Dislike':
+            icon = 'dislike_icon';
+            break;
+        case 'Useful':
+            icon = 'useful_icon';
+            break;
+        case 'Funny':
+            icon = 'funny_icon';
+            break;
+        case 'Dumb':
+            icon = 'dumb_icon';
+            break;
+        default:
+            icon = 'like_icon'; 
+            break;
+      }
+      return icon;
+  }
+
+
+  registerIcons(): void {
+    this.iconRegistry.addSvgIcon(
+      'like_icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/like.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'dislike_icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/dislike.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'useful_icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/useful.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'funny_icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/funny.svg')
+    );
+    this.iconRegistry.addSvgIcon(
+      'dumb_icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/dumb.svg')
+    )
+  }
+
+  getThreadRoute(): void {
+    this.route.paramMap.subscribe(params => {
+      const threadId = params.get('id');
+      if (threadId) {
+          this.getThread(threadId);
+          this.getThreadReplies(threadId);
+        }
+      }
+    );
   }
 
   /**
@@ -105,9 +166,18 @@ export class ThreadComponent {
   /**
    * Get thread replies
    */
-  getThreadReplies(threadId: string): void {
+  getThreadReplies(threadId: string): void { 
     this.fetchForumData.getAllReplies(threadId).subscribe(
-      (replies) => {
+      (replies: Post[]) => {
+        replies.forEach((reply: Post) => {
+          reply.MostRecentReactions = reply.Reactions.slice(-3).reverse().map(reaction => ({
+            Username: reaction.Username,
+            Type: reaction.Type,
+            Icon: this.getIconByType(reaction.Type)
+          }));
+          console.log(reply.MostRecentReactions);
+        });
+        
         this.replies = replies;
       },
       (error) => {
@@ -115,13 +185,14 @@ export class ThreadComponent {
       }
     );
   }
+  
+  
 
   /**
    * Open user profile
    * @param userId user ID
    */
   openProfile(userId: string): void {
-    console.log(userId)
     this.router.navigate(['/profile', userId], {
       state: {
         data: {
@@ -237,49 +308,6 @@ export class ThreadComponent {
     }
   }
   
-  /**
-   * Like a post
-   * @param postId ID of post to like
-   */
-  likePost(postId: string): void {
-    this.fetchForumData.getOnePost(postId).subscribe(
-      (post) => {
-        this.fetchForumData.likePost(postId).subscribe(
-          (result) => {
-            console.log(`Post liked successfully: ${result}`);
-          },
-          (error) => {
-            console.error(`Error liking post: ${error}`);
-          }
-        );
-      },
-      (error) => {
-        console.error(`Error fetching post: ${error}`);
-      }
-    );
-  }
-
-  /**
-   * Dislike a post
-   * @param postId ID of post to dislike
-   */
-  dislikePost(postId: string): void {
-    this.fetchForumData.getOnePost(postId).subscribe(
-        (post) => {
-          this.fetchForumData.dislikePost(postId).subscribe(
-            (result) => {
-              console.log(`Post disliked successfully: ${result}`);
-            },
-            (error) => {
-              console.error(`Error disliking post: ${error}`);
-            }
-          ); 
-        },
-        (error) => {
-          console.error(`Error fetching post: ${error}`);
-        }
-    );
-  }
 }
 
 
