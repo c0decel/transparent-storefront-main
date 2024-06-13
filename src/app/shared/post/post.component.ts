@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 //Import services
 import { FetchForumDataService } from '../../services/fetch-forum-data.service';
@@ -19,6 +21,7 @@ import { Thread } from '../models/thread.model';
 })
 export class PostComponent implements OnInit{
   @Input() replies: Post[]=[];
+  @Input() userPosts: Post[]=[];
   @Input() user!: User;
   @Input() thread!: Thread;
 
@@ -33,20 +36,19 @@ export class PostComponent implements OnInit{
 
   threadData: any;
 
-  reactionData: { Username: String, Type: 'Like' | 'Dislike' | 'Userful' | 'Funny' | 'Dumb' | ''} = {
-    Username: '',
-    Type: ''
-  }
-
   replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
   banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
 
   constructor(
     private authService: AuthService,
+    private iconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
     public fetchForumData: FetchForumDataService,
     public utilsService: UtilsService,
     public router: Router
-  ) {}
+  ) {
+    this.utilsService.registerIcons();
+  }
 
   ngOnInit(): void {
     

@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FetchApiDataService } from '../services/fetch-api-data.service';
 import { FetchUserDataService } from '../services/fetch-user-data.service';
 import { FetchForumDataService } from '../services/fetch-forum-data.service';
+import { UtilsService } from '../shared/functions/utils.service';
 import { AuthService } from '../services/auth.service';
 
 //Import models
@@ -37,6 +38,7 @@ export class ProfileComponent {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
+    public utilsService: UtilsService,
     public fetchApiData: FetchApiDataService,
     public fetchUserData: FetchUserDataService,
     public fetchForumData: FetchForumDataService,
@@ -61,22 +63,36 @@ export class ProfileComponent {
     loadUserProfile(userId: string): void {
       this.fetchUserData.getUserByID(userId).subscribe(user => {
         this.user = user;
+        console.log(this.user)
 
         if (user && user.Posts) {
+          user.Posts.forEach((post: Post) => {
+            post.MostRecentReactions = post.Reactions.slice(-3).reverse().map(reaction => ({
+              Username: reaction.Username,
+              Type: reaction.Type,
+              Icon: this.utilsService.getIconByType(reaction.Type)
+            }));
+          });
+
           this.posts = user.Posts;
-
-          var totalLikes = 0
-          var totalDislikes = 0
-
-          for (const post of user.Posts) {
-            totalLikes += post.LikedBy.length
-            totalDislikes += post.DislikedBy.length
-          } 
-
-          this.reactionScore = totalLikes - totalDislikes;
         }
 
       })
+    }
+
+    /**
+     * Get current user's wishlist items
+     */
+    getListItems(): void {
+      this.fetchUserData.getListItems(this.user.Username).subscribe(
+        (items: Wishlist[]) => {
+          this.wishlistItems = items;
+          console.log(`Wishlist Items: ${this.wishlistItems}`);
+        }, 
+        (error) => {
+          console.error(`Could not fetch wishlist items: ${error}`);
+        }
+      );
     }
 
     /**

@@ -76,7 +76,7 @@ export class CartComponent {
      * Get current user's wishlist items
      */
     getListItems(): void {
-      this.fetchUserData.getListItems().subscribe(
+      this.fetchUserData.getListItems(this.user.Username).subscribe(
         (items: Wishlist[]) => {
           this.wishlistItems = items;
           console.log(`Wishlist Items: ${this.wishlistItems}`);

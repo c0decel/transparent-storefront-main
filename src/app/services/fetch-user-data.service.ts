@@ -190,11 +190,11 @@ export class FetchUserDataService {
     }
 
     //Get wishlist items
-    getListItems(): Observable<any> {
+    getListItems(Username: string): Observable<any> {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        return this.http.get(`${apiUrl}/users/${user.Username}/wishlist`, {
+        return this.http.get(`${apiUrl}/users/${Username}/wishlist`, {
         headers: new HttpHeaders({
             Authorization: 'Bearer ' + token,
         })

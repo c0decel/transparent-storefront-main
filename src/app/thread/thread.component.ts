@@ -8,10 +8,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FetchApiDataService } from '../services/fetch-api-data.service';
 import { FetchForumDataService } from '../services/fetch-forum-data.service';
 import { FetchUserDataService } from '../services/fetch-user-data.service';
+import { UtilsService } from '../shared/functions/utils.service';
 import { AuthService } from '../services/auth.service';
 
 //Import models
-import { Ban } from '../shared/models/bans.model';
 import { Post } from '../shared/models/post.model';
 import { Thread } from '../shared/models/thread.model';
 import { User } from '../shared/models/user.model';
@@ -37,15 +37,14 @@ export class ThreadComponent {
   constructor(
     public router: Router,
     private authService: AuthService,
-    private iconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
+    public utilsService: UtilsService,
     public fetchApiData: FetchApiDataService,
     public fetchForumData: FetchForumDataService,
     public fetchUserData: FetchUserDataService,
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) { 
-    this.registerIcons();
+    this.utilsService.registerIcons();
   }
 
   ngOnInit(): void {
@@ -63,63 +62,6 @@ export class ThreadComponent {
     return this.authService.isAuthenticated();
   }
 
-  /**
-   * Get icon by reaction type
-   * @param type type of reaction
-   * @returns corresponding icon
-   */
-  getIconByType(type: string): string {
-    let icon: string;
-
-    switch (type) {
-        case 'Like':
-            icon = 'like_icon';
-            break;
-        case 'Dislike':
-            icon = 'dislike_icon';
-            break;
-        case 'Useful':
-            icon = 'useful_icon';
-            break;
-        case 'Funny':
-            icon = 'funny_icon';
-            break;
-        case 'Dumb':
-            icon = 'dumb_icon';
-            break;
-        default:
-            icon = 'like_icon'; 
-            break;
-      }
-      return icon;
-  }
-
-
-  /**
-   * Register custom icons
-   */
-  registerIcons(): void {
-    this.iconRegistry.addSvgIcon(
-      'like_icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/like.svg')
-    );
-    this.iconRegistry.addSvgIcon(
-      'dislike_icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/dislike.svg')
-    );
-    this.iconRegistry.addSvgIcon(
-      'useful_icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/useful.svg')
-    );
-    this.iconRegistry.addSvgIcon(
-      'funny_icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/funny.svg')
-    );
-    this.iconRegistry.addSvgIcon(
-      'dumb_icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('src/app/icons/dumb.svg')
-    )
-  }
 
   /**
    * Get thread ID from route
@@ -174,7 +116,7 @@ export class ThreadComponent {
           reply.MostRecentReactions = reply.Reactions.slice(-3).reverse().map(reaction => ({
             Username: reaction.Username,
             Type: reaction.Type,
-            Icon: this.getIconByType(reaction.Type)
+            Icon: this.utilsService.getIconByType(reaction.Type)
           }));
         });
         
