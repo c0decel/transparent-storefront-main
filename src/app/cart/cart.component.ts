@@ -4,16 +4,18 @@ import { environment } from '../../environments/environment';
 import { loadStripe } from '@stripe/stripe-js';
 
 //Import services
-import { FetchApiDataService } from '../fetch-api-data.service';
-import { FetchUserDataService } from '../fetch-user-data.service';
-import { FetchPaymentDataService } from '../fetch-payment-data.service';
-import { AuthService } from '../auth.service';
+import { FetchApiDataService } from '../services/fetch-api-data.service';
+import { FetchUserDataService } from '../services/fetch-user-data.service';
+import { FetchPaymentDataService } from '../services/fetch-payment-data.service';
+import { AuthService } from '../services/auth.service';
 
 //Import models
 import { Wishlist } from '../shared/models/wishlist.model';
 import { Cart } from '../shared/models/cart.model';
-import { ModalService } from '../modal.service';
+import { ModalService } from '../services/modal.service';
 import { User } from '../shared/models/user.model';
+
+import { CheckoutService } from '../services/checkout.service';
 
 @Component({
   selector: 'app-cart',
@@ -33,6 +35,7 @@ export class CartComponent {
   constructor(
     private modalService: ModalService,
     public router: Router,
+    public checkoutService: CheckoutService,
     public fetchApiData: FetchApiDataService, 
     public fetchUserData: FetchUserDataService,
     public fetchPaymentData: FetchPaymentDataService,
@@ -49,6 +52,10 @@ export class CartComponent {
 
       this.getCartItems();
       this.getListItems();
+
+      this.checkoutService.checkoutRequested$.subscribe(item => {
+        this.checkoutCart(item);
+      });
     }
 
     /**
@@ -78,45 +85,6 @@ export class CartComponent {
           console.error(`Could not fetch wishlist items: ${error}`);
         }
       );
-    }
-
-    /**
-     * Remove item from cart
-     * @param item 
-     */
-    removeItemFromCart(item: Cart): void {
-      const itemID: string = item.ProductID as string;
-      this.fetchUserData.removeFromCart(itemID).subscribe(
-      (result) => {
-        console.log(`${itemID} removed from cart.`)
-        this.modalService.openModal({
-          title: `Removed from cart`,
-          content: `Test`
-        })
-      },
-      (error) => {
-        console.error(`Cannot remove from cart: ${error}`)
-      })
-    }
-
-    /**
-     * Remove item from wishlist
-     * @param item 
-     */
-    removeItemFromWishlist(item: Wishlist): void {
-      const itemID: string = item.ProductID as string;
-      this.fetchUserData.removeFromList(itemID).subscribe(
-        (result) => {
-          console.log(`${itemID} removed from wishlist.`)
-          this.modalService.openModal({
-            title: `Removed from wishlist`,
-            content: `Test`
-          })
-        },
-        (error) => {
-          console.error(`Cannot remove from wishlist: ${error}`)
-        }
-      )
     }
 
     /**
@@ -153,5 +121,9 @@ export class CartComponent {
           console.error(`Error.`);
         }
       )
+    }
+
+    handleCheckoutRequest(item: Cart): void {
+      this.checkoutCart(item);
     }
 }

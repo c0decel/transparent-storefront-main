@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FetchApiDataService } from './fetch-api-data.service';
-import { Product } from './shared/models/product.model';
+import { Product } from '../shared/models/product.model';
 
 
 /**

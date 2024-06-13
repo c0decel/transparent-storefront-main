@@ -5,12 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 //Import services
-import { FetchApiDataService } from '../fetch-api-data.service';
-import { FetchProductDataService } from '../fetch-product-data.service';
-import { FetchUserDataService } from '../fetch-user-data.service';
+import { FetchApiDataService } from '../services/fetch-api-data.service';
+import { FetchProductDataService } from '../services/fetch-product-data.service';
+import { FetchUserDataService } from '../services/fetch-user-data.service';
 import { UtilsService } from '../shared/functions/utils.service';
-import { AuthService } from '../auth.service';
-import { ModalService } from '../modal.service';
+import { AuthService } from '../services/auth.service';
+import { ModalService } from '../services/modal.service';
 
 //Import models
 import { User } from '../shared/models/user.model';

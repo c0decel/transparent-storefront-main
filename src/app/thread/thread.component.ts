@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 //Import services
-import { FetchApiDataService } from '../fetch-api-data.service';
-import { FetchForumDataService } from '../fetch-forum-data.service';
-import { FetchUserDataService } from '../fetch-user-data.service';
-import { AuthService } from '../auth.service';
+import { FetchApiDataService } from '../services/fetch-api-data.service';
+import { FetchForumDataService } from '../services/fetch-forum-data.service';
+import { FetchUserDataService } from '../services/fetch-user-data.service';
+import { AuthService } from '../services/auth.service';
 
 //Import models
 import { Ban } from '../shared/models/bans.model';

@@ -3,7 +3,7 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Thread } from './shared/models/thread.model';
+import { Thread } from '../shared/models/thread.model';
 
 
 /**

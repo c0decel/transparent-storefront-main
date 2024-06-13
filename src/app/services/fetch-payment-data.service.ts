@@ -10,6 +10,7 @@ import { FetchProductDataService } from './fetch-product-data.service';
  * Replace with your API URL
  */
 const apiUrl = 'https://transparent-storefront-api-7a631c0a8a92.herokuapp.com';
+const stripeApiKey = 'pk_test_51OjvYuIlMN9otNsqVPYOO6T0nEAPiIggPkmj0l9kpqDHlscQ8b65sVwELJ4MoAf2MoGAXPpw0ODQC0PGHJRfrWV300rdfa3eJJ';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,8 @@ export class FetchPaymentDataService {
         const token = localStorage.getItem('token');
         return this.http.post(`${apiUrl}/payment/create-checkout-session`, checkoutDetails, {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
             })
         }).pipe(
             map(this.extractResponseData),

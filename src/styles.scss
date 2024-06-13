@@ -116,6 +116,17 @@ Store
   }
 }
 
+.cart-container {
+  background-color: $background-color-body;
+  border-color: $border-color;
+  border-width: $border-width;
+
+  .cart-card {
+    background-color: $background-color-product;
+    border-color: $border-color;
+  }
+}
+
 .products-list {
   background-color: $background-color-product;
   border-color: $border-color;

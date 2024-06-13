@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 
-import { FetchProductDataService } from '../../fetch-product-data.service';
+import { FetchProductDataService } from '../../services/fetch-product-data.service';
 
 import { Product } from '../models/product.model';
 

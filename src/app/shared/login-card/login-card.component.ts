@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 //Import services
-import { FetchApiDataService } from '../../fetch-api-data.service';
-import { FetchUserDataService } from '../../fetch-user-data.service';
-import { AuthService } from '../../auth.service';
+import { FetchApiDataService } from '../../services/fetch-api-data.service';
+import { FetchUserDataService } from '../../services/fetch-user-data.service';
+import { AuthService } from '../../services/auth.service';
 
 @Injectable({providedIn: 'root'})
 

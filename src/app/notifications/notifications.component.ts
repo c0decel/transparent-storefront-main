@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 //Import services
-import { FetchUserDataService } from '../fetch-user-data.service';
-import { AuthService } from '../auth.service';
+import { FetchUserDataService } from '../services/fetch-user-data.service';
+import { AuthService } from '../services/auth.service';
 
 //Import models
 import { User } from '../shared/models/user.model';

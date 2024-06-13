@@ -1,10 +1,10 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 //Import services
-import { FetchApiDataService } from '../fetch-api-data.service';
-import { FetchProductDataService } from '../fetch-product-data.service';
+import { FetchApiDataService } from '../services/fetch-api-data.service';
+import { FetchProductDataService } from '../services/fetch-product-data.service';
 
 //Import models
 import { User } from '../shared/models/user.model';

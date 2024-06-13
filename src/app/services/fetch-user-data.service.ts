@@ -5,7 +5,7 @@ import { Observable, throwError, forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FetchApiDataService } from './fetch-api-data.service';
 import { FetchProductDataService } from './fetch-product-data.service';
-import { User } from './shared/models/user.model';
+import { User } from '../shared/models/user.model';
 
 /**
  * Replace with your API URL
