@@ -18,10 +18,8 @@ export class UtilsService {
   ) { }
 
   /**
-    * Open a thread
-    * @param _id thread ID
-  */
- 
+   * Go to admin panel
+   */
   goToAdminPanel(): void {
     this.router.navigate(['admin-panel']);
   }

@@ -4,8 +4,8 @@
 <div class="forum-main">
     <div class="forum-grid">
         <div class="forum-titles-box">
-            <h1>Threads:</h1>
             <div class="forum-threads">
+                <h1>Threads:</h1>
                 <p *ngIf="threads.length === 0">
                     No threads yet.
                 </p>
@@ -24,11 +24,23 @@
                     </tr>
                 </table>
             </div>
+            <div class="da-rules-container">
+                <h1>
+                    Rules
+                </h1>
+                <div class="da-rules">
+                    <p>
+                        Don't spam
+                    </p>
+                    <p>
+                        Stay on topic
+                    </p>
+                </div>
+            </div>
         </div>
     
         <div *ngIf="isLoggedIn()" class="post-thread">
             <h1>Post a thread:</h1>
-
                 <form>
                     <div class="new-post-container">
                         <div class="new-post-grid-item">
@@ -57,9 +69,10 @@
                             >
                         </mat-form-field>
                             
+                        </div>          
                         </div>
-    
-                        <div class="new-post-grid-item" *ngIf="allTags.length > 0">
+
+                        <div class="post-thread" *ngIf="allTags.length > 0">
                             <h2>Add tags</h2>
                         <div *ngFor="let tag of allTags">
                             <label>
@@ -70,12 +83,10 @@
                                 {{ tag.Tag }}
                             </label>
                         </div>
-                            
-                        </div>
-                    </div>
+                     </div>
                     
 
-                    <button
+                    <button 
                         (click)="postThread()"
                     >
                         Post

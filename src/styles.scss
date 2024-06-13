@@ -7,6 +7,10 @@ body {
     background-color: $background-color-body;
   }
 
+  .icon {
+    width: 30px;
+    margin: 5px;
+  }
 /*
 Modal
 */
@@ -503,31 +507,15 @@ Forum page
 */
 
 .forum-main {
-  text-align: center;
-  align-items: center;
-  justify-content: center;
   background-color: $background-color-container;
-  border-style: solid;
   border-width: $border-width;
   border-color: $border-color;
-  padding: 20px;
 }
 
-.forum-grid {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.forum-titles-box {
-  align-items: center;
-  justify-content: center;
-  display: block;
-  text-align: center;
-}
-
-.new-post-container {
-  text-align: center;
+.da-rules {
+  background-color: white;
+  border-width: $border-width;
+  border-color: $border-color;
 }
 
 th, td {

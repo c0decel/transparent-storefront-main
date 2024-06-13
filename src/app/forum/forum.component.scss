@@ -1,9 +1,55 @@
+@media screen and (max-width: 900px) {
+    .forum-titles-box {
+        grid-template-columns: 1fr;
+    }
+
+    .new-post-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 901px) {
+    .forum-titles-box {
+        grid-template-columns: 1fr 1fr;
+    }
+    .new-post-container {
+        grid-template-columns: 1fr 1fr;
+        text-align: center;
+    }
+}
+
 .forum-main {
     display: flex;
     justify-content: center;  
-    align-items: center;      
-
+    align-items: center;  
 }
+
+.forum-titles-box {
+    display: grid;
+    grid-gap: 40px;   
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.da-rules-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.da-rules {
+    padding: 20px;
+    width: 50%;
+    border-radius: 5px;
+    border-style: solid;
+
+    p {
+        font-size: larger;
+    }
+}
+
 
 .forum-grid {
     display: flex;
@@ -13,6 +59,7 @@
 
 .forum-threads {
     display: flex;
+    flex-direction: column;
     justify-content: center;  
     align-items: center;      
     width: 100%;
@@ -21,6 +68,8 @@
 table {
     margin: auto;             
     border-collapse: collapse;
+    width: fit-content;
+    margin: 10px;
 }
 
 th, td {
@@ -28,7 +77,15 @@ th, td {
     border: 1px solid black;
 }
 
+.post-thread {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .new-post-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+    grid-gap: 20px;
 }
