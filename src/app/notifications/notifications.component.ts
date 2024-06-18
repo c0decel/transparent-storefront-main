@@ -50,6 +50,7 @@ export class NotificationsComponent {
           const bDate = new Date(`${b.NotifDate} ${b.NotifTime}`);
           return bDate.getTime() - aDate.getTime();
         });
+        console.log(this.notifs)
       },
       (error) => {
         console.error(`Could not fetch notifications: ${error}`);

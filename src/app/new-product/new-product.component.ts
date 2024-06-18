@@ -10,6 +10,7 @@ import { FetchProductDataService } from '../services/fetch-product-data.service'
 import { User } from '../shared/models/user.model';
 import { Supply } from '../shared/models/supply.model';
 import { Tag } from '../shared/models/tag.model';
+import { Product } from '../shared/models/product.model';
 
 interface SupplyDetail {
   selected: boolean;
@@ -27,19 +28,26 @@ export class NewProductComponent implements OnInit {
   user!: User;
   allTags: Tag[] = [];
   allSupplies: Supply[] = [];
+  products: Product[]=[];
 
   supplyDetailData: { [supplyId: string]: SupplyDetail } = {};
   selectedTags: { [tagId: string]: boolean } = {};
   selectedSupplies: { [supplyId: string]: boolean } = {};
   measurementUnits = ['grams', 'oz', 'piece'];
 
+  newDiscountOpen: boolean = false;
+  newProductOpen: boolean = true;
+  newTagOpen: boolean = false;
+  newSupplyOpen: boolean = false;
+  newExpenseOpen: boolean = false;
+  newSaleOpen: boolean = false;
+
   newProductData: any = { Name: '', Price: '', Description: '', Stock: '', Upcharge: '', Image: '', Tags: [], Supplies: [{SupplyID: '', Amount: '', Measurement: '', Name: '', Description: '', Supplier: ''}] };
   newSupplyData: any = { Name: '', Description: '', Cost: '', Quantity: '', Measurement: '', Supplier: ''};
   newDiscountData: any = { Name: '', Description: '', Type: '', Amount: 0, ExpiresOn: ''};
-
-  discountFormVisible: boolean = false;
-  productFormVisible: boolean = false;
-  tagFormVisible: boolean = false;
+  newExpenseData: any = {Expense: '', Amount: '', Description: '', ExpenseDate: ''};
+  newSaleData: any = {Sale: '', Amount: '', Description: '', SaleDate: ''};
+  newTagData: any = {Tag: '', Description: ''};
 
   constructor(
     private authService: AuthService,
@@ -62,56 +70,51 @@ export class NewProductComponent implements OnInit {
     this.fetchApiData.getAllSupplies().subscribe(allSupplies => {
       this.allSupplies = allSupplies;
     });
-  }
 
-  /**
-   * Toggle discount form
-   */
-  toggleDiscount(): void {
-    this.discountFormVisible = !this.discountFormVisible
-  }
-
-  /**
-   * Toggle new product form
-   */
-  toggleProduct(): void {
-    this.productFormVisible = !this.productFormVisible
-  }
-
-  /**
-   * Toggle new tag form
-   */
-  toggleTag(): void {
-    this.tagFormVisible = !this.tagFormVisible
+    this.fetchProductData.getAllProducts().subscribe(
+      (products) => {
+        this.products = products;
+      },
+      (error) => {
+        console.error(`Error: ${error.toString()}`);
+      }
+    )
   }
 
   /**
    * Select or unselect tag
    * @param tagId selected tag
    */
-  toggleTagSelection(tagId: string): void {
-    this.selectedTags[tagId] = !this.selectedTags[tagId];
-
-    if (!this.selectedTags[tagId]) {
-      const index = this.newProductData.Tags.indexOf(tagId);
+  toggleTagSelection(tag: Tag): void {
+    this.selectedTags[tag._id] = !this.selectedTags[tag._id];
+  
+    if (this.selectedTags[tag._id]) {
+      this.newProductData.Tags.push(tag._id);
+    } else {
+      const index = this.newProductData.Tags.indexOf(tag._id);
       if (index !== -1) {
         this.newProductData.Tags.splice(index, 1);
       }
     }
+    console.log(this.newProductData.Tags)
   }
+  
 
   /**
    * Select or unselect supply
    * @param supplyId selected supply
    */
-  toggleSupplySelection(supplyId: string): void {
-    this.selectedSupplies[supplyId] = !this.selectedSupplies[supplyId];
-    if (this.selectedSupplies[supplyId]) {
-      this.supplyDetailData[supplyId] = { selected: true, Amount: 0, Measurement: '' };
+  toggleSupplySelection(supply: Supply): void {
+    this.selectedSupplies[supply._id] = !this.selectedSupplies[supply._id];
+    console.log(supply._id)
+  
+    if (this.selectedSupplies[supply._id]) {
+      this.supplyDetailData[supply._id] = { selected: true, Amount: 0, Measurement: '' };
     } else {
-      delete this.supplyDetailData[supplyId];
+      delete this.supplyDetailData[supply._id];
     }
   }
+  
 
   /**
    * Submit new discount
@@ -136,23 +139,23 @@ export class NewProductComponent implements OnInit {
     if (!this.newProductData.Image) {
       this.newProductData.Image = 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg';
     }
-    const selectedTags = this.allTags.filter(tag => this.selectedTags[tag.TagID]).map(tag => tag.TagID);
+    const selectedTags = this.allTags.filter(tag => this.selectedTags[tag._id]).map(tag => tag._id);
     this.newProductData.Tags = selectedTags;
   
-    const selectedSupplies = this.allSupplies.filter(supply => this.selectedSupplies[supply.SupplyID]);
-    const validSupplies = selectedSupplies.filter(supply => this.supplyDetailData[supply.SupplyID]);
+    const selectedSupplies = this.allSupplies.filter(supply => this.selectedSupplies[supply._id]);
+    const validSupplies = selectedSupplies.filter(supply => this.supplyDetailData[supply._id]);
   
     this.newProductData.Supplies = [];
 
     validSupplies.forEach(supply => {
       const costOz = supply.CostOz;
-      const supplyId = supply.SupplyID;
+      const supplyId = supply._id;
       const supplyName = supply.Name;
       const supplyDescription = supply.Description;
       console.log(supply.Description)
       const supplySupplier = supply.Supplier;
-      const supplyAmount = this.supplyDetailData[supply.SupplyID].Amount;
-      const supplyMeasurement = this.supplyDetailData[supply.SupplyID].Measurement;
+      const supplyAmount = this.supplyDetailData[supply._id].Amount;
+      const supplyMeasurement = this.supplyDetailData[supply._id].Measurement;
   
       if (supplyId && supplyAmount && supplyMeasurement) {
         this.newProductData.Supplies.push({
@@ -223,5 +226,104 @@ export class NewProductComponent implements OnInit {
         console.error(`Error posting new supply: ${error}`);
       }
     );
+  }
+
+  /**
+   * Manually log new expense
+   */
+  postNewExpense(): void {
+    this.fetchApiData.addNewExpense(this.newExpenseData).subscribe(
+      (result) => {
+        alert(`New expense added.`)
+        console.log(`New expense added: ${result}`);
+      },
+      (error) => {
+        console.error(`Error: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Manually log new sale
+   */
+  postNewSale(): void {
+    this.fetchApiData.addNewSale(this.newSaleData).subscribe(
+      (result) => {
+        alert(`New sale added.`)
+        console.log(`New sale added: ${result}`);
+      },
+      (error) => {
+        console.error(`Error: ${error}`);
+      }
+    );
+  }
+
+  /**
+   * Post new tag
+   */
+  postNewTag(): void {
+    this.fetchApiData.addNewTag(this.newTagData).subscribe(
+      (result) => {
+        alert(`New tag added.`)
+        console.log(`New tag added: ${result}`);
+      },
+      (error) => {
+        console.error(`Error: ${error}`);
+      }
+    );
+  }
+
+  openNewProduct(): void {
+    this.newProductOpen = true;
+    this.newDiscountOpen = false;
+    this.newTagOpen = false;
+    this.newSupplyOpen = false;
+    this.newExpenseOpen = false;
+    this.newSaleOpen = false;
+  }
+
+  openNewDiscount(): void {
+    this.newProductOpen = false;
+    this.newDiscountOpen = true;
+    this.newTagOpen = false;
+    this.newSupplyOpen = false;
+    this.newExpenseOpen = false;
+    this.newSaleOpen = false;
+  }
+
+  openNewTag(): void {
+    this.newProductOpen = false;
+    this.newDiscountOpen = false;
+    this.newTagOpen = true;
+    this.newSupplyOpen = false;
+    this.newExpenseOpen = false;
+    this.newSaleOpen = false;
+  }
+
+  openNewExpense(): void {
+    this.newProductOpen = false;
+    this.newDiscountOpen = false;
+    this.newTagOpen = false;
+    this.newSupplyOpen = false;
+    this.newExpenseOpen = true;
+    this.newSaleOpen = false;
+  }
+
+  openNewSale(): void {
+    this.newProductOpen = false;
+    this.newDiscountOpen = false;
+    this.newTagOpen = false;
+    this.newSupplyOpen = false;
+    this.newExpenseOpen = false;
+    this.newSaleOpen = true;
+  }
+
+  openNewSupply(): void {
+    this.newProductOpen = false;
+    this.newDiscountOpen = false;
+    this.newTagOpen = false;
+    this.newSupplyOpen = true;
+    this.newExpenseOpen = false;
+    this.newSaleOpen = false;
   }
 }

@@ -20,6 +20,7 @@ export interface User {
     ];
     Reviews: [];
     Posts: [];
+    ProfileComments: [];
     PostCount: number;
     Threads: [];
     ThreadCount: number;

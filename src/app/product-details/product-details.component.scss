@@ -13,6 +13,11 @@ select {
     justify-content: center;
 }
 
+.product-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 .related-threads {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -35,7 +40,6 @@ select {
   mat-card-content {
     p {
       margin:10px;
-      background-color: antiquewhite;
       max-height: fit-content;
       padding: 10px;
     }

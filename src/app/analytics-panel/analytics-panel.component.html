@@ -7,90 +7,92 @@
             <div class="analytics-graph" style="border-width: 4px; border-color: black; border-style: solid;">
                 <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>    
             </div>
-            <div class="sales-list">
-                <h1>
-                    Sales
-                </h1>
-                <table *ngIf="sales.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                    </tr>
-                    <tr *ngFor="let sale of sales">
-                        <td>{{ sale.Sale }}</td>
-                        <td>{{ sale.Amount }}</td>
-                        <td>{{ sale.Description }}</td>
-                        <td>{{ sale.SaleDate }}</td>
-                    </tr>
-                </table>
-                <div *ngIf="sales.length === 0">
-                    <p>Nothing here yet.</p>
-                    <p
-                    *ngIf="isJanitor"
-                    (click)="goToAdminPanel()"
-                    >
-                        Add a sale.
-                    </p> 
+            <div class="two-grid">
+                <div>
+                    <h1>
+                        Sales
+                    </h1>
+                    <div class="info-table">
+                        <table *ngIf="sales.length > 0">
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr *ngFor="let sale of sales">
+                                <td>{{ sale.Sale }}</td>
+                                <td>{{ sale.Amount }}</td>
+                                <td>{{ sale.Description }}</td>
+                            </tr>
+                        </table>
+                        <div *ngIf="sales.length === 0">
+                            <p>Nothing here yet.</p>
+                            <p
+                            *ngIf="isJanitor"
+                            (click)="goToAdminPanel()"
+                            >
+                                Add a sale.
+                            </p> 
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1>
+                        Expenses
+                    </h1>
+                    <div class="info-table">
+                        <table *ngIf="expenses.length > 0">
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr *ngFor="let expense of expenses">
+                                <td>{{ expense.Expense }}</td>
+                                <td>{{ expense.Amount }}</td>
+                                <td>{{ expense.Description }}</td>
+                            </tr>
+                        </table>
+                        <div *ngIf="expenses.length === 0">
+                            <p>Nothing here yet.</p>
+                            <p
+                            *ngIf="isJanitor"
+                            (click)="goToAdminPanel()"
+                            >
+                                Add an expense.
+                            </p> 
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="sales-list">
-                <h1>
-                    Expenses
-                </h1>
-                <table *ngIf="expenses.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                    </tr>
-                    <tr *ngFor="let expense of expenses">
-                        <td>{{ expense.Expense }}</td>
-                        <td>{{ expense.Amount }}</td>
-                        <td>{{ expense.Description }}</td>
-                        <td>{{ expense.ExpenseDate }}</td>
-                    </tr>
-                </table>
-                <div *ngIf="expenses.length === 0">
-                    <p>Nothing here yet.</p>
-                    <p
-                    *ngIf="isJanitor"
-                    (click)="goToAdminPanel()"
-                    >
-                        Add an expense.
-                    </p> 
-                </div>
-            </div>
-            <div class="sales-list">
+            <div>
                 <h1>
                     Supplies used
                 </h1>
-                <table *ngIf="supplies.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Cost</th>
-                        <th>Quantity</th>
-                        <th>Supplier</th>
-                    </tr>
-                    <tr *ngFor="let supply of supplies">
-                        <td>{{ supply.Name }}</td>
-                        <td>{{ supply.Description }}</td>
-                        <td>{{ supply.Cost }}</td>
-                        <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
-                        <td>{{ supply.Supplier }}</td>
-                    </tr>
-                </table>
-                <div *ngIf="supplies.length === 0">
-                    <p>Nothing here yet.</p>
-                    <p
-                    *ngIf="isJanitor"
-                    (click)="goToAdminPanel()"
-                    >
-                        Add a supply.
-                    </p> 
+                <div class="info-table">
+                    <table *ngIf="supplies.length > 0">
+                        <tr>
+                            <th>Name</th>
+                            <th>Cost</th>
+                            <th>Quantity</th>
+                            <th>Supplier</th>
+                        </tr>
+                        <tr *ngFor="let supply of supplies">
+                            <td>{{ supply.Name }}</td>
+                            <td>{{ supply.Cost }}</td>
+                            <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
+                            <td>{{ supply.Supplier }}</td>
+                        </tr>
+                    </table>
+                    <div *ngIf="supplies.length === 0">
+                        <p>Nothing here yet.</p>
+                        <p
+                        *ngIf="isJanitor"
+                        (click)="goToAdminPanel()"
+                        >
+                            Add a supply.
+                        </p> 
+                    </div>
                 </div>
             </div>
         </div>

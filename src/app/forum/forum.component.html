@@ -4,25 +4,27 @@
 <div class="forum-main">
     <div class="forum-grid">
         <div class="forum-titles-box">
-            <div class="forum-threads">
+            <div>
                 <h1>Threads:</h1>
                 <p *ngIf="threads.length === 0">
                     No threads yet.
                 </p>
-                <table *ngIf="threads.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Replies</th>
-                        <th>OP</th>
-                    </tr>
-                    <tr *ngFor="let thread of threads">
-                        <td
-                            (click)="openThread(thread._id)"
-                        >{{ thread.Title }}</td>
-                        <td>{{ thread.ReplyCount }}</td>
-                        <td>{{ thread.Username }}</td>
-                    </tr>
-                </table>
+                <div class="info-table">
+                    <table *ngIf="threads.length > 0">
+                        <tr>
+                            <th>Name</th>
+                            <th>Replies</th>
+                            <th>OP</th>
+                        </tr>
+                        <tr *ngFor="let thread of threads">
+                            <td
+                                (click)="openThread(thread._id)"
+                            >{{ thread.Title }}</td>
+                            <td>{{ thread.ReplyCount }}</td>
+                            <td>{{ thread.Username }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <div class="da-rules-container">
                 <h1>

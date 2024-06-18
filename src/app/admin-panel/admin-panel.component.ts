@@ -191,49 +191,4 @@ export class AdminPanelComponent implements OnInit {
       console.error(`Error deleting: ${error}`);
     });
   }
-
-  /**
-   * Manually log new expense
-   */
-  postNewExpense(): void {
-    this.fetchApiData.addNewExpense(this.newExpenseData).subscribe(
-      (result) => {
-        alert(`New expense added.`)
-        console.log(`New expense added: ${result}`);
-      },
-      (error) => {
-        console.error(`Error: ${error}`);
-      }
-    );
-  }
-
-  /**
-   * Manually log new sale
-   */
-  postNewSale(): void {
-    this.fetchApiData.addNewSale(this.newSaleData).subscribe(
-      (result) => {
-        alert(`New sale added.`)
-        console.log(`New sale added: ${result}`);
-      },
-      (error) => {
-        console.error(`Error: ${error}`);
-      }
-    );
-  }
-
-  /**
-   * Post new tag
-   */
-  postNewTag(): void {
-    this.fetchApiData.addNewTag(this.newTagData).subscribe(
-      (result) => {
-        alert(`New tag added.`)
-        console.log(`New tag added: ${result}`);
-      },
-      (error) => {
-        console.error(`Error: ${error}`);
-      }
-    );
-  }
 }

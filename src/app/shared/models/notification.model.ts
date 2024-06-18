@@ -1,7 +1,5 @@
 export interface Notification {
-    Status: string;
     Type: string;
-    Header: string;
     UserLink: {
         UserID: string;
         Username: string;
@@ -11,7 +9,20 @@ export interface Notification {
         ThreadID: string;
         ThreadName: string;
     };
-    Content: string;
+    ProductLink: {
+        ProductID: string;
+        ProductName: string;
+    };
+    PurchaseLink: {
+        PurchaseID: string;
+    }
     NotifDate: string;
     NotifTime: string;
+    Content: string;
+    Status: string;
+    BanLink: {
+        BanID: string;
+        Reason: string;
+        ExpiresOn: string;
+    }
 }

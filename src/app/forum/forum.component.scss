@@ -57,26 +57,6 @@
     align-items: center;
 }
 
-.forum-threads {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;  
-    align-items: center;      
-    width: 100%;
-}
-
-table {
-    margin: auto;             
-    border-collapse: collapse;
-    width: fit-content;
-    margin: 10px;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid black;
-}
-
 .post-thread {
     display: flex;
     flex-direction: column;

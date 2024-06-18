@@ -10,61 +10,151 @@
         </div>
         <div *ngFor="let notif of notifs">
             <div class="notification" class="{{notif?.Status}}">
-
-                    <p *ngIf="notif.Type == 'ThreadReply'" class="notif-header">
-                        New reply in thread 
-                        <span 
-                            class="thread-reply"
-                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
-                        >
-                            {{notif?.ThreadLink?.ThreadName}}
-                        </span>
-                    </p>
-
-                    <p *ngIf="notif.Type == 'Mention'" class="notif-header">
-                        You were mentioned in thread 
-                        <span 
-                            class="thread-reply"
-                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
-                        >
-                            {{notif?.ThreadLink?.ThreadName}}
-                        </span>
-                    </p>
-
-                    <p *ngIf="notif.Type == 'Threadban'" class="notif-header">
-                        {{notif?.Header}} 
-                        <span
-                            class="thread-reply"
-                            (click)="openProfile(notif?.UserLink?.UserID ?? '')"
-                        >
-                            {{notif?.UserLink?.Username}}
-                        </span>
-                    </p>
-
-                    <h3>
-                        {{notif?.NotifTime}}
-                    </h3>
-                    <p>
-                        <span *ngIf="notif.Type == 'Mention'">
-                            <span 
-                                class="thread-reply"
+                <div class="notif-container">
+                    <div class="notif-header">
+                        <p *ngIf="notif.Type === 'Mention'">
+                            <span
+                                class="notif-link"
                                 (click)="openProfile(notif?.UserLink?.UserID ?? '')"
                             >
-                                {{notif?.UserLink?.Username}} 
+                                {{notif?.UserLink?.Username}}
                             </span>
-                        </span>
-                        
-                        {{notif?.Content}}
-                    <span *ngIf="notif.Type == 'Threadban'">
-                        in thread 
-                        <span 
-                            class="thread-reply"
-                            (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
-                        >
-                            {{notif?.ThreadLink?.ThreadName}}
-                        </span>
-                    </span>
-                    </p>
+                            has mentioned you in thread 
+                            <span
+                                class="notif-link"
+                                (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                            >
+                                {{notif?.ThreadLink?.ThreadName}}.
+                            </span>
+                        </p>
+
+                        <p *ngIf="notif.Type === 'NewPurchase'">
+                            Thank you for your purchase!
+                        </p>
+
+                        <p *ngIf="notif.Type === 'PurchaseUpdate'">
+                            Update on your purchase of
+                            <span
+                                class="notif-link"
+                            >
+                                {{notif?.ProductLink?.ProductName}}:
+                            </span>
+                        </p>
+
+                        <p *ngIf="notif.Type === 'Threadban'">
+                            You can't behave! Because of this, you are banned from 
+                            <span
+                                class="notif-link"
+                                (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                            >
+                                {{notif?.ThreadLink?.ThreadName}}
+                            </span>
+
+                        </p>
+
+                        <p *ngIf="notif.Type === 'ThreadReply'">
+                            New post in thread
+                            <span
+                                class="notif-link"
+                                (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                            >
+                                {{notif?.ThreadLink?.ThreadName}}
+                            </span>
+                        </p>
+
+                        <p *ngIf="notif.Type === 'ProfileComment'">
+                            <span
+                                class="notif-link"
+                                (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                            >
+                                {{notif?.UserLink?.Username}}
+                            </span>
+                             left a comment on your profile.
+                        </p>
+
+                        <div>
+                            <p class="notif-timestamp">
+                                {{notif?.NotifDate}} at {{notif?.NotifTime}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="notif-body">
+                        <div *ngIf="notif.Type === 'Mention'" class="notif-quote">
+                            <p class="notif-quote-bar">
+                                <span
+                                    class="notif-link"
+                                    (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                                >
+                                    {{notif?.UserLink?.Username}}
+                                </span> said:
+                            </p>
+
+                            <p class="notif-quote-content">
+                                {{notif?.Content}}
+                            </p>
+                        </div>
+
+                        <div *ngIf="notif.Type === 'NewPurchase'" class="notif-quote">
+                            <p class="notif-quote-content">
+                                Thank you for purchasing
+                                <span
+                                class="notif-link"
+                            >
+                                {{notif?.ProductLink?.ProductName}}.
+                            </span>
+                            </p>
+                        </div>
+
+                        <p *ngIf="notif.Type === 'PurchaseUpdate'">
+                            Your purchase status has been updated.
+                        </p>
+                        <div *ngIf="notif.Type === 'Threadban'" class="notif-quote">
+                            <p class="notif-quote-bar"> 
+                                <span
+                                    class="notif-link"
+                                    (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                                >
+                                    {{notif?.UserLink?.Username}}
+                                </span>
+                                banned you. Reason:
+                            </p>
+                            <p class="notif-quote-content">
+                                {{notif?.BanLink?.Reason}}
+                            </p>
+                        </div>
+
+                        <div *ngIf="notif.Type === 'ThreadReply'" class="notif-quote">
+                            <p class="notif-quote-bar">
+                                <span
+                                    class="notif-link"
+                                    (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                                >
+                                    {{notif?.UserLink?.Username}}
+                                </span>
+                                said: 
+                            </p>
+                            <p class="notif-quote-content">
+                                {{notif?.Content}}
+                            </p>
+                        </div>
+
+                        <div *ngIf="notif.Type === 'ProfileComment'" class="notif-quote">
+                            <p class="notif-quote-bar">
+                                <span
+                                    class="notif-link"
+                                    (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                                >
+                                    {{notif?.UserLink?.Username}}
+                                </span>
+                                said: 
+                            </p>
+                            <p class="notif-quote-content">
+                                {{notif?.Content}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

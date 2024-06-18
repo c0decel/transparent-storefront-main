@@ -41,27 +41,78 @@
             <h2>Reaction Score: {{reactionScore}}</h2>
         </div>
     </div>
-    
-    <div>
-        <h2>Wishlist</h2>
-        <app-product-card [wishlistItems]="wishlistItems" [secondItemType]="'wishlist'">
 
-        </app-product-card>
-    </div>
-
-    <div>
-        <h2>User Posts</h2>
-        <div class="profile-post-container">
-            <app-post [replies]="posts" [user]="user">
+    <div class="user-tabs-container">
+        <div class="user-tabs-buttons">
+            <div [ngClass]="{ 'tab-selected': wallOpen }">
+                <h3
+                    (click)="openWall()"
+                >
+                    Wall
+                </h3>
+            </div>
+            <div [ngClass]="{ 'tab-selected': wishlistOpen }">
+                <h3
+                    (click)="openWishlist()"
+                >
+                    Wishlist
+                </h3>
+            </div>
+            <div [ngClass]="{ 'tab-selected': userPostsOpen }">
+                <h3
+                    (click)="openUserPosts()"
+                >
+                    Posts
+                </h3>
+            </div>
+            <div [ngClass]="{ 'tab-selected': userPurchasesOpen }">
+                <div *ngIf="currentUser?._id === user?._id">
+                    <h3
+                        (click)="openUserPurchases()"
+                    >
+                        Purchases
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div [ngClass]="{ 'tab-open': wishlistOpen }" class="user-tab">
+            <div class="profile-post-container">
+                <app-product-card [wishlistItems]="wishlistItems" [secondItemType]="'wishlist'">
     
-            </app-post>
+                </app-product-card>
+            </div>
+        </div>
+    
+        <div [ngClass]="{ 'tab-open': wallOpen }" class="user-tab">
+            <div class="profile-post-container">
+                <app-post [userProfileComments]="profileComments" [user]="user" [profileView]="true">
+        
+                </app-post>
+            </div>
+        </div>
+    
+        <div [ngClass]="{ 'tab-open': userPostsOpen }" class="user-tab">
+            <div class="profile-post-container">
+                <app-post [replies]="posts" [user]="user">
+        
+                </app-post>
+            </div>
+        </div>
+
+        <div [ngClass]="{ 'tab-open': userPurchasesOpen }" class="user-tab">
+            <div class="profile-post-container">
+                <app-purchase-card [purchases]="userPurchases" [singlePurchase]="false" [profileView]="true">
+        
+                </app-purchase-card>
+            </div>
         </div>
     </div>
 
-    <div *ngIf="currentUser?._id === user?._id">
-        <h1>
-            Settings
-        </h1>
+    <h1 *ngIf="currentUser?._id === user?._id">
+        Settings
+    </h1>
+
+    <div *ngIf="currentUser?._id === user?._id" class="user-settings">
         <div>
             <h2>
                 Update bio:

@@ -1,9 +1,5 @@
 $background-color-container: #e9f5ea;
 
-.admin-panel-page {
-    margin: 40px;
-}
-
 .analytics-list {
     text-align: center;
 }
@@ -53,6 +49,30 @@ $background-color-container: #e9f5ea;
     justify-content: center;
     align-items: center;
 }
+
+.info-table {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    table {
+        width: 100%;
+        max-width: 100%;
+        border-collapse: collapse;
+    }
+}
+
+table {
+    background-color: white;
+    border-style: solid;
+    align-items: center;
+    border-collapse: collapse;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+  }
+
 
 .status-bar {
     display: flex;

@@ -21,6 +21,24 @@
     font-weight: 200;
 }
 
-.thread-reply {
+.notif-link {
     font-weight: 900;
+}
+
+.notif-timestamp {
+    font-size: 10px;
+}
+
+.notif-quote {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.notif-quote-bar {
+    background-color: aqua;
+    padding-left: 2px;
+}
+
+.notif-quote-content {
+    padding: 10px;
 }

@@ -66,6 +66,20 @@ export class FetchForumDataService {
         )
     }
 
+    //Post on user wall
+    postWallComment(commentData: any, username: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        return this.http.post(`${apiUrl}/users/${username}/wall`, commentData, {
+        headers: new HttpHeaders({
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        })
+        }).pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+        )
+    }
+
 
     //Get all replies to thread
     getAllReplies(threadId: string): Observable<any> {

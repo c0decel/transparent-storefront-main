@@ -1,4 +1,5 @@
 export interface Supply {
+    _id: string;
     SupplyID: string;
     Name: string;
     Description: string;

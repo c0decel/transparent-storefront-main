@@ -15,6 +15,7 @@ import { AuthService } from '../services/auth.service';
 import { User } from '../shared/models/user.model';
 import { Wishlist } from '../shared/models/wishlist.model';
 import { Post } from '../shared/models/post.model';
+import { Purchase } from '../shared/models/purchase.model';
 
 @Component({
   selector: 'app-profile',
@@ -26,8 +27,14 @@ export class ProfileComponent {
   user!: User;
   wishlistItems: Wishlist[]=[];
   posts: Post[]=[];
+  profileComments: Post[]=[];
+  userPurchases: Purchase[]=[];
 
   isJanitor: boolean = false;
+  wishlistOpen: boolean = false;
+  wallOpen: boolean = true;
+  userPostsOpen: boolean = false;
+  userPurchasesOpen: boolean = false;
 
   reactionScore!: number;
   userId: string | null=null;
@@ -65,6 +72,22 @@ export class ProfileComponent {
         this.user = user;
         console.log(this.user)
 
+        if (user) {
+          this.fetchUserData.getListItems(this.user.Username).subscribe(
+            (items: Wishlist[]) => {
+              this.wishlistItems = items;
+              console.log(`Wishlist Items: ${this.wishlistItems}`);
+            }, 
+            (error) => {
+              console.error(`Could not fetch wishlist items: ${error}`);
+            }
+          );
+        }
+
+        if (user && user.Purchases) {
+          this.userPurchases = user.Purchases;
+        }
+
         if (user && user.Posts) {
           user.Posts.forEach((post: Post) => {
             post.MostRecentReactions = post.Reactions.slice(-3).reverse().map(reaction => ({
@@ -75,26 +98,23 @@ export class ProfileComponent {
           });
 
           this.posts = user.Posts;
+
+          
         }
 
-      })
-    }
-
-    /**
-     * Get current user's wishlist items
-     */
-    getListItems(): void {
-      this.fetchUserData.getListItems(this.user.Username).subscribe(
-        (items: Wishlist[]) => {
-          this.wishlistItems = items;
-          console.log(`Wishlist Items: ${this.wishlistItems}`);
-        }, 
-        (error) => {
-          console.error(`Could not fetch wishlist items: ${error}`);
+        if (user && user.ProfileComments) {
+          this.fetchUserData.getUserWall(this.user.Username).subscribe(
+            (comments: Post[]) => {
+              this.profileComments = comments;
+            },
+            (error) => {
+              console.error(`Could not fetch profile comments: ${error}`);
+            }
+          )
         }
-      );
-    }
 
+      });
+    }
     /**
      * Update user bio
      */
@@ -213,5 +233,34 @@ export class ProfileComponent {
         }
       );
     }
+
+    openWishlist(): void {
+      this.wishlistOpen = true;
+      this.wallOpen = false;
+      this.userPostsOpen = false;
+      this.userPurchasesOpen = false;
+    }
+
+    openWall(): void {
+      this.wishlistOpen = false;
+      this.wallOpen = true;
+      this.userPostsOpen = false;
+      this.userPurchasesOpen = false;
+    }
+
+    openUserPosts(): void {
+      this.wishlistOpen = false;
+      this.wallOpen = false;
+      this.userPostsOpen = true;
+      this.userPurchasesOpen = false;
+    }
+
+    openUserPurchases(): void {
+      this.wishlistOpen = false;
+      this.wallOpen = false;
+      this.userPostsOpen = false;
+      this.userPurchasesOpen = true;
+    }
+
 
 }

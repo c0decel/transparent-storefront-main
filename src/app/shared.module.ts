@@ -11,6 +11,7 @@ import { NavHeaderComponent } from './shared/nav-header/nav-header.component';
 import { LoginCardComponent } from './shared/login-card/login-card.component';
 import { ProductCardComponent } from './shared/product-card/product-card.component';
 import { PostComponent } from './shared/post/post.component';
+import { PurchaseCardComponent } from './shared/purchase-card/purchase-card.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { PostComponent } from './shared/post/post.component';
     NavHeaderComponent,
     ProductCardComponent,
     LoginCardComponent,
-    PostComponent
+    PostComponent,
+    PurchaseCardComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { PostComponent } from './shared/post/post.component';
     NavHeaderComponent,
     ProductCardComponent,
     LoginCardComponent,
-    PostComponent
+    PostComponent,
+    PurchaseCardComponent
   ]
 })
 export class SharedModule { }

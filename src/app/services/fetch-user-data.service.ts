@@ -219,6 +219,21 @@ export class FetchUserDataService {
         );
     }
 
+    //Get user profile comments
+    getUserWall(username: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        return this.http.get(`${apiUrl}/users/${username}/wall`, {
+        headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token,
+        })
+        }).pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+        );
+    }
+
     //Add item to wishlist
     addToList(_id: string): Observable<any> {
         const token = localStorage.getItem('token');

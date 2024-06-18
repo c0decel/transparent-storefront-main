@@ -1,0 +1,51 @@
+<div *ngIf="!singlePurchase"  [ngClass]="{ 'profile-view': profileView }">
+    <div *ngFor="let purchase of purchases">
+        <div class="purchase-container">
+            <div class="purchase-info">
+                <div class="purchase-info-item">
+                    <img src="{{purchase.Image}}" class="purchase-image">
+                </div>
+                <div class="purchase-info-item">
+                    <h2>
+                        {{purchase.Name}} - ${{purchase.Price}}
+                    </h2>
+                    <p>
+                        on {{purchase.PurchaseDate}} 
+                    </p>
+                    <div class="purchase-status">
+                        <h3>
+                            Status: 
+                        </h3>
+                        <h3 class="purchase-status-{{purchase.Status}}">
+                            {{purchase.Status}}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="singlePurchase">
+    <div class="purchase-info">
+        <div class="purchase-info-item">
+            <img src="{{successfulPurchase.Image}}" class="purchase-image">
+        </div>
+        <div class="purchase-info-item">
+            <h2>
+                {{successfulPurchase.Name}} - ${{successfulPurchase.Price}}
+            </h2>
+            <p>
+                on {{successfulPurchase.PurchaseDate}} 
+            </p>
+            <div class="purchase-status">
+                <h3>
+                    Status: 
+                </h3>
+                <h3 class="purchase-status-{{successfulPurchase.Status}}">
+                    {{successfulPurchase.Status}}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>

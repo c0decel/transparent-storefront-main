@@ -11,6 +11,40 @@ body {
     width: 30px;
     margin: 5px;
   }
+
+
+/*
+Media settings
+*/
+@media screen and (max-width: 800px) {
+  .two-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (min-width: 801px) {
+  .two-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/*
+Purchase card
+*/
+
+.purchase-container {
+  background-color: $background-color-product;
+}
+
+
+/*
+Global
+*/
+.two-grid {
+  display: grid;
+  grid-gap: 20px;
+}
+
 /*
 Modal
 */
@@ -64,7 +98,6 @@ Store
   border-color: $border-color;
   border-width: $border-width;
   border-style: solid;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,18 +118,6 @@ button {
 
 h2 {
   padding-right: 9px;
-}
-
-
-
-table {
-  background-color: white;
-  border-color: $border-color;
-  border-width: $border-width;
-  border-style: solid;
-  align-items: center;
-  border-collapse: collapse;
-  text-align: center;
 }
 
 /*
@@ -283,149 +304,6 @@ Admin panel
   padding: 20px;
 }
 
-/*
-New products page
-*/
-.forms-container {
-  display: grid;
-  grid-gap: 40px;
-  padding: 20px;
-}
-
-.admin-form {
-  background-color: $background-color-product;
-  width: fit-content;
-  padding: 20px;
-  text-align: center;
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 5px;
-  border-color: black;
-}
-
-@media screen and (min-width: 1500px) {
-  table {
-    width: 700px;
-  }
-
-  .forms-container {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  #image-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    img {
-      width: 400px;
-    }
-  }
-  
-  #text-info {
-    text-align: right;
-    width: fit-content;
-  }
-
-  #supply-info {
-    width: max-content;
-    text-align: left;
-  }
-
-  .product-info {
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: 100px;
-    grid-gap: 40px;
-    width: auto;
-    text-align: center;
-  }
-  }
-
-@media screen and (max-width: 1499px) {
-  table {
-    width: max-content;
-  }
-
-  .forms-container {
-    grid-template-columns: 1fr;
-  }
-
-  #image-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    img {
-      width: 300px;
-    }
-  }
-  
-  #text-info {
-    text-align: center;
-    width: fit-content;
-  }
-
-  #supply-info {
-    width: max-content;
-    text-align: center;
-    font-size: 12px;
-  }
-
-  .product-info {
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
-  }
-
-  .options {
-    #button-options {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-}
-
-@media screen and (max-width: 700px) {
-  table {
-    width: max-content;
-  }
-
-  .forms-container {
-    grid-template-columns: 1fr;
-  }
-
-  #image-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    img {
-      width: 200px;
-    }
-  }
-  
-  #text-info {
-    text-align: center;
-    width: fit-content;
-  }
-
-  #supply-info {
-    width: max-content;
-    text-align: center;
-    font-size: 12px;
-  }
-
-  .product-info {
-    grid-template-columns: 1fr;
-    width: auto;
-    text-align: center;
-  }
-
-  .options {
-    #button-options {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-}
 
 
 .product-info_item {
@@ -518,8 +396,26 @@ Forum page
   border-color: $border-color;
 }
 
+.info-table {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  
+  table {
+      margin: auto;
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+  }
+}
+
+
+
 th, td {
-  padding: 8px;
+  padding: 10px;
+  border: 1px solid black;
   text-align: left;
 }
 
@@ -551,6 +447,10 @@ Profile page
   grid-gap: 40px;
 }
 
+.comment-container {
+  background-color: $options-container-color;
+}
+
 .user-post-info {
   display: flex;
   flex-direction: row;
@@ -562,8 +462,31 @@ Profile page
    }
 }
 
-.profile-post-container {
+.user-tabs-container {
+  background-color: $background-color-header;
   border-style: solid;
+}
+
+.forms-tab-container {
+  background-color: $background-color-header;
+  border-style: solid;
+}
+
+.app-purchase-card {
+  background-color: $background-color-body;
+}
+
+.profile-post-container {
+  background-color: $background-color-body;
+}
+
+.tab-open {
+  background-color: $background-color-body;
+}
+
+.tab-selected {
+    line-height: 100%;
+    background-color: $background-color-body;
 }
 
 .user-post-container {
@@ -575,16 +498,7 @@ Profile page
   margin: 10px;
 }
 
-@media screen and (min-width: 769px) {
-  .profile-grid {
-    grid-template-columns: 1fr 1fr; 
-    grid-gap: 20px
-  }
 
-  #account-info {
-    text-align: left;
-  }
-}
 
 @media screen and (max-width: 768px) {
   .forum-grid {
@@ -632,7 +546,7 @@ Thread
   p {
     margin-right: 10px;
   }
-  position: absolute; /* Position the options absolutely within the parent container */
+  position: absolute;
   right: 10%;
 }
 
@@ -657,32 +571,6 @@ Thread
   }
 }
 
-.user-admin {
-  color: aquamarine;
-}
-
 .write-reply {
   background-color: $background-color-product;
-}
-
-/*
-Mod log
-*/
-
-.ban-list {
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: 1fr 1fr; 
-}
-
-@media screen and (min-width: 769px) {
-  .ban-list {
-    grid-template-columns: 1fr 1fr; 
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .ban-list {
-    grid-template-columns: 1fr;
-}
 }

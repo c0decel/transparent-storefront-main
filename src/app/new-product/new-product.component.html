@@ -3,276 +3,402 @@
         
     </nav-header-component>
     <div class="content-container">
-        <button
-            (click)="toggleDiscount()"
-        >
-            Add new discount
-        </button>
-        <button
-            (click)="toggleProduct()"
-        >
-            Add new product
-        </button>
-        <button
-            (click)="toggleTag()"
-        >
-            Add new tag
-        </button>
-        <div class="forms-container">
-            <form class="admin-form" *ngIf="discountFormVisible">
-                <h2>Name</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newDiscountData.Name"
-                        placeholder="Discount Name"
-                        type="text"
-                        name="Name"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Amount</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newDiscountData.Amount"
-                        placeholder="Discount Amount"
-                        type="number"
-                        name="Amount"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Description</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newDiscountData.Description"
-                        placeholder="Discount Description"
-                        type="text"
-                        name="Description"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Expires On</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newDiscountData.ExpiresOn"
-                        placeholder="Discount Expires On"
-                        type="date"
-                        name="ExpiresOn"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Discount Type</h2>
-                <select
-                    [(ngModel)]="newDiscountData.Type"
-                    name="Type"
-                    
-                >
-                    <option value="Dollar">Dollar</option>
-                    <option value="Percent">Percent</option>
-                </select>
-                <br>
-                <button
-                    (click)="submitNewDiscount()"
-                >
-                    Submit new discount
-                </button>
-            </form>
-            <form class="admin-form" *ngIf="productFormVisible">
-                <h2>Name</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Name"
-                        placeholder="Product Name"
-                        type="text"
-                        name="Name"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Price</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Price"
-                        placeholder="Product Price"
-                        type="text"
-                        name="Price"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Upcharge Percentage</h2>
-                <p>Enter the profit margin number (no % sign)</p>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Upcharge"
-                        placeholder="Product Upcharge"
-                        type="text"
-                        name="Upcharge"
-                    >
-                </mat-form-field><br>
-                <h2>Description</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Description"
-                        placeholder="Product Description"
-                        type="text"
-                        name="Description"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Stock</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Stock"
-                        placeholder="Product Stock"
-                        type="number"
-                        name="Stock"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Link to image</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newProductData.Image"
-                        placeholder="Link to image"
-                        type="text"
-                        name="Image"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Add tags</h2>
-                <div *ngFor="let tag of allTags">
-                    <label>
-                        <input 
-                            type="checkbox"
-                            [checked]="selectedTags[tag.TagID]"
-                            (change)="toggleTagSelection(tag.TagID)">
-                        {{ tag.Tag }}
-                    </label>
-                </div><br>
-                <h2>Add supplies</h2>
-                <div *ngFor="let supply of allSupplies">
-                    <label>
-                        <input 
-                            type="checkbox"
-                            [checked]="selectedSupplies[supply.SupplyID]"
-                            (change)="toggleSupplySelection(supply.SupplyID)">
-                        {{ supply.Name }}
-                    </label>
-                    <div *ngIf="selectedSupplies[supply.SupplyID]">
-                        <label>
-                            Amount:
-                            <input 
-                                type="number"
-                                name="supplyDetailData[supply.SupplyID].Amount"
-                                [(ngModel)]="supplyDetailData[supply.SupplyID].Amount"
-[ngModelOptions]="{standalone: true}"
-                            >
-                        </label>
-                        <label>
-                            UOM:
-                            <select
-                                [(ngModel)]="supplyDetailData[supply.SupplyID].Measurement"
-                                [ngModelOptions]="{standalone: true}"
-                            >
-                                <option 
-                                    *ngFor="let unit of measurementUnits"
-                                    [value]="unit"
-                                    
-                                >
-                                    {{unit}}
-                                </option>
-                            </select>
-                        </label>
+        <div class="options-grid">
+            <div class="product-table">
+                <table *ngIf="products.length > 0">
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Featured</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr *ngFor="let product of products">
+                        <td>{{ product.Name }}</td>
+                        <td>{{ product.Stock }}</td>
+                        <td>{{ product.isFeatured }}</td>
+                        <td>Delete</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="forms-tab-container">
+                <div class="admin-tabs-buttons">
+                    <div [ngClass]="{ 'tab-selected': newProductOpen }">
+                        <p
+                            (click)="openNewProduct()"
+                        >
+                            Product
+                    </p>
+                    </div>
+                    <div [ngClass]="{ 'tab-selected': newDiscountOpen }">
+                        <p
+                            (click)="openNewDiscount()"
+                        >
+                            Discount
+                    </p>
+                    </div>
+                    <div [ngClass]="{ 'tab-selected': newTagOpen }">
+                        <p
+                            (click)="openNewTag()"
+                        >
+                            Tag
+                    </p>
+                    </div>
+                    <div [ngClass]="{ 'tab-selected': newSupplyOpen }">
+                        <p
+                            (click)="openNewSupply()"
+                        >
+                            Supply
+                    </p>
+                    </div>
+                    <div [ngClass]="{ 'tab-selected': newExpenseOpen }">
+                        <p
+                            (click)="openNewExpense()"
+                        >
+                            Expense
+                    </p>
+                    </div>
+                    <div [ngClass]="{ 'tab-selected': newSaleOpen }">
+                        <p
+                            (click)="openNewSale()"
+                        >
+                            Sale
+                    </p>
                     </div>
                 </div>
-                <button
-                    (click)="submitNewProduct()"
-                >
-                    Submit new product
-                </button>
-            </form>
-            <form class="admin-form" *ngIf="tagFormVisible">
-                <h2>Name</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newSupplyData.Name"
-                        placeholder="Supply Name"
-                        type="text"
-                        name="Name"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Description</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newSupplyData.Description"
-                        placeholder="Supply Description"
-                        type="text"
-                        name="Description"
-                        required
-                    >
-                </mat-form-field><br>
-                <h2>Quantity</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newSupplyData.Quantity"
-                        placeholder="Supply Quantity"
-                        type="text"
-                        name="Quantity"
-                        required
-                    >
-                </mat-form-field>
-    
-                    <select
-                        [(ngModel)]="newSupplyData.Measurement"
-                        name="Quantity"
-                        required
-                    >
-                        <option value="grams">Grams</option>
-                        <option value="oz">Ounce</option>
-                        <option value="ml">Milliliter</option>
-                        <option value="piece">Pieces</option>
-                    </select>
+                <form [ngClass]="{ 'tab-open': newDiscountOpen }" class="admin-tab">
+                    <h2>Name</h2>
+
+                        <input
+                            [(ngModel)]="newDiscountData.Name"
+                            placeholder="Discount Name"
+                            type="text"
+                            name="Name"
+                            required
+                        >
+                    <br>
+                    <h2>Amount</h2>
+
+                        <input
+                            [(ngModel)]="newDiscountData.Amount"
+                            placeholder="Discount Amount"
+                            type="number"
+                            name="Amount"
+                            required
+                        >
                 <br>
-                <h2>Cost</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newSupplyData.Cost"
-                        placeholder="Supply Cost"
-                        type="text"
-                        name="Cost"
-                        required
+                    <h2>Description</h2>
+                        <input
+                            [(ngModel)]="newDiscountData.Description"
+                            placeholder="Discount Description"
+                            type="text"
+                            name="Description"
+                            required
+                        >
+                    <br>
+                    <h2>Expires On</h2>
+
+                        <input
+                            [(ngModel)]="newDiscountData.ExpiresOn"
+                            placeholder="Discount Expires On"
+                            type="date"
+                            name="ExpiresOn"
+                            required
+                        >
+                    <br>
+                    <h2>Discount Type</h2>
+                    <select
+                        [(ngModel)]="newDiscountData.Type"
+                        name="Type"
                     >
-                </mat-form-field><br>
-                <h2>Supplier</h2>
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newSupplyData.Supplier"
-                        placeholder="Supply Supplier"
-                        type="text"
-                        name="Supplier"
-                        required
+                        <option value="Dollar">Dollar</option>
+                        <option value="Percent">Percent</option>
+                    </select>
+                    <br>
+                    <button
+                        (click)="submitNewDiscount()"
                     >
-                </mat-form-field><br>
-                <button
-                    (click)="submitNewSupply()"
-                >
-                    Submit new supply
-                </button>
-            </form>
+                        Submit new discount
+                    </button>
+                </form>
+                <form [ngClass]="{ 'tab-open': newProductOpen }" class="admin-tab">
+                    <h2>Name</h2>
+                        <input
+                            [(ngModel)]="newProductData.Name"
+                            placeholder="Product Name"
+                            type="text"
+                            name="Name"
+                            required
+                        >
+                    <br>
+                    <h2>Price</h2>
+                        <input
+                            [(ngModel)]="newProductData.Price"
+                            placeholder="Product Price"
+                            type="text"
+                            name="Price"
+                            required
+                        >
+                    <br>
+                    <h2>Upcharge Percentage</h2>
+                    <p>Enter the profit margin number (no % sign)</p>
+                        <input
+                            [(ngModel)]="newProductData.Upcharge"
+                            placeholder="Product Upcharge"
+                            type="text"
+                            name="Upcharge"
+                        >
+                    <br>
+                    <h2>Description</h2>
+                        <input
+                            [(ngModel)]="newProductData.Description"
+                            placeholder="Product Description"
+                            type="text"
+                            name="Description"
+                            required
+                        >
+                    <br>
+                    <h2>Stock</h2>
+                        <input                      
+                            [(ngModel)]="newProductData.Stock"
+                            placeholder="Product Stock"
+                            type="number"
+                            name="Stock"
+                            required
+                        >
+                    <br>
+                    <h2>Link to image</h2>
+                        <input
+                            [(ngModel)]="newProductData.Image"
+                            placeholder="Link to image"
+                            type="text"
+                            name="Image"
+                            required
+                        >
+                    <br>
+                    <h2>Add tags</h2>
+                    <div *ngFor="let tag of allTags">
+                        <label>
+                          <input 
+                            type="checkbox"
+                            [checked]="selectedTags[tag._id]"
+                            (change)="toggleTagSelection(tag);">
+                          {{ tag.Tag }}
+                        </label>
+                      </div><br>
+                    <h2>Add supplies</h2>
+                    <div *ngFor="let supply of allSupplies">
+                        <label>
+                          <input 
+                            type="checkbox"
+                            [checked]="selectedSupplies[supply._id]"
+                            (change)="toggleSupplySelection(supply)">
+                          {{ supply.Name }}
+                        </label>
+                        <div *ngIf="selectedSupplies[supply._id]">
+                          <label>
+                            Amount:
+                            <input 
+                              type="number"
+                              name="supplyDetailData[supply._id].Amount"
+                              [(ngModel)]="supplyDetailData[supply._id].Amount"
+                              [ngModelOptions]="{standalone: true}"
+                            >
+                          </label>
+                          <label>
+                            UOM:
+                            <select
+                              [(ngModel)]="supplyDetailData[supply._id].Measurement"
+                              [ngModelOptions]="{standalone: true}"
+                            >
+                              <option *ngFor="let unit of measurementUnits" [value]="unit">{{unit}}</option>
+                            </select>
+                          </label>
+                        </div>
+                      </div>
+                    <button
+                        (click)="submitNewProduct()"
+                    >
+                        Submit new product
+                    </button>
+                </form>
+                <form [ngClass]="{ 'tab-open': newSupplyOpen }" class="admin-tab">
+                    <h2>Name</h2>
+                        <input
+                            [(ngModel)]="newSupplyData.Name"
+                            placeholder="Supply Name"
+                            type="text"
+                            name="Name"
+                            required
+                        >
+                    <br>
+                    <h2>Description</h2>
+                        <input
+                            [(ngModel)]="newSupplyData.Description"
+                            placeholder="Supply Description"
+                            type="text"
+                            name="Description"
+                            required
+                        >
+                    <br>
+                    <h2>Quantity</h2>
+                        <input
+                            [(ngModel)]="newSupplyData.Quantity"
+                            placeholder="Supply Quantity"
+                            type="text"
+                            name="Quantity"
+                            required
+                        >
+        
+                        <select
+                            [(ngModel)]="newSupplyData.Measurement"
+                            name="Quantity"
+                            required
+                        >
+                            <option value="grams">Grams</option>
+                            <option value="oz">Ounce</option>
+                            <option value="ml">Milliliter</option>
+                            <option value="piece">Pieces</option>
+                        </select>
+                    <br>
+                    <h2>Cost</h2>
+                        <input
+                            [(ngModel)]="newSupplyData.Cost"
+                            placeholder="Supply Cost"
+                            type="text"
+                            name="Cost"
+                            required
+                        >
+                    <br>
+                    <h2>Supplier</h2>
+                        <input
+                            [(ngModel)]="newSupplyData.Supplier"
+                            placeholder="Supply Supplier"
+                            type="text"
+                            name="Supplier"
+                            required
+                        >
+                    <br>
+                    <button
+                        (click)="submitNewSupply()"
+                    >
+                        Submit new supply
+                    </button>
+                </form>
+                <form [ngClass]="{ 'tab-open': newTagOpen }" class="admin-tab">
+                    <h2>Name</h2>
+                            <input
+                                [(ngModel)]="newTagData.Tag"
+                                placeholder="Tag Name"
+                                type="text"
+                                name="Tag"
+                                required
+                            >
+                        <br>
+                        <h2>Description</h2>
+                            <input
+                                [(ngModel)]="newTagData.Description"
+                                placeholder="Tag Description"
+                                type="text"
+                                name="Description"
+                                required
+                            >
+                        <br>
+                        <button
+                            (click)="postNewTag()"
+                        >
+                            Submit
+                        </button>
+
+                </form>
+                <form [ngClass]="{ 'tab-open': newExpenseOpen }" class="admin-tab">
+                    <h2>Expense</h2>
+                            <input
+                                [(ngModel)]="newExpenseData.Expense"
+                                placeholder="Expense Name"
+                                type="text"
+                                name="Expense"
+                                required
+                            >
+                        <br>
+                        <h2>Amount</h2>
+                            <input
+                                [(ngModel)]="newExpenseData.Amount"
+                                placeholder="Expense Amount"
+                                type="text"
+                                name="Amount"
+                                required
+                            >
+                        <br>
+                        <h2>Description</h2>
+                            <input
+                                [(ngModel)]="newExpenseData.Description"
+                                placeholder="Expense Description"
+                                type="text"
+                                name="Description"
+                                required
+                            >
+                        <br>
+                        <h2>Date</h2>
+                            <input
+                                [(ngModel)]="newExpenseData.ExpenseDate"
+                                placeholder="Expense Date"
+                                type="date"
+                                name="ExpenseDate"
+                                required
+                            >
+                        <br>
+                        <button
+                            (click)="postNewExpense()"
+                        >
+                            Submit
+                        </button>
+
+                </form>
+                <form [ngClass]="{ 'tab-open': newSaleOpen }" class="admin-tab">
+                    <h2>Sale</h2>
+                            <input
+                                [(ngModel)]="newSaleData.Sale"
+                                placeholder="Sale Name"
+                                type="text"
+                                name="Sale"
+                                required
+                            >
+                        <br>
+                        <h2>Amount</h2>
+                            <input
+                                [(ngModel)]="newSaleData.Amount"
+                                placeholder="Sale Amount"
+                                type="text"
+                                name="Amount"
+                                required
+                            >
+                        <br>
+                        <h2>Description</h2>
+                            <input
+                                [(ngModel)]="newSaleData.Description"
+                                placeholder="Sale Description"
+                                type="text"
+                                name="Description"
+                                required
+                            >
+                        <br>
+                        <h2>Date</h2>
+                            <input
+                                [(ngModel)]="newSaleData.SaleDate"
+                                placeholder="Sale Date"
+                                type="date"
+                                name="SaleDate"
+                                required
+                            >
+                        <br>
+                        <button
+                            (click)="postNewSale()"
+                        >
+                            Submit
+                        </button>
+
+                </form>
+            </div>
         </div>
     </div>
     </div>

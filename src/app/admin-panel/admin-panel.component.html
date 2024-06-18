@@ -3,209 +3,45 @@
         
     </nav-header-component>
     <div class="content-container">
-        <div class="order-dash" *ngIf="isJanitor">
-            <h1>Orders</h1>
-            <div class="order-container">
-                <div *ngFor="let purchase of purchases" class="order-item">
+        <div class="two-grid">
+            <div>
+                <h2>
+                    Purchases
+                </h2>
+                <app-purchase-card [purchases]="purchases">
 
-                        <div class="order-grid-item">
-                            <img class="order-image" src="{{purchase.Image}}">
-                        </div>
-                        <div class="order-grid-item">
-                            <div class="order-detail">
-                                <h2>
-                                    {{purchase.Name}} - ${{purchase.Price}}
-                                </h2>
-                                <h4>
-                                    Purchased on {{purchase.PurchaseDate}}
-                                </h4>
-                        </div>
-                        <div class="status-bar">
-                            <h3>Status: </h3><h2 class="status-bar" id="status-{{purchase.Status}}">{{purchase.Status}}</h2>
-                        </div>
-
-    
+                </app-purchase-card>
+            </div>
+            <div>
+                <h2>Users</h2>
+                <div class="info-table">
+                    <table>
+                        <tr>
+                            <th>Username</th>
+                            <th>Admin</th>
+                            <th>Sponsor</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let user of users">
+                            <td>{{ user.Username }}</td>
+                            <td
+                                (click)="toggleAdmin(user._id)"
+                            >
+                                {{ user.hasBroom ? 'True' : 'False' }}
+                            </td>
+                            <td
+                                (click)="toggleSponsor(user._id)"
+                            >
+                                {{ user.isSponsor ? 'True' : 'False' }}
+                            </td>
+                            <td
+                                (click)="deleteOneUser(user._id)"
+                            >
+                                Delete
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-    
-        </div>
-        <div class="user-list" *ngIf="isJanitor">
-            <h1>User permissions</h1>
-            <table>
-                <tr>
-                    <th>Username</th>
-                    <th>Admin</th>
-                    <th>Sponsor</th>
-                    <th>Delete</th>
-                </tr>
-                <tr *ngFor="let user of users">
-                    <td>{{ user.Username }}</td>
-                    <td
-                        (click)="toggleAdmin(user._id)"
-                    >
-                        {{ user.hasBroom ? 'True' : 'False' }}
-                    </td>
-                    <td
-                        (click)="toggleSponsor(user._id)"
-                    >
-                        {{ user.isSponsor ? 'True' : 'False' }}
-                    </td>
-                    <td
-                        (click)="deleteOneUser(user._id)"
-                    >
-                        Delete
-                    </td>
-                </tr>
-            </table>
-        </div>
-        
-        <div class="data-list">
-            <div class="add-data" *ngIf="isJanitor">
-                <h1>Add a tag</h1>
-                <form class="form">
-                    <h2>Name</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newTagData.Tag"
-                                placeholder="Tag Name"
-                                type="text"
-                                name="Tag"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Description</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newTagData.Description"
-                                placeholder="Tag Description"
-                                type="text"
-                                name="Description"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <button
-                            (click)="postNewTag()"
-                        >
-                            Submit
-                        </button>
-
-                </form>
-            </div>
-            
-            <div class="add-data" *ngIf="isJanitor">
-                <h1>Add an expense</h1>
-                <form class="form">
-                    <h2>Expense</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newExpenseData.Expense"
-                                placeholder="Expense Name"
-                                type="text"
-                                name="Expense"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Amount</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newExpenseData.Amount"
-                                placeholder="Expense Amount"
-                                type="text"
-                                name="Amount"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Description</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newExpenseData.Description"
-                                placeholder="Expense Description"
-                                type="text"
-                                name="Description"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Date</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newExpenseData.ExpenseDate"
-                                placeholder="Expense Date"
-                                type="date"
-                                name="ExpenseDate"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <button
-                            (click)="postNewExpense()"
-                        >
-                            Submit
-                        </button>
-
-                </form>
-            </div>
-
-            <div class="add-data" *ngIf="isJanitor">
-                <h1>Add a sale</h1>
-                <form class="form">
-                    <h2>Sale</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newSaleData.Sale"
-                                placeholder="Sale Name"
-                                type="text"
-                                name="Sale"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Amount</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newSaleData.Amount"
-                                placeholder="Sale Amount"
-                                type="text"
-                                name="Amount"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Description</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newSaleData.Description"
-                                placeholder="Sale Description"
-                                type="text"
-                                name="Description"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <h2>Date</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                [(ngModel)]="newSaleData.SaleDate"
-                                placeholder="Sale Date"
-                                type="date"
-                                name="SaleDate"
-                                required
-                            >
-                        </mat-form-field><br>
-                        <button
-                            (click)="postNewSale()"
-                        >
-                            Submit
-                        </button>
-
-                </form>
-            </div>
-        </div>
-        
     </div>
 </div>

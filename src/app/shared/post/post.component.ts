@@ -24,10 +24,13 @@ export class PostComponent implements OnInit{
   @Input() userPosts: Post[]=[];
   @Input() user!: User;
   @Input() thread!: Thread;
+  @Input() userProfileComments: Post[]=[];
+  @Input() profileView: boolean = false;
 
   isJanitor: boolean = false;
 
   modalOpen = false;
+
 
   BannedUser: string = '';
   BannedFrom: string = '';
@@ -38,6 +41,7 @@ export class PostComponent implements OnInit{
 
   replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
   banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
+  commentData: any = { Content: ''};
 
   constructor(
     private authService: AuthService,
@@ -156,6 +160,29 @@ export class PostComponent implements OnInit{
       );
     } else {
       console.error('Thread ID, User ID, or reply content is missing.');
+    }
+  }
+
+  /**
+   * Comment on user wall
+   */
+  postOnWall(): void {
+    if (this.user && this.commentData.Content) {
+      const commentData = {
+        Content: this.commentData.Content
+      };
+
+      this.fetchForumData.postWallComment(commentData, this.user.Username).subscribe(
+        (result) => {
+          console.log(`Response created successfully.`);
+          window.location.reload();
+        },
+        (error) => {
+          console.error(error.toString());
+        }
+      );
+    } else {
+      console.error('Could not post.');
     }
   }
   

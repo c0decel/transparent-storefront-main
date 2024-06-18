@@ -1,0 +1,57 @@
+@media screen and (max-width: 500px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.product-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    table {
+        width: 100%;
+    }
+}
+
+.admin-tab {
+    display: none;
+    padding: 10px;
+}
+
+.tab-open {
+    display: block;
+}
+
+.forms-tab-container {
+    margin: auto;
+    justify-content: center;  
+    align-items: center;
+    width: 80%;
+}
+
+
+.admin-tabs-buttons {
+    display: flex;
+    width: max-content;
+    border-collapse: collapse;
+    height: 25px;
+
+    p {
+        margin-right: 3px;
+        margin-left: 3px;
+        line-height: 0%;
+    }
+}
+
+.options-grid {
+    display: grid;
+    grid-gap: 10px;
+    width: 100%;
+}
