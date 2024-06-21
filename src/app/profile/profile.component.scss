@@ -1,4 +1,12 @@
 @media screen and (max-width: 500px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-username {
+        justify-content: center;
+    }
+
     .user-settings {
         grid-template-columns: 1fr;
     }
@@ -14,9 +22,13 @@
     }
 }
 
-@media screen and (min-width: 501px) {
+@media screen and (min-width: 900px) {
     .user-settings {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 200px);
+    }
+
+    .profile-username {
+        justify-content: center;
     }
 
     .user-tabs-container {
@@ -31,17 +43,43 @@
 }
 
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 901px) {
     .profile-grid {
-      grid-template-columns: 1fr 1fr; 
-      grid-gap: 20px
+        grid-template-columns: repeat(2, 300px);
+        grid-gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-username {
+        justify-content: left;
+        align-items: left;
+        text-align: left;
     }
   
     #account-info {
       text-align: left;
     }
+
+    .profile-pic {
+        justify-content: right;
+        margin-left: 5%;
+    }
+
   }
-  
+
+.profile-grid {
+    display: grid;
+}
+
+.profile-pic {
+    width: 200px;
+}
+
+.profile-username {
+    display: flex;
+    justify-content: center;
+}
 
 .has-broom {
     color: #F1D400;
@@ -86,4 +124,18 @@
 
 .user-settings {
     display: grid;
+}
+
+#profile-pic {
+    img {
+        border-radius: 100px;
+    }
+}
+
+.current-user {
+    #profile-pic {
+        img:hover {
+            background-color: #000;
+        }
+    }
 }

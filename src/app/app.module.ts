@@ -64,7 +64,7 @@ const appRoutes: Routes = [
         TagDetailsComponent,
         ModLogComponent,
         SuccessCheckoutComponent,
-        NotificationsComponent
+        NotificationsComponent,
     ],
     imports: [
         FormsModule,

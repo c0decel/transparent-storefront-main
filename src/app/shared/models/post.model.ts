@@ -1,7 +1,12 @@
 export interface Post {
     _id: string;
     Thread: string;
-    User: string;
+    User: {
+      Username: string;
+      ProfileImage: string;
+      _id: string;
+    };
+    ProfileImage: string;
     Username: string;
     Content: string;
     ReplyNumber: number;

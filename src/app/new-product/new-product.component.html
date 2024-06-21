@@ -4,68 +4,75 @@
     </nav-header-component>
     <div class="content-container">
         <div class="options-grid">
-            <div class="product-table">
-                <table *ngIf="products.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Stock</th>
-                        <th>Featured</th>
-                        <th>Delete</th>
-                    </tr>
-                    <tr *ngFor="let product of products">
-                        <td>{{ product.Name }}</td>
-                        <td>{{ product.Stock }}</td>
-                        <td>{{ product.isFeatured }}</td>
-                        <td>Delete</td>
-                    </tr>
-                </table>
+            <div>
+                <div class="product-table">
+                    <table *ngIf="products.length > 0">
+                        <tr>
+                            <th>Name</th>
+                            <th>Stock</th>
+                            <th>Featured</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr *ngFor="let product of products">
+                            <td>{{ product.Name }}</td>
+                            <td>{{ product.Stock }}</td>
+                            <td>{{ product.isFeatured }}</td>
+                            <td>Delete</td>
+                        </tr>
+                    </table>
+                </div>
+                <div *ngFor="let tag of allTags">
+                    <p>
+                        {{ tag.Tag }}
+                    </p>
+                </div>
             </div>
             <div class="forms-tab-container">
                 <div class="admin-tabs-buttons">
-                    <div [ngClass]="{ 'tab-selected': newProductOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'product' }">
                         <p
-                            (click)="openNewProduct()"
+                            (click)="openTab('product')"
                         >
                             Product
                     </p>
                     </div>
-                    <div [ngClass]="{ 'tab-selected': newDiscountOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'discount' }">
                         <p
-                            (click)="openNewDiscount()"
+                            (click)="openTab('discount')"
                         >
                             Discount
                     </p>
                     </div>
-                    <div [ngClass]="{ 'tab-selected': newTagOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'tag' }">
                         <p
-                            (click)="openNewTag()"
+                            (click)="openTab('tag')"
                         >
                             Tag
                     </p>
                     </div>
-                    <div [ngClass]="{ 'tab-selected': newSupplyOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'supply' }">
                         <p
-                            (click)="openNewSupply()"
+                            (click)="openTab('supply')"
                         >
                             Supply
                     </p>
                     </div>
-                    <div [ngClass]="{ 'tab-selected': newExpenseOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'expense' }">
                         <p
-                            (click)="openNewExpense()"
+                            (click)="openTab('expense')"
                         >
                             Expense
                     </p>
                     </div>
-                    <div [ngClass]="{ 'tab-selected': newSaleOpen }">
+                    <div [ngClass]="{ 'tab-selected': optionOpen == 'sale' }">
                         <p
-                            (click)="openNewSale()"
+                            (click)="openTab('sale')"
                         >
                             Sale
                     </p>
                     </div>
                 </div>
-                <form [ngClass]="{ 'tab-open': newDiscountOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'discount' }" class="admin-tab">
                     <h2>Name</h2>
 
                         <input
@@ -120,7 +127,7 @@
                         Submit new discount
                     </button>
                 </form>
-                <form [ngClass]="{ 'tab-open': newProductOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'product' }" class="admin-tab">
                     <h2>Name</h2>
                         <input
                             [(ngModel)]="newProductData.Name"
@@ -221,7 +228,7 @@
                         Submit new product
                     </button>
                 </form>
-                <form [ngClass]="{ 'tab-open': newSupplyOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'supply' }" class="admin-tab">
                     <h2>Name</h2>
                         <input
                             [(ngModel)]="newSupplyData.Name"
@@ -284,7 +291,7 @@
                         Submit new supply
                     </button>
                 </form>
-                <form [ngClass]="{ 'tab-open': newTagOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'tag' }" class="admin-tab">
                     <h2>Name</h2>
                             <input
                                 [(ngModel)]="newTagData.Tag"
@@ -310,7 +317,7 @@
                         </button>
 
                 </form>
-                <form [ngClass]="{ 'tab-open': newExpenseOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'expense' }" class="admin-tab">
                     <h2>Expense</h2>
                             <input
                                 [(ngModel)]="newExpenseData.Expense"
@@ -354,7 +361,7 @@
                         </button>
 
                 </form>
-                <form [ngClass]="{ 'tab-open': newSaleOpen }" class="admin-tab">
+                <form [ngClass]="{ 'tab-open': optionOpen == 'sale' }" class="admin-tab">
                     <h2>Sale</h2>
                             <input
                                 [(ngModel)]="newSaleData.Sale"

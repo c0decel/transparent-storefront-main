@@ -107,8 +107,7 @@ export class ForumComponent {
       this.fetchForumData.postNewThread(this.postData).subscribe(
         (result) => {
           console.log(`New thread posted: ${result}`);
-          this.openThread(result._id);
-         // window.location.reload();
+          window.location.reload();
         },
         (error) => {
           console.error(`Error posting thread: ${error}`);

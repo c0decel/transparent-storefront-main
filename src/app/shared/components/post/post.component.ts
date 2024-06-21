@@ -4,15 +4,15 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
 //Import services
-import { FetchForumDataService } from '../../services/fetch-forum-data.service';
-import { AuthService } from '../../services/auth.service';
-import { UtilsService } from '../functions/utils.service';
+import { FetchForumDataService } from '../../../services/fetch-forum-data.service';
+import { AuthService } from '../../../services/auth.service';
+import { UtilsService } from '../../functions/utils.service';
 
 //Import models
-import { Post } from '../models/post.model';
-import { User } from '../models/user.model';
-import { Ban } from '../models/bans.model';
-import { Thread } from '../models/thread.model';
+import { Post } from '../../models/post.model';
+import { User } from '../../models/user.model';
+import { Ban } from '../../models/bans.model';
+import { Thread } from '../../models/thread.model';
 
 @Component({
   selector: 'app-post',

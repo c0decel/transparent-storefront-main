@@ -2,6 +2,16 @@
     padding: 20px;
 }
 
+.user-info-container {
+    display: flex;
+    flex-direction: row;
+
+    img {
+        width: 50px;
+        height: 50px;
+        padding-right: 10px;
+    }
+}
 .comment-container {
     margin-bottom: 10px;
     padding: 20px;
@@ -47,3 +57,9 @@
     display: flex;
 }
 
+.ban-message {
+    p {
+        font-weight: bolder;
+        color: red;
+    }
+}

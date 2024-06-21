@@ -3,15 +3,38 @@
 </nav-header-component>
 <div class="profile-container">
     <div class="profile-grid">
-        <div class="profile-grid-item" id="profile-pic">
-            <img>
+        <div [ngClass]="{'current-user': currentUser?._id === user?._id}" class="profile-grid-item" id="profile-pic">
+            
+            <div style="display: block;">
+                <img class="profile-pic" src="{{user?.ProfileImage}}">
+                <button class="button" 
+                    *ngIf="currentUser?._id === user?._id"
+                    (click)="openNewPic()"
+                >
+                    New profile pic
+                </button>
+                <div *ngIf="newPicOpen">
+                    <form (ngSubmit)="onSubmit()" #profilePicForm="ngForm">
+                        <div>
+                        <label for="profilePic">Upload New Profile Picture:</label>
+                        <input type="file" id="profilePic" (change)="onFileSelected($event)" required>
+                        </div>
+                        <button type="submit" [disabled]="!selectedFile">Upload</button>
+                    </form>
+                    
+                    <div *ngIf="uploadResponse">
+                        <p>{{ uploadResponse.message }}</p>
+                        <img *ngIf="uploadResponse.imageUrl" [src]="uploadResponse.imageUrl" alt="Profile Picture">
+                    </div>
+                    
+                </div>
+            </div>
         </div>
         <div class="profile-grid-item" id="account-info">
-            <div style="display: flex;">
+            <div class="profile-username">
                 <h1 [ngClass]="{'has-broom': user?.hasBroom}">{{user?.Username}}</h1>
                 <img *ngIf="user?.hasBroom" src="src/app/icons/crown.svg" class="icon">
             </div>
-            
             <p>{{user?.Status}}</p>
             <h3>Joined on {{user?.JoinDate}}</h3>
             <p>{{user?.Bio}}</p>
@@ -44,38 +67,38 @@
 
     <div class="user-tabs-container">
         <div class="user-tabs-buttons">
-            <div [ngClass]="{ 'tab-selected': wallOpen }">
+            <div [ngClass]="{ 'tab-selected': optionOpen == 'wall'}">
                 <h3
-                    (click)="openWall()"
+                    (click)="openTab('wall')"
                 >
                     Wall
                 </h3>
             </div>
-            <div [ngClass]="{ 'tab-selected': wishlistOpen }">
+            <div [ngClass]="{ 'tab-selected': optionOpen == 'wishlist' }">
                 <h3
-                    (click)="openWishlist()"
+                    (click)="openTab('wishlist')"
                 >
                     Wishlist
                 </h3>
             </div>
-            <div [ngClass]="{ 'tab-selected': userPostsOpen }">
+            <div [ngClass]="{ 'tab-selected': optionOpen == 'posts' }">
                 <h3
-                    (click)="openUserPosts()"
+                    (click)="openTab('posts')"
                 >
                     Posts
                 </h3>
             </div>
-            <div [ngClass]="{ 'tab-selected': userPurchasesOpen }">
+            <div [ngClass]="{ 'tab-selected': optionOpen == 'purchases' }">
                 <div *ngIf="currentUser?._id === user?._id">
                     <h3
-                        (click)="openUserPurchases()"
+                        (click)="openTab('purchases')"
                     >
                         Purchases
                     </h3>
                 </div>
             </div>
         </div>
-        <div [ngClass]="{ 'tab-open': wishlistOpen }" class="user-tab">
+        <div [ngClass]="{ 'tab-open': optionOpen == 'wall' }" class="user-tab">
             <div class="profile-post-container">
                 <app-product-card [wishlistItems]="wishlistItems" [secondItemType]="'wishlist'">
     
@@ -83,7 +106,7 @@
             </div>
         </div>
     
-        <div [ngClass]="{ 'tab-open': wallOpen }" class="user-tab">
+        <div [ngClass]="{ 'tab-open': optionOpen == 'wishlist' }" class="user-tab">
             <div class="profile-post-container">
                 <app-post [userProfileComments]="profileComments" [user]="user" [profileView]="true">
         
@@ -91,7 +114,7 @@
             </div>
         </div>
     
-        <div [ngClass]="{ 'tab-open': userPostsOpen }" class="user-tab">
+        <div [ngClass]="{ 'tab-open': optionOpen == 'posts' }" class="user-tab">
             <div class="profile-post-container">
                 <app-post [replies]="posts" [user]="user">
         
@@ -99,7 +122,7 @@
             </div>
         </div>
 
-        <div [ngClass]="{ 'tab-open': userPurchasesOpen }" class="user-tab">
+        <div [ngClass]="{ 'tab-open': optionOpen == 'purchases' }" class="user-tab">
             <div class="profile-post-container">
                 <app-purchase-card [purchases]="userPurchases" [singlePurchase]="false" [profileView]="true">
         

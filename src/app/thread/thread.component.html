@@ -6,9 +6,17 @@
     <div class="thread-op-post">
         <div class="thread-details">
             <h2>{{ thread?.Title }}</h2>
-            <h3>{{ thread?.Username}}</h3>
             <!--<p class="timestamp">{{ thread?.PostedAtDate }} at {{ thread?.PostedAtTime }}</p> -->
             <p>{{ thread?.ReplyCount }} replies</p>
+            <div class="op-details">
+                <img src="{{ thread.User.ProfileImage }}">
+                <h3
+                    (click)="openProfile(thread.User._id)"
+                >
+                    {{ thread?.Username}}
+                </h3>
+            </div>
+            
         </div>
     
         <div class="thread-op-content" [ngClass]="{ 'highlighted-post': thread?.Highlighted }">

@@ -1,21 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { FetchProductDataService } from '../../services/fetch-product-data.service';
-import { FetchUserDataService } from '../../services/fetch-user-data.service';
-import { FetchPaymentDataService } from '../../services/fetch-payment-data.service';
-import { ModalService } from '../../services/modal.service';
-import { AuthService } from '../../services/auth.service';
+import { FetchProductDataService } from '../../../services/fetch-product-data.service';
+import { FetchUserDataService } from '../../../services/fetch-user-data.service';
+import { FetchPaymentDataService } from '../../../services/fetch-payment-data.service';
+import { ModalService } from '../../../services/modal.service';
+import { AuthService } from '../../../services/auth.service';
 
-import { Product } from '../models/product.model';
-import { Cart } from '../models/cart.model';
-import { User } from '../models/user.model';
-import { Wishlist } from '../models/wishlist.model';
+import { Product } from '../../models/product.model';
+import { Cart } from '../../models/cart.model';
+import { User } from '../../models/user.model';
+import { Wishlist } from '../../models/wishlist.model';
 
 
-import { CheckoutService } from '../../services/checkout.service';
+import { CheckoutService } from '../../../services/checkout.service';
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
@@ -58,7 +58,8 @@ export class ProductCardComponent implements OnInit{
         console.log(`Item added to cart: ${result}`);
         this.modalService.openModal({
           title: `Added to cart`,
-          content: `Test`
+          data: `Test`,
+          modalType: 'newpic'
         })
       },
       (error) => {

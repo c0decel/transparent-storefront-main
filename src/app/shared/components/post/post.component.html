@@ -1,8 +1,9 @@
 <div class="thread-replies" *ngIf="!profileView">
     <div *ngFor="let reply of replies" class="thread-content">
         <div class="comment-container">
-            <div style="display: flex; flex-direction: row;" id="{{ reply.ReplyNumber }}">
-                <h2 (click)="openProfile(reply.User)">{{ reply.Username }}</h2>
+            <div class="user-info-container" id="{{ reply.ReplyNumber }}">
+                <img src="{{ reply.User.ProfileImage }}">
+                <h3 (click)="openProfile(reply.User._id)">{{ reply.Username }}</h3>
                 <p>#{{ reply.ReplyNumber }}</p>
             </div>
             <p class="timestamp">{{ reply.PostedAtDate }} at {{ reply.PostedAtTime }}</p>
@@ -74,8 +75,9 @@
 <div class="thread-replies" *ngIf="profileView">
     <div *ngFor="let comment of userProfileComments" class="thread-content">
         <div class="comment-container">
-            <div style="display: flex; flex-direction: row;">
-                <h2 (click)="openProfile(comment.User)">{{ comment.Username }}</h2>
+            <div class="user-info-container">
+                <img src="{{ comment.User.ProfileImage }}">
+                <h3 (click)="openProfile(comment.User._id)">{{ comment.Username }}</h3>
                 <p class="timestamp">{{ comment.PostedAtDate }} at {{ comment.PostedAtTime }}</p>
             </div>
             <div class="reply-content">

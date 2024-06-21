@@ -42,7 +42,8 @@
             Sign Up
         </h1>
         <form id="signup-form">
-            <input
+            <div id="text-boxes">
+                <input
                 [(ngModel)]="userData.Username"
                 placeholder="Username"
                 type="text"
@@ -69,6 +70,56 @@
                 placeholder="Birthday"
                 name="Birthday" 
             >
+            </div>
+            <div>
+                <h3>
+                    Profile photo
+                </h3>
+                <div>
+                    <label class="image-option" [class.selected]="selectedProfilePic === 1">
+                        <input
+                            type="radio"
+                            value="1"
+                            name="userData.defaultNum"
+                            (click)="setSelectedProfilePic(1)"
+                        >
+                        <img src="https://ts-demo-bucket-img.s3.amazonaws.com/profile-pics/default-profile-pic-1.png">
+                    </label>
+                    <label class="image-option" [class.selected]="selectedProfilePic === 2">
+                        <input
+                            type="radio"
+                            value="2"
+                            name="userData.defaultNum"
+                            (click)="setSelectedProfilePic(2)"
+                        >
+                        <img src="https://ts-demo-bucket-img.s3.amazonaws.com/profile-pics/default-profile-pic-2.png">
+                    </label>
+                    <label class="image-option" [class.selected]="selectedProfilePic === 3">
+                        <input
+                            type="radio"
+                            value="3"
+                            name="userData.defaultNum"
+                            (click)="setSelectedProfilePic(3)"
+                        >
+                        <img src="https://ts-demo-bucket-img.s3.amazonaws.com/profile-pics/default-profile-pic-3.png">
+                    </label>
+                </div>
+                <button
+                    (click)="toggleFileSelection()"
+                >
+                    Upload your own
+                </button>
+                <div *ngIf="uploadPic">
+                    <p>
+                        .jpg, .jpeg, or .png only
+                    </p>
+                    <input 
+                        type="file" 
+                        id="profile-pic-selection" 
+                        (change)="onFileSelected($event)"
+                    >
+                </div>
+            </div>
         </form>
         <div class="login-options">
             <button

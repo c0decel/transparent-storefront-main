@@ -1,3 +1,33 @@
+#signup-form {
+    display: grid;
+}
+
+#text-boxes {
+    margin-bottom: 20px;
+}
+
+#profile-pic-selection {
+    padding: 10px;
+    border-style: none;
+}
+
+
+.image-option input[type="radio"] {
+    display: none;
+}
+
+.image-option {
+    img {
+        width: 100px;
+        border-radius: 100px;
+    }
+}
+
+.selected {
+    border-style: solid;
+    border-radius: 100px;
+    border-width: 10px;
+}
 
 
 .login-container {
@@ -39,21 +69,16 @@ input {
 }
 
 @media screen and (max-width: 800px) {
-    #signup-form {
-        display: grid;
-        grid-template-columns: 1fr;
-    }
+
 }
 
 @media screen and (min-width: 801px) and (max-width: 1000px) {
-    #signup-form {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
+
 }
 
 @media screen and (min-width: 1001px) {
-    #signup-form {
+
+    #text-boxes {
         display: flex;
         flex-direction: row;
     }

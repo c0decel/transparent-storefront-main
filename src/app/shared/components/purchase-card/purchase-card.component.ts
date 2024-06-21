@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 //Import services
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 //Import models
-import { Purchase } from '../models/purchase.model';
-import { User } from '../models/user.model';
+import { Purchase } from '../../models/purchase.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-purchase-card',

@@ -19,7 +19,7 @@ export interface User {
       }
     ];
     Reviews: [];
-    Posts: [];
+    Posts: string[];
     ProfileComments: [];
     PostCount: number;
     Threads: [];

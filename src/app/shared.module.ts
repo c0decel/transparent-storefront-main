@@ -7,12 +7,11 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
 //Import shared components
-import { NavHeaderComponent } from './shared/nav-header/nav-header.component';
-import { LoginCardComponent } from './shared/login-card/login-card.component';
-import { ProductCardComponent } from './shared/product-card/product-card.component';
-import { PostComponent } from './shared/post/post.component';
-import { PurchaseCardComponent } from './shared/purchase-card/purchase-card.component';
-
+import { NavHeaderComponent } from './shared/components/nav-header/nav-header.component';
+import { LoginCardComponent } from './shared/components/login-card/login-card.component';
+import { ProductCardComponent } from './shared/components/product-card/product-card.component';
+import { PostComponent } from './shared/components/post/post.component';
+import { PurchaseCardComponent } from './shared/components/purchase-card/purchase-card.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +27,7 @@ import { PurchaseCardComponent } from './shared/purchase-card/purchase-card.comp
     MatFormFieldModule,
     FormsModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   exports: [
     NavHeaderComponent,

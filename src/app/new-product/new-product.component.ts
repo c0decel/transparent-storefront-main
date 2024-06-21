@@ -35,6 +35,8 @@ export class NewProductComponent implements OnInit {
   selectedSupplies: { [supplyId: string]: boolean } = {};
   measurementUnits = ['grams', 'oz', 'piece'];
 
+  optionOpen: 'discount' | 'product' | 'tag' | 'supply' | 'expense' | 'sale' | '' = 'product';
+
   newDiscountOpen: boolean = false;
   newProductOpen: boolean = true;
   newTagOpen: boolean = false;
@@ -273,57 +275,7 @@ export class NewProductComponent implements OnInit {
     );
   }
 
-  openNewProduct(): void {
-    this.newProductOpen = true;
-    this.newDiscountOpen = false;
-    this.newTagOpen = false;
-    this.newSupplyOpen = false;
-    this.newExpenseOpen = false;
-    this.newSaleOpen = false;
-  }
-
-  openNewDiscount(): void {
-    this.newProductOpen = false;
-    this.newDiscountOpen = true;
-    this.newTagOpen = false;
-    this.newSupplyOpen = false;
-    this.newExpenseOpen = false;
-    this.newSaleOpen = false;
-  }
-
-  openNewTag(): void {
-    this.newProductOpen = false;
-    this.newDiscountOpen = false;
-    this.newTagOpen = true;
-    this.newSupplyOpen = false;
-    this.newExpenseOpen = false;
-    this.newSaleOpen = false;
-  }
-
-  openNewExpense(): void {
-    this.newProductOpen = false;
-    this.newDiscountOpen = false;
-    this.newTagOpen = false;
-    this.newSupplyOpen = false;
-    this.newExpenseOpen = true;
-    this.newSaleOpen = false;
-  }
-
-  openNewSale(): void {
-    this.newProductOpen = false;
-    this.newDiscountOpen = false;
-    this.newTagOpen = false;
-    this.newSupplyOpen = false;
-    this.newExpenseOpen = false;
-    this.newSaleOpen = true;
-  }
-
-  openNewSupply(): void {
-    this.newProductOpen = false;
-    this.newDiscountOpen = false;
-    this.newTagOpen = false;
-    this.newSupplyOpen = true;
-    this.newExpenseOpen = false;
-    this.newSaleOpen = false;
+  openTab(optionType: 'discount' | 'product' | 'tag' | 'supply' | 'expense' | 'sale'): void {
+    this.optionOpen = optionType;
   }
 }

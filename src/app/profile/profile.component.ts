@@ -9,6 +9,7 @@ import { FetchApiDataService } from '../services/fetch-api-data.service';
 import { FetchUserDataService } from '../services/fetch-user-data.service';
 import { FetchForumDataService } from '../services/fetch-forum-data.service';
 import { UtilsService } from '../shared/functions/utils.service';
+import { ModalService } from '../services/modal.service';
 import { AuthService } from '../services/auth.service';
 
 //Import models
@@ -32,19 +33,22 @@ export class ProfileComponent {
 
   isJanitor: boolean = false;
   wishlistOpen: boolean = false;
-  wallOpen: boolean = true;
-  userPostsOpen: boolean = false;
-  userPurchasesOpen: boolean = false;
+  optionOpen: 'wall' | 'wishlist' | 'posts' | 'purchases' | '' = 'wall';
+  newPicOpen: boolean = false;
 
-  reactionScore!: number;
+  reactionScore: number=0 | 0;
   userId: string | null=null;
 
   @Input() updatedBio = { newBio: '' };
   @Input() updatedStatus = { newStatus: ''};
 
+  selectedFile: File | null = null;
+  uploadResponse: any;
+
   constructor(
     private http: HttpClient,
     private authService: AuthService,
+    public modalService: ModalService,
     public utilsService: UtilsService,
     public fetchApiData: FetchApiDataService,
     public fetchUserData: FetchUserDataService,
@@ -95,6 +99,8 @@ export class ProfileComponent {
               Type: reaction.Type,
               Icon: this.utilsService.getIconByType(reaction.Type)
             }));
+            console.log('reactikon score', post.ReactionScore, this.reactionScore)
+            this.reactionScore += post.ReactionScore;
           });
 
           this.posts = user.Posts;
@@ -143,6 +149,31 @@ export class ProfileComponent {
           alert(`Could not update bio.`);
           console.error(`Error updating: ${error}`);
         });
+    }
+
+    onFileSelected(event: any): void {
+      const file: File = event.target.files[0];
+      if (file) {
+        this.selectedFile = file;
+      }
+    }
+  
+    onSubmit(): void {
+      if (!this.selectedFile) {
+        return;
+      }
+  
+      const formData: FormData = new FormData();
+      formData.append('image', this.selectedFile);
+  
+      this.fetchUserData.newProfilePic(formData).subscribe(
+        (response) => {
+          window.location.reload();
+        },
+        (error) => {
+          console.error('Error uploading file:', error);
+        }
+      );
     }
 
     /**
@@ -234,32 +265,12 @@ export class ProfileComponent {
       );
     }
 
-    openWishlist(): void {
-      this.wishlistOpen = true;
-      this.wallOpen = false;
-      this.userPostsOpen = false;
-      this.userPurchasesOpen = false;
+    openTab(optionType: 'wall' | 'wishlist' | 'posts' | 'purchases'): void {
+      this.optionOpen = optionType;
     }
 
-    openWall(): void {
-      this.wishlistOpen = false;
-      this.wallOpen = true;
-      this.userPostsOpen = false;
-      this.userPurchasesOpen = false;
-    }
-
-    openUserPosts(): void {
-      this.wishlistOpen = false;
-      this.wallOpen = false;
-      this.userPostsOpen = true;
-      this.userPurchasesOpen = false;
-    }
-
-    openUserPurchases(): void {
-      this.wishlistOpen = false;
-      this.wallOpen = false;
-      this.userPostsOpen = false;
-      this.userPurchasesOpen = true;
+    openNewPic(): void {
+      this.newPicOpen = !this.newPicOpen;
     }
 
 

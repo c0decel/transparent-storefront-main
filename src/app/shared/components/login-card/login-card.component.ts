@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 //Import services
-import { FetchApiDataService } from '../../services/fetch-api-data.service';
-import { FetchUserDataService } from '../../services/fetch-user-data.service';
-import { AuthService } from '../../services/auth.service';
+import { FetchApiDataService } from '../../../services/fetch-api-data.service';
+import { FetchUserDataService } from '../../../services/fetch-user-data.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Injectable({providedIn: 'root'})
 
@@ -16,9 +16,12 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginCardComponent implements OnInit {
   @Input() loginData = {Username: '', Password: ''};
-  @Input() userData = { Username: '', Password: '', Email: '', Birthday: ''};
+  @Input() userData = { Username: '', Password: '', Email: '', Birthday: '', defaultNum: null as Number | null, image: null as File | null };
   @Input() newUser: boolean = false;
   @Input() isVisible: boolean = false;
+
+  uploadPic: boolean = false;
+  selectedProfilePic: number = 0 | 0;
 
   constructor(
     private authService: AuthService,
@@ -58,7 +61,19 @@ export class LoginCardComponent implements OnInit {
   };
 
   registerUser(): void {
-    this.fetchUserData.userRegistration(this.userData).subscribe(
+    this.userData.defaultNum = this.selectedProfilePic;
+
+    const formData = new FormData();
+    formData.append('Username', this.userData.Username);
+    formData.append('Password', this.userData.Password);
+    formData.append('Email', this.userData.Email);
+    formData.append('Birthday', this.userData.Birthday);
+    formData.append('defaultNum', String(this.userData.defaultNum));
+    if (this.userData.image) {
+      formData.append('image', this.userData.image);
+    }
+
+    this.fetchUserData.userRegistration(formData).subscribe(
       (result) => {
         console.log(result);
         this.toggleNewUser();
@@ -67,5 +82,23 @@ export class LoginCardComponent implements OnInit {
         console.error(`Could not register: ${error}`);
       }
     );
+  };
+
+  toggleFileSelection(): void {
+    this.uploadPic = !this.uploadPic;
+    this.selectedProfilePic = 0;
+    this.userData.defaultNum = 0;
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file){
+      this.userData.image = file;
+    }
+  };
+
+  setSelectedProfilePic(newSelection: number): void {
+    this.selectedProfilePic = newSelection;
+    this.userData.defaultNum = newSelection;
   };
 }

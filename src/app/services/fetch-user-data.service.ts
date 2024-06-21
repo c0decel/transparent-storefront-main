@@ -24,9 +24,9 @@ export class FetchUserDataService {
         ) { }
 
     //Registration
-    userRegistration(userDetails: any): Observable<any> {
-        console.log(userDetails);
-        return this.http.post(`${apiUrl}/users`, userDetails).pipe(
+    userRegistration(formData: FormData): Observable<any> {
+        console.log(formData);
+        return this.http.post(`${apiUrl}/users`, formData).pipe(
         catchError(this.handleError)
         );
     }
@@ -147,8 +147,22 @@ export class FetchUserDataService {
         }).pipe(
             map(this.extractResponseData),
             catchError(this.handleError)
-            );
+        );
     }
+
+    //New profile photo
+    newProfilePic(newPic: FormData): Observable<any> {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const token = localStorage.getItem('token');
+        return this.http.post<any>(`${apiUrl}/users/${user.Username}/profile-pic`, newPic, {
+          headers: new HttpHeaders({
+            Authorization: 'Bearer ' + token,
+          })
+        }).pipe(
+          map(this.extractResponseData),
+          catchError(this.handleError)
+        );
+      }
 
     //Toggle sponsor
     toggleSponsorStatus(userId: string): Observable<any> {

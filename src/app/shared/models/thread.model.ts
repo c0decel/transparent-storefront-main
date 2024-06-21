@@ -1,7 +1,11 @@
 export interface Thread {
     _id: string;
     Title: string;
-    User: string;
+    User: {
+      Username: string;
+      _id: string;
+      ProfileImage: string;
+    };
     Username: string;
     Content: string;
     ReplyCount: number;

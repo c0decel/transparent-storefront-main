@@ -127,6 +127,14 @@ export class ThreadComponent {
       }
     );
   }
+
+  /**
+   * Open user profile
+   * @param userId user ID
+   */
+  openProfile(userId: string): void {
+    this.utilsService.openProfile(userId);
+  }
 }
 
 
