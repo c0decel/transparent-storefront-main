@@ -1,9 +1,120 @@
-<div *ngFor="let ban of bans" class="ban-list">
-    <div> <!-- <h1>User: {{ban.BannedUser}}</h1>
-        <h2>Banned until: {{ban.ExpiresOn | date: 'short' }}</h2>
-        <h2>Ban status: {{ ban?.IsActive ? 'Active' : 'Inactive' }}</h2>
-        <h4>Issued: {{ban.IssuedOn | date: short }} </h4>-->
+<div>
+    <nav-header-component>
 
+    </nav-header-component>
+    <div class="mod-log-grid">
+        <div class="report-queue">
+            <h2>
+                Report Queue
+            </h2>
+            <div *ngFor="let report of reports">
+                <div class="ban-container">
+                    <div class="ban-header">
+                        <p>
+                            User 
+                            <span
+                                class="ban-link"
+                                (click)="openProfile(report?.UserID?._id ?? '')"
+                            >
+                                {{ report.UserID.Username }}
+                            </span>
+                             reported a 
+                             <span
+                                class="ban-link"
+                             >
+                                post 
+                             </span>
+                             in thread 
+                             <span
+                                class="ban-link"
+                             >
+                                {{ report.ThreadID.Title }}
+                             </span>
+                        </p>
+                    </div>
+                    <div class="ban-content">
+                        <div class="ban-quote">
+                            <p class="ban-quote-bar">
+                                Reason:
+                            </p>
+                            <p class="ban-quote-content">
+                                {{ report.ReportReason }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ban-details">
+                        <p class="ban-status">
+                            Status: 
+                            <span
+                                class="active-report"
+                                *ngIf="report.ReportStatus == 'Active'"
+                            >
+                                {{ report.ReportStatus }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ban-history">
+            <h2>
+                Mod Log
+            </h2>
+            <div *ngFor="let ban of bans">
+                <div class="ban-container">
+                    <div class="ban-header">
+                        <p>
+                            User
+                            <span
+                                class="ban-link"
+                                (click)="openProfile(ban?.BannedUser?._id ?? '')"
+                            >
+                                {{ ban.BannedUser.Username }}
+                            </span>
+                             banned by 
+                             <span
+                                class="ban-link"
+                                (click)="openProfile(ban?.BannedBy?._id ?? '')"
+                            >
+                                {{ ban.BannedBy.Username }}
+                            </span>
+                             until 
+                             <span
+                                class="ban-link"
+                            >
+                                {{ ban.formattedExpiresOn }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="ban-content">
+                        <div class="ban-quote">
+                            <p class="ban-quote-bar">
+                                Reason:
+                            </p>
+                            <p class="ban-quote-content">
+                                {{ ban.Reason }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="ban-details">
+                        <p class="ban-status">
+                            Status:
+                            <span
+                                class="active-true"
+                                *ngIf="ban.IsActive == true"
+                            >
+                                Active
+                            </span>
+                            <span
+                                class="active-false"
+                                *ngIf="ban.IsActive == false"
+                            >
+                                Expired
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
 </div>

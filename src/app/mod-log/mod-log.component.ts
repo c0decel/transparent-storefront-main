@@ -13,6 +13,7 @@ import { AuthService } from '../services/auth.service';
 import { Product } from '../shared/models/product.model';
 import { Ban } from '../shared/models/bans.model';
 import { User } from '../shared/models/user.model';
+import { Report } from '../shared/models/report.model';
 
 @Component({
   selector: 'app-mod-log',
@@ -23,6 +24,7 @@ export class ModLogComponent {
   user!: User;
   bans: Ban[] = [];
   users: User[] = [];
+  reports: Report[] =[];
 
   constructor(
     public router: Router,
@@ -39,7 +41,15 @@ export class ModLogComponent {
     this.user = this.authService.getUser();
 
     this.getBans();
+    this.getReports();
   }
+
+  formatDate(date: Date) {
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+}
 
   /**
    * Get all bans
@@ -47,12 +57,39 @@ export class ModLogComponent {
   getBans(): void {
     this.fetchApiData.getBans().subscribe(
       (bans) => {
-        this.bans = bans;
+        this.bans = bans.map((ban: Ban) => ({
+          ...ban,
+          formattedExpiresOn: this.formatDate(new Date(ban.ExpiresOn))
+        }));
+        console.log(this.bans);
         return this.bans;
       },
       (error) => {
         console.error(`Could not fetch bans: ${error}`);
       }
     );
+  }
+
+  getReports(): void {
+    this.fetchApiData.getReports().subscribe(
+      (reports) => {
+        console.log(reports)
+        this.reports = reports;
+      },
+      (error) => {
+        console.error(`Could not fetch reports: ${error}`);
+      }
+    );
+  }
+
+  openProfile(userId: string): void {
+    console.log(userId)
+    this.router.navigate(['/profile', userId], {
+      state: {
+        data: {
+          _id: userId
+        }
+      }
+    })
   }
 }

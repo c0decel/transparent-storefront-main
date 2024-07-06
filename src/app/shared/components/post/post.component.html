@@ -32,6 +32,12 @@
             </div>
             <div class="thread-options">
                 <p *ngIf="isLoggedIn()">Reply</p>
+                <p 
+                    *ngIf="isLoggedIn()"
+                    (click)="openReportModal(reply.Thread, reply._id)"
+                >
+                    Report
+                </p>
                 <div class="reaction-buttons" *ngIf="isLoggedIn()">
                     <mat-icon svgIcon="like_icon" class="icon like-icon"
                         (click)="reactPost(reply._id, 'Like')"
@@ -135,9 +141,9 @@
     </div>
 </div>
 
-<div class="modal" *ngIf="modalOpen">
+<div class="modal" *ngIf="banModalOpen">
     <div class="modal-content">
-        <span class="close" (click)="closeModal()">x</span>
+        <span class="close" (click)="closeBanModal()">x</span>
         <h2>Ban user</h2>
         <div class="ban-form">
             <form>
@@ -146,6 +152,20 @@
                 <h4>Expires on</h4>
                 <input [(ngModel)]="banData.ExpiresOn" name="ExpiresOn" type="date" required>
                 <button (click)="banUser(banData)">Ban user</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" *ngIf="reportModalOpen">
+    <div class="modal-content">
+        <span class="close" (click)="closeReportModal()">x</span>
+        <h2>Report post</h2>
+        <div class="ban-form">
+            <form>
+                <h4>Reason:</h4>
+                <input [(ngModel)]="reportData.ReportReason" name="ReportReason" type="text" required>
+                <button (click)="reportPost(reportData)">Report</button>
             </form>
         </div>
     </div>

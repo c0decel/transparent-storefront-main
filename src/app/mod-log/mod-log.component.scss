@@ -1,0 +1,81 @@
+.mod-log-grid {
+    display: grid;
+    grid-gap: 20px;
+}
+
+@media screen and (max-width: 800px) {
+    .mod-log-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (min-width: 801px) {
+    .mod-log-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+.ban-container {
+    padding: 20px;
+    margin: 10px;
+    background-color: aquamarine;
+    border-radius: 5px;
+
+}
+
+.ban-header {
+    p {
+        font-size: 20px;
+    }
+}
+
+.ban-content {
+    background-color: white;
+}
+
+.ban-link {
+    font-weight: 900;
+}
+.ban-quote {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.ban-quote-bar {
+    background-color: aqua;
+    padding-left: 2px;
+}
+
+.ban-quote-content {
+    padding: 10px;
+}
+
+.ban-status {
+    font-size: 16px;
+}
+
+.active-true {
+    background-color: red;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 10px;
+    color: white;
+}
+
+.active-false {
+    background-color: green;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.active-report {
+    background-color: rgb(153, 153, 153);
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 10px;
+    color: white;
+}
+
+

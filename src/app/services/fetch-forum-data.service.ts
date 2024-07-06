@@ -80,6 +80,20 @@ export class FetchForumDataService {
         )
     }
 
+    //Report a post
+    reportPost(reportData: any): Observable<any> {
+        const token = localStorage.getItem('token');
+        return this.http.post(`${apiUrl}/bans/reports/${reportData.ThreadID}/report/${reportData.PostID}`, reportData, {
+        headers: new HttpHeaders({
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        })
+        }).pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+        )
+    }
+
 
     //Get all replies to thread
     getAllReplies(threadId: string): Observable<any> {

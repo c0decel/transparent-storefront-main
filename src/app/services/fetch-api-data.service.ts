@@ -133,6 +133,11 @@ export class FetchApiDataService {
     return this.http.get(`${apiUrl}/bans`);
   }
 
+  //Get all reports
+  getReports():Observable<any> {
+    return this.http.get(`${apiUrl}/bans/reports`);
+  }
+
 
   private extractResponseData(res: any): any {
     const body = res;

@@ -32,6 +32,23 @@
                             Thank you for your purchase!
                         </p>
 
+                        <p *ngIf="notif.Type === 'NewReport'">
+                            Report on  
+                            <span
+                                class="notif-link"
+                            >
+                                post
+                            </span>
+                            
+                            in thread
+                            <span
+                                class="notif-link"
+                                (click)="openThread(notif?.ThreadLink?.ThreadID ?? '')"
+                            >
+                                {{notif?.ThreadLink?.ThreadName}}
+                            </span>
+                        </p>
+
                         <p *ngIf="notif.Type === 'PurchaseUpdate'">
                             Update on your purchase of
                             <span
@@ -103,6 +120,20 @@
                             >
                                 {{notif?.ProductLink?.ProductName}}.
                             </span>
+                            </p>
+                        </div>
+
+                        <div *ngIf="notif.Type === 'NewReport'" class="notif-quote">
+                            <p class="notif-quote-bar">
+                                <span
+                                    class="notif-link"
+                                    (click)="openProfile(notif?.UserLink?.UserID ?? '')"
+                                >
+                                    {{notif?.UserLink?.Username}}
+                                </span> reported this post for:
+                            </p>
+                            <p class="notif-quote-content">
+                                {{notif?.Content}}
                             </p>
                         </div>
 

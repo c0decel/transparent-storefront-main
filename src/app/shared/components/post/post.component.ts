@@ -29,7 +29,8 @@ export class PostComponent implements OnInit{
 
   isJanitor: boolean = false;
 
-  modalOpen = false;
+  banModalOpen = false;
+  reportModalOpen = false;
 
 
   BannedUser: string = '';
@@ -37,11 +38,14 @@ export class PostComponent implements OnInit{
   BannedForPost: string = '';
   BannedBy: string = '';
 
+  
+
   threadData: any;
 
   replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
   banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
   commentData: any = { Content: ''};
+  reportData: any = { PostID: '', ThreadID: '', UserID: '', ReportReason: ''};
 
   constructor(
     private authService: AuthService,
@@ -69,7 +73,7 @@ export class PostComponent implements OnInit{
    * @param replyId reply ID of post to ban
    */
   openBanModal(userId: string, threadId: string, replyId: string): void {
-    this.modalOpen = true;
+    this.banModalOpen = true;
 
     this.BannedUser = userId;
     this.BannedFrom = threadId;
@@ -78,9 +82,9 @@ export class PostComponent implements OnInit{
   }
 
 
-  closeModal(): void {
-    this.modalOpen = false;
-    console.log(this.modalOpen)
+  closeBanModal(): void {
+    this.banModalOpen = false;
+    console.log(this.banModalOpen)
   }
 
   /**
@@ -88,13 +92,13 @@ export class PostComponent implements OnInit{
    * @param banData data of user to ban
    */
   banUser(banData: Ban): void {
-    banData.BannedBy = this.user._id;
-    banData.BannedFrom = this.BannedFrom;
-    banData.BannedForPost = this.BannedForPost;
+    banData.BannedBy._id = this.user._id;
+    banData.BannedFrom._id = this.BannedFrom;
+    banData.BannedForPost._id = this.BannedForPost;
     banData.Reason = this.banData.Reason; 
     banData.IssuedOn = new Date();
     banData.ExpiresOn = this.banData.ExpiresOn; 
-    banData.BannedUser = this.BannedUser;
+    banData.BannedUser._id = this.BannedUser;
     banData.PostBan = true;
     
   
@@ -108,7 +112,36 @@ export class PostComponent implements OnInit{
       }
     );
   
-    this.closeModal();
+    this.closeBanModal();
+  }
+
+  openReportModal(threadId: string, replyId: string): void {
+    this.reportModalOpen = true;
+
+    this.reportData.UserID = this.user._id;
+    this.reportData.ThreadID = threadId;
+    this.reportData.PostID = replyId;
+  }
+
+  reportPost(reportData: any): void {
+    reportData.UserID = this.user._id;
+    reportData.ThreadID = this.reportData.ThreadID;
+    reportData.PostID = this.reportData.PostID;
+    reportData.ReportReason = this.reportData.ReportReason;
+
+    this.fetchForumData.reportPost(reportData).subscribe(
+      (result) => {
+        console.log(`Report submitted: ${result}`);
+        this.reportModalOpen = false;
+      },
+      (error) => {
+        console.error(`Error submitting report: ${error}`);
+      }
+    );
+  }
+
+  closeReportModal(): void {
+    this.reportModalOpen = false;
   }
 
   /**
