@@ -4,21 +4,24 @@
 <div class="info-page">
 
     <div class="product-info">
-        <div class="product-info_item" id="text-info">
-            <h1>{{productData.Name}}</h1>
-            <h2>${{productData.Price}}</h2>
-            <h2>Sales: {{productData.Sales}}</h2>
-            <h2>Stock: {{productData.Stock}}</h2>
-            <h2>Description:</h2>
-            <p>{{productData.Description}}</p>
-            <h2>Upcharge:</h2>
-            <p>{{productData.Upcharge}}%</p>
-
-        </div>
         <div class="product-info_item" id="image-info">
-            <img
-                src={{productData.Image}}
+            <button
+                class="prev-button"
+                (click)="prevImage()"
             >
+                &lt;
+            </button>
+            <button
+                class="prev-button"
+                (click)="nextImage()"
+            >
+                &gt;
+            </button>
+            <div class="product-image-gallery">
+                <div class="product-image-container">
+                    <img src="{{ productData.ProductImages[imageIndex] }}" class="product-image">
+                </div>
+            </div>
             <h2 *ngIf="tags.length > 0">Tags:</h2>
             <ul class="tags-list">
                 <li *ngFor="let tag of tags">
@@ -38,24 +41,131 @@
                     >
                         Wishlist
                     </button>
+                    
             </div>
         </div>
-        <div *ngIf="supplies.length > 0" class="product-info_item" id="supply-info">
-            <h2>Supplies:</h2>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Cost</th>
-                    <th>Quantity</th>
-                </tr>
-                <tr *ngFor="let supply of supplies">
-                    <td>{{ supply.Name }}</td>
-                    <td>{{ supply.Description }}</td>
-                    <td>{{ supply.Cost }}</td>
-                    <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
-                </tr>
-            </table>
+        <div class="forms-tab-container">
+            <div class="admin-tabs-buttons">
+                <div [ngClass]="{ 'tab-selected': optionOpen == 'details'}">
+                    <p
+                        (click)="openTab('details')"
+                    >
+                        Details
+                    </p>
+                </div>
+                <div [ngClass]="{ 'tab-selected': optionOpen == 'supplies'}">
+                    <p
+                        (click)="openTab('supplies')"
+                    >
+                        Supplies
+                    </p>
+                </div>
+                <div [ngClass]="{ 'tab-selected': optionOpen == 'edit-product'}" *ngIf="isJanitor">
+                    <p
+                        (click)="openTab('edit-product')"
+                    >
+                        Edit
+                    </p>
+                </div>
+            </div>
+            <div [ngClass]="{ 'tab-open': optionOpen == 'details'}" class="admin-tab">
+                <div class="product-info_item">
+                    <h3>
+                        Description:
+                    </h3>
+                    <p>
+                        {{productData.Description}}
+                    </p>
+                    <h3>
+                        Sales:
+                    </h3>
+                    <p>
+                        {{productData.Sales}}
+                    </p>
+                    <h3>
+                        Stock:
+                    </h3>
+                    <p>
+                        {{productData.Stock}}
+                    </p>
+                    <h3>
+                        Upcharge:
+                    </h3>
+                    <p>
+                        {{productData.Upcharge}}%
+                    </p>
+                </div>
+            </div>
+            <div [ngClass]="{ 'tab-open': optionOpen == 'supplies'}" class="admin-tab">
+                <div *ngIf="supplies.length > 0" class="product-info_item" id="supply-info">
+                    <h2>Supplies:</h2>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Cost</th>
+                            <th>Quantity</th>
+                        </tr>
+                        <tr *ngFor="let supply of supplies">
+                            <td>{{ supply.Name }}</td>
+                            <td>{{ supply.Description }}</td>
+                            <td>{{ supply.Cost }}</td>
+                            <td>{{ supply.Quantity }}{{ supply.Measurement }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div *ngIf="supplies.length === 0">
+                    <h4>
+                        No supplies listed.
+                    </h4>
+                </div>
+            </div>
+            <div [ngClass]="{ 'tab-open': optionOpen == 'edit-product'}" class="admin-tab"  *ngIf="isJanitor">
+                <div>
+                    <form class="form">
+                        <mat-form-field>
+                            <h2>
+                                Stock
+                            </h2>
+                            <input
+                                matInput
+                                [(ngModel)]="newStock.newStock"
+                                placeholder="New stock quantity"
+                                type="text"
+                                name="Stock"
+                                required
+                            >
+                        </mat-form-field><br>
+                        <button
+                            (click)="updateStockQuantity(newStock, productData._id)"
+                        >
+                        Update Stock
+                    </button>
+                    </form>
+                </div>
+                <button
+                    (click)="toggleImageOpen()"
+                >
+                    Change Images
+                </button>
+                <div>
+                    <div *ngIf="newPicsOpen">
+                        <form (ngSubmit)="onSubmit()" #profilePicForm="ngForm">
+                            <div>
+                            <label for="productImages">Upload new product images:</label>
+                            <input type="file" id="productImages" (change)="onFilesSelected($event)" required multiple>
+                            </div>
+                            <button type="submit" [disabled]="!selectedFiles">Upload</button>
+                        </form>
+                        
+                        <div *ngIf="uploadResponse">
+                            <p>{{ uploadResponse.message }}</p>
+                            <img *ngIf="uploadResponse.imageUrl" [src]="uploadResponse.imageUrl" alt="Product Image">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </div>
     </div>
     <div class="reviews-section" *ngIf="relatedThreads.length > 0">
@@ -85,28 +195,6 @@
                 </mat-card>
 
             </div>
-        </div>
-    </div>
-    <div class="reviews-section" *ngIf="isJanitor">
-        <h1>Edit</h1>
-        <div class="content-container">
-            <form class="form">
-                <mat-form-field>
-                    <input
-                        matInput
-                        [(ngModel)]="newStock.newStock"
-                        placeholder="New stock quantity"
-                        type="text"
-                        name="Stock"
-                        required
-                    >
-                </mat-form-field><br>
-                <button
-                    (click)="updateStockQuantity(newStock, productData._id)"
-                >
-                Update Stock
-            </button>
-            </form>
         </div>
     </div>
     <div class="reviews-section">

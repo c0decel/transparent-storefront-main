@@ -129,6 +129,20 @@ export class FetchProductDataService {
 
     }
 
+    //New product images
+    changeProductImages(formData: FormData, productId: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        return this.http.put<any>(`${apiUrl}/products/${productId}/images`, formData, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        }).pipe(
+          map(this.extractResponseData),
+          catchError(this.handleError)
+        );
+      }
+      
+
     //Add supplies to product
     addSupplyToProduct(productID: string, supplyID: string): Observable<any> {
         const token = localStorage.getItem('token');

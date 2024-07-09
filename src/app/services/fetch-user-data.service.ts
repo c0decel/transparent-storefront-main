@@ -154,7 +154,7 @@ export class FetchUserDataService {
     newProfilePic(newPic: FormData): Observable<any> {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const token = localStorage.getItem('token');
-        return this.http.post<any>(`${apiUrl}/users/${user.Username}/profile-pic`, newPic, {
+        return this.http.put<any>(`${apiUrl}/users/${user.Username}/profile-pic`, newPic, {
           headers: new HttpHeaders({
             Authorization: 'Bearer ' + token,
           })

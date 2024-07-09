@@ -54,7 +54,6 @@ export class ThreadComponent {
       this.isJanitor = true;
     }
 
-    this.getAllUsers();
     this.getThreadRoute();
   }
 
@@ -73,20 +72,6 @@ export class ThreadComponent {
           this.getThread(threadId);
           this.getThreadReplies(threadId);
         }
-      }
-    );
-  }
-
-  /**
-   * Get all users
-   */
-  getAllUsers(): void {
-    this.fetchUserData.getAllUsers().subscribe(
-      (users) => {
-        this.users = users;
-      },
-      (error) => {
-        console.log(`Couldn't fetch users: ${error}`);
       }
     );
   }

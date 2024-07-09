@@ -52,6 +52,20 @@ export class FetchForumDataService {
         )
     }
 
+    //Create thread from one post
+    createThreadFromPost(postData: any): Observable<any> {
+        const token = localStorage.getItem('token');
+        return this.http.post(`${apiUrl}/posts/${postData.PostID}/make-thread`, postData, {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            })
+            }).pipe(
+            map(this.extractResponseData),
+            catchError(this.handleError)
+            )
+    }
+
     //Reply to thread
     postNewReply(replyData: any): Observable<any> {
         const token = localStorage.getItem('token');

@@ -24,18 +24,26 @@ import { Supply } from '../shared/models/supply.model';
 })
 export class ProductDetailsComponent implements OnInit {
   user!: User;
-  reviews: Review[]=[];
-  tags: Tag[]=[];
-  supplies: Supply[]=[];
+  reviews: Review[] = [];
+  tags: Tag[] = [];
+  supplies: Supply[] = [];
 
   isJanitor: boolean = false;
   
+  optionOpen: 'details' | 'supplies' | 'edit-product' | '' = 'details';
+
+  imageIndex = 0;
+  maxImageIndex = 0;
+  
   productData: any;
-  relatedThreads: any[] =[];
+  relatedThreads: any[] = [];
 
-  reviewData: any = {Rating: 0, UserID: '', Username: '', ProductID: '', Content: ''};
-  newStock: any = {newStock: 0};
+  reviewData: any = { Rating: 0, UserID: '', Username: '', ProductID: '', Content: '' };
+  newStock: any = { newStock: 0 };
 
+  newPicsOpen: boolean = false;
+  selectedFiles: File[] = [];
+  uploadResponse: any;
 
   constructor(
     public router: Router,
@@ -58,13 +66,14 @@ export class ProductDetailsComponent implements OnInit {
 
     this.route.paramMap.subscribe(params => {
       if (window.history.state && window.history.state.data) {
-
         this.productData = window.history.state.data;
+        console.log(this.productData)
         const productName = this.productData.Name.toLowerCase();
         this.getReviews(this.productData._id);
         this.getTags(this.productData._id);
         this.getSupplies(this.productData._id);
         this.getRelatedThreads(productName);
+        this.maxImageIndex = this.productData.ProductImages.length - 1;
       }
     });
   }
@@ -121,6 +130,7 @@ export class ProductDetailsComponent implements OnInit {
       }
     );
   }
+  
 
   /**
    * Get reviews from product
@@ -230,5 +240,62 @@ export class ProductDetailsComponent implements OnInit {
    */
   closeDetails(): void {
     this.router.navigate(['store']);
+  }
+
+  openTab(optionType: 'details' | 'supplies' | 'edit-product'): void {
+    this.optionOpen = optionType;
+  }
+
+  nextImage(): void {
+    if ((this.imageIndex + 1) > this.maxImageIndex) {
+      this.imageIndex = 0;
+    } else {
+      this.imageIndex += 1;
+    }
+    console.log(this.imageIndex)
+  }
+
+  prevImage(): void {
+    if ((this.imageIndex - 1) < 0) {
+      this.imageIndex = this.maxImageIndex - 1;
+    } else {
+      this.imageIndex -= 1;
+    }
+  }
+
+  toggleImageOpen(): void {
+    this.newPicsOpen = true;
+    console.log(this.newPicsOpen)
+  }
+
+  onFilesSelected(event: any): void {
+    const files: File[] = Array.from(event.target.files);
+    if (files) {
+      this.selectedFiles = files;
+      console.log(this.selectedFiles)
+    }
+  }
+
+  onSubmit(): void {
+    if (this.selectedFiles.length === 0) {
+      return;
+    }
+
+    const formData: FormData = new FormData();
+    this.selectedFiles.forEach((file, index) => {
+      formData.append('productImages', file); 
+      console.log(formData)
+    });
+
+    console.log(formData)
+    this.fetchProductData.changeProductImages(formData, this.productData._id).subscribe(
+      (result) => {
+        console.log(`Updated.`);
+        window.location.reload();
+      },
+      (error) => {
+        console.log(`Error: ${error.toString()}`);
+      }
+    )
   }
 }

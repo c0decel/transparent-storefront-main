@@ -165,6 +165,7 @@ export class ProfileComponent {
   
       const formData: FormData = new FormData();
       formData.append('image', this.selectedFile);
+      console.log(this.selectedFile)
   
       this.fetchUserData.newProfilePic(formData).subscribe(
         (response) => {

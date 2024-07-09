@@ -28,7 +28,7 @@ export class ProductCardComponent implements OnInit{
   @Input() wishlistItems: Wishlist[]=[];
   @Input() itemType: 'product' | 'cart' | 'wishlist' | '' ='';
   @Input() secondItemType: 'product' | 'cart' | 'wishlist' | ''='';
-
+  
   stripePromise!: Promise<any>;
 
   checkoutDetails: any = { ProductID: '', successUrl: '', cancelUrl: '', UserID: ''};
@@ -142,7 +142,7 @@ export class ProductCardComponent implements OnInit{
     Name: string,
     Price: number,
     Description: string,
-    Image: string,
+    ProductImages: [],
     Sales: number,
     Stock: number,
     Upcharge: number,
@@ -156,7 +156,7 @@ export class ProductCardComponent implements OnInit{
             Name: Name,
             Price: Price,
             Description: Description,
-            Image: Image,
+            ProductImages: ProductImages,
             Sales: Sales,
             Stock: Stock,
             Supplies: Supplies,

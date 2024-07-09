@@ -29,8 +29,8 @@ export class PostComponent implements OnInit{
 
   isJanitor: boolean = false;
 
-  banModalOpen = false;
-  reportModalOpen = false;
+  modalOpen = false;
+  modalType: 'ban-user' | 'report-user' | 'move-post' | '' = 'move-post';
 
 
   BannedUser: string = '';
@@ -39,13 +39,13 @@ export class PostComponent implements OnInit{
   BannedBy: string = '';
 
   
-
+  postData = {PostID: '', Title: '', Tags: [], Content: ''};
   threadData: any;
 
   replyData: any = { ThreadID: '', UserID: '', Content: '', LikedBy: [], DislikedBy: [], PostedAtTime: '', PostedAtDate: '', PostBan: false};
   banData: any = {BannedBy: '', BannedForPost: '', BannedFrom: '', Reason: '', IssuedOn: new Date(), ExpiresOn: new Date(), BannedUser: ''};
   commentData: any = { Content: ''};
-  reportData: any = { PostID: '', ThreadID: '', UserID: '', ReportReason: ''};
+  reportData: any = { PostID: '', ThreadID: '', ReportReason: ''};
 
   constructor(
     private authService: AuthService,
@@ -73,7 +73,8 @@ export class PostComponent implements OnInit{
    * @param replyId reply ID of post to ban
    */
   openBanModal(userId: string, threadId: string, replyId: string): void {
-    this.banModalOpen = true;
+    this.modalType = 'ban-user';
+    this.modalOpen = true;
 
     this.BannedUser = userId;
     this.BannedFrom = threadId;
@@ -81,10 +82,28 @@ export class PostComponent implements OnInit{
     this.BannedBy = this.user._id;
   }
 
+  openNewThreadModal(replyId: string, replyContent: string): void {
+    this.modalType = 'move-post';
+    this.modalOpen = true;
 
-  closeBanModal(): void {
-    this.banModalOpen = false;
-    console.log(this.banModalOpen)
+    this.postData.PostID = replyId;
+    this.postData.Content = replyContent;
+    console.log(this.postData.Content)
+  }
+
+  moveToOwnThread(postData: any): void {
+    this.fetchForumData.createThreadFromPost(postData).subscribe(
+      (result) => {
+        console.log(`Moved to new thread: ${result}`);
+      },
+      (error) => {
+        console.error(`Error: ${error.toString()}`);
+      }
+    )
+  }
+
+  closeModal(): void {
+    this.modalOpen = false;
   }
 
   /**
@@ -112,11 +131,12 @@ export class PostComponent implements OnInit{
       }
     );
   
-    this.closeBanModal();
+    this.closeModal();
   }
 
   openReportModal(threadId: string, replyId: string): void {
-    this.reportModalOpen = true;
+    this.modalType = 'report-user';
+    this.modalOpen = true;
 
     this.reportData.UserID = this.user._id;
     this.reportData.ThreadID = threadId;
@@ -132,7 +152,7 @@ export class PostComponent implements OnInit{
     this.fetchForumData.reportPost(reportData).subscribe(
       (result) => {
         console.log(`Report submitted: ${result}`);
-        this.reportModalOpen = false;
+        this.modalOpen = false;
       },
       (error) => {
         console.error(`Error submitting report: ${error}`);
@@ -140,9 +160,6 @@ export class PostComponent implements OnInit{
     );
   }
 
-  closeReportModal(): void {
-    this.reportModalOpen = false;
-  }
 
   /**
    * Highlight or unhighlight a reply

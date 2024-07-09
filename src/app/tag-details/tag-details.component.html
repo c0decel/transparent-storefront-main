@@ -10,21 +10,9 @@
     <div class="content-container">
         <h2>Products containing tag:</h2>
         <div class="cart-items">
-            <mat-card *ngFor="let product of products">
-                <mat-card-header>
-                    <mat-card-title>
-                        {{ product.Name }}
-                    </mat-card-title>
+            <app-product-card [products]="products" [itemType]="'product'">
 
-                    <mat-card-subtitle>
-                        ${{ product.Price }}
-                    </mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <img src="{{ product.Image }}" class="product-image">
-                </mat-card-content>
-
-            </mat-card>
+            </app-product-card>
 
             <p *ngIf="products.length === 0">
                 No products with this tag.

@@ -73,6 +73,9 @@
                     </div>
                 </div>
                 <p *ngIf="thread && thread?._id" (click)="openBanModal(reply.Username, thread._id, reply._id)">Ban user</p>
+                <p
+                    (click)="openNewThreadModal(reply._id, reply.Content)"
+                >Thread</p>
             </div>
         </div>
     </div>
@@ -141,32 +144,53 @@
     </div>
 </div>
 
-<div class="modal" *ngIf="banModalOpen">
+<div class="modal" *ngIf="modalOpen">
     <div class="modal-content">
-        <span class="close" (click)="closeBanModal()">x</span>
-        <h2>Ban user</h2>
-        <div class="ban-form">
-            <form>
-                <h4>Reason:</h4>
-                <input [(ngModel)]="banData.Reason" name="Reason" type="text" required>
-                <h4>Expires on</h4>
-                <input [(ngModel)]="banData.ExpiresOn" name="ExpiresOn" type="date" required>
-                <button (click)="banUser(banData)">Ban user</button>
-            </form>
-        </div>
-    </div>
-</div>
+        <span class="close" (click)="closeModal()">x</span>
 
-<div class="modal" *ngIf="reportModalOpen">
-    <div class="modal-content">
-        <span class="close" (click)="closeReportModal()">x</span>
-        <h2>Report post</h2>
-        <div class="ban-form">
-            <form>
-                <h4>Reason:</h4>
-                <input [(ngModel)]="reportData.ReportReason" name="ReportReason" type="text" required>
-                <button (click)="reportPost(reportData)">Report</button>
-            </form>
+        <div *ngIf="modalType == 'report-user'">
+            <h2>Report post</h2>
+            <div class="ban-form">
+                <form>
+                    <h4>Reason:</h4>
+                    <input [(ngModel)]="reportData.ReportReason" name="ReportReason" type="text" required>
+                    <button (click)="reportPost(reportData)">Report</button>
+                </form>
+            </div>
+        </div>
+
+        <div *ngIf="modalType == 'ban-user'">
+            <h2>Ban user</h2>
+            <div class="ban-form">
+                <form>
+                    <h4>Reason:</h4>
+                    <input [(ngModel)]="banData.Reason" name="Reason" type="text" required>
+                    <h4>Expires on</h4>
+                    <input [(ngModel)]="banData.ExpiresOn" name="ExpiresOn" type="date" required>
+                    <button (click)="banUser(banData)">Ban user</button>
+                </form>
+            </div>
+        </div>
+
+        <div *ngIf="modalType == 'move-post'">
+            <h2>Create new thread from post</h2>
+            <div class="ban-form">
+                <form>
+                    <h4>New thread title:</h4>
+                    <input 
+                        [(ngModel)]="postData.Title"
+                        name="Title"
+                        type="text"
+                        required
+                    >
+                    <button
+                        (click)="moveToOwnThread(postData)"
+                    >
+                        Create thread
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>

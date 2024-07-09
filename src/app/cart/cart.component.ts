@@ -65,6 +65,7 @@ export class CartComponent {
       this.fetchUserData.getCartItems().subscribe(
         (items: Cart[]) => {
             this.cartItems = items;
+            console.log(this.cartItems)
         }, 
         (error) => {
           console.error(`Couldn't fetch cart items: ${error}`);

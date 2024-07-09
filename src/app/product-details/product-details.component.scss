@@ -1,9 +1,25 @@
-
-@media only screen and (min-width: 1024px) {
-    .product-image {
-      width: 400px;
-    }
+@media screen and (max-width: 800px) {
+  .product-info {
+    grid-template-columns: 1fr;
   }
+}
+
+@media screen and (min-width: 801px) {
+  .product-info {
+    grid-template-columns: 1fr 1fr;
+  }
+  .product-image {
+    width: 400px;
+    padding: 10px;
+  }
+}
+
+#image-info {
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+}
+
 
 select {
     padding: 10px;
@@ -15,7 +31,6 @@ select {
 
 .product-info {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .related-threads {
@@ -45,4 +60,35 @@ select {
     }
   } 
 }
+
+.admin-tab {
+  display: none;
+  padding: 10px;
+}
+
+.tab-open {
+  display: block;
+}
+
+
+.forms-tab-container {
+  justify-content: center;  
+  align-items: center;
+  width: 80%;
+}
+
+
+.admin-tabs-buttons {
+  display: flex;
+  width: max-content;
+  border-collapse: collapse;
+  height: 25px;
+
+  p {
+      margin-right: 3px;
+      margin-left: 3px;
+      line-height: 0%;
+  }
+}
+
 
